@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">FinalProject</string>
+    <string name="app_name">FinalProject CST2355</string>
+    <string name="ma_TV">Created by: </string>
+    <string name='author'>Zavar Siddiqui,  Marek La Roche,  Michael Hansen, Benjamin Dalton </string>
+    <string name='searchCity_TM'>Enter a city name: </string>
+    <string name="searchRadius_TM">Enter a search radius</string>
 </resources>

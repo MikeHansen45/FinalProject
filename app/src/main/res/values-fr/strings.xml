@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_name">Projet final CST2355</string>
+    <string name="ma_TV">Créé par:  </string>
+
+    <string name='author'>Zavar Siddiqui,  Marek La Roche,  Michael Hansen, Benjamin Dalton </string>
+    <string name='searchCity_TM'>Entrez un nom de ville: </string>
+    <string name="searchRadius_TM">Entrez un rayon de recherche</string>
+
+</resources>
