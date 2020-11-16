@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class TicketMasterActivity extends AppCompatActivity {
@@ -25,6 +26,7 @@ public class TicketMasterActivity extends AppCompatActivity {
     private EditText cityName_ET;
     private EditText radius_ET;
     private ProgressBar search_PB;
+    private ArrayList<Event> eventArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +54,18 @@ public class TicketMasterActivity extends AppCompatActivity {
 
 
     }
+
+
     private class SearchTktMstr extends AsyncTask<String,Integer,String>{
         @Override
         protected String doInBackground(String... args) {
             String JSONresult;
             String line = null;
             String name;
+            String type;
+            String url1;
+            String info;
+
             try {
                 URL url = new URL(args[0]);
                 HttpURLConnection jsonUrlConnection = (HttpURLConnection) url.openConnection();
@@ -76,9 +84,15 @@ public class TicketMasterActivity extends AppCompatActivity {
 
                 Log.d("PLEASE FUCKING WORK", "WOROROROOROR");
                    for(int i =0; i<events.length();i++){
-                    JSONObject obj = events.getJSONObject(i);
-                    name = obj.getString("name");
-                    Log.d("PLEASE BE THE NAME",name);
+                       JSONObject obj = events.getJSONObject(i);
+                       name = obj.getString("name");
+                       type = obj.getString("type");
+                       url1 = obj.getString("url");
+                       info = obj.getString("info");
+                       Log.d(" NAME",name);
+                       Log.d(" TYPE",type);
+                       Log.d(" URL",url1);
+                       Log.d("  INFO",info);
 
                 }
 
@@ -88,7 +102,7 @@ public class TicketMasterActivity extends AppCompatActivity {
 
             }
             catch (Exception e){
-                Log.d("IN CATCH", "FUCK");
+                Log.d("IN CATCH", e.toString());
             }
             finally {
                 // close connection
