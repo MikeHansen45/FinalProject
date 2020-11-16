@@ -26,5 +26,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(goToTicket);
             }
         });
+
+        Button covbutton = findViewById(R.id.toCovid);
+        covbutton.setOnClickListener( click -> {
+            Intent goToCovid = new Intent(MainActivity.this, CovidData.class);
+            startActivity(goToCovid);});
     }
 }
