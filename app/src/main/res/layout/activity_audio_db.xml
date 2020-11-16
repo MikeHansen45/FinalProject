@@ -10,15 +10,15 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_below="@+id/button"
-        android:layout_above="@+id/progressBar"
+        android:id="@+id/audioDBListView"
+        android:layout_below="@+id/audioDBButton"
+        android:layout_above="@+id/audioDBProgressBar"
         />
 
     <ProgressBar style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
+        android:id="@+id/audioDBProgressBar"
         android:layout_alignParentBottom="true"
 
         />
@@ -26,7 +26,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
+        android:id="@+id/audioDBButton"
         android:text="Button"
         android:layout_alignParentTop="true"
         android:gravity="fill"
@@ -35,8 +35,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_toRightOf="@+id/button"
+        android:id="@+id/audioDBEditText"
+        android:layout_toRightOf="@+id/audioDBButton"
 
         />
 
