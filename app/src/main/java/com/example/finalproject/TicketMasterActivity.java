@@ -1,14 +1,24 @@
 package com.example.finalproject;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,6 +37,9 @@ public class TicketMasterActivity extends AppCompatActivity {
     private EditText radius_ET;
     private ProgressBar search_PB;
     private ArrayList<Event> eventArray = new ArrayList<>();
+    private ArrayList<String> tempArray = new ArrayList<>();
+    private ListView chatLView;
+    MyListAdapter myAdapter = new MyListAdapter();// the adapter to update the list
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +51,29 @@ public class TicketMasterActivity extends AppCompatActivity {
         cityName_ET = findViewById(R.id.cityName_ET);
         radius_ET = findViewById(R.id.radius_ET);
         search_PB = findViewById(R.id.searchPB);
+        chatLView = findViewById(R.id.chatLView);
+        chatLView.setAdapter(myAdapter);
+
+        //////////////////////////////////////// TOAST Just because it is required not sure where I want it for real ///////////////////////////////////
+        Context context = getApplicationContext();
+        CharSequence text = "Welcome to the ticket master search app";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text,duration);
+        toast.show();
+
+
+
+        /////////////////////////////////////// End of toast, Times up /////////////////////////////////////////////////////////////////////////////////
+
+
+        /////////////////////////////////// building snackbar, cause its snack time ////////////////////////////////////////////////////////////////////
+//
+//        Snackbar cheesyPoof = Snackbar.make()
+
+        ////////////////////////////////// End of Snackbar   /////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
         search_IB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,14 +84,60 @@ public class TicketMasterActivity extends AppCompatActivity {
                 search_PB.setVisibility(View.VISIBLE);
                 SearchTktMstr req = new SearchTktMstr();
                 req.execute("https://app.ticketmaster.com/discovery/v2/events.json?apikey=ZeH2TvddeHJytkYTsWA4F3GQ9gIWaVZB&city=toronto&radius=100");
+                tempArray.add("hi");
+                myAdapter.notifyDataSetChanged();
             }
+        });
+        ///Delete from list on long click add a
+        chatLView.setOnItemLongClickListener((parent, view, position, id) -> {
+            androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_Alert))
+                    .setMessage("would you like to delete row " + position + " ?")
+
+                    .setPositiveButton("YES", (click, arg) -> {
+                        tempArray.remove(position);
+                        myAdapter.notifyDataSetChanged();
+
+                    })
+                    .setNegativeButton("NO", (click, arg) -> { })
+                    .create().show();
+            return true;
+
         });
 
 
+    chatLView.setAdapter(myAdapter);
+    }
+/////////////////////////////////////////////////////////////// MyListAdapter Code bellow /////////////////////////////////////////////////////////
 
+    private class MyListAdapter extends BaseAdapter {
+
+        public int getCount() { return tempArray.size();}
+
+        public Object getItem(int position) { return "This is row " + position; }
+
+        public long getItemId(int position) { return (long) position; }
+
+        public View getView(int position, View old, ViewGroup parent)
+        {
+            LayoutInflater inflater = getLayoutInflater();
+
+            //make a new row:
+            View newView = inflater.inflate(R.layout.activity_tktmstr_lv, parent, false);
+
+            //set what the text should be for this row:
+            TextView tView = newView.findViewById(R.id.event_details_tv);
+            tView.setText( getItem(position).toString() );
+
+            //return it to be put in the table
+            return newView;
+        }
     }
 
 
+
+
+//////////////////////////////////////////////////////////////  ASYNC CODE BELOW /////////////////////////////////////////////////////////////////
     private class SearchTktMstr extends AsyncTask<String,Integer,String>{
         @Override
         protected String doInBackground(String... args) {
@@ -121,4 +203,9 @@ public class TicketMasterActivity extends AppCompatActivity {
             super.onPostExecute(s);
         }
     }
+
+
+
+
+
 }
