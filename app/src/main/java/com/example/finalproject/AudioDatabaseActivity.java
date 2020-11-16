@@ -9,6 +9,6 @@ public class AudioDatabaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_audio_database2);
+        setContentView(R.layout.activity_audio_db);
     }
 }

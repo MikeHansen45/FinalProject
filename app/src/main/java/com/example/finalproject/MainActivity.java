@@ -11,6 +11,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
     SharedPreferences prefs = null;
     Button toTicket;
+    Button toAudio;
 
 
     @Override
@@ -24,6 +25,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(goToTicket);
+            }
+        });
+
+        toAudio = findViewById(R.id.toAudio);
+        Intent goToAudio = new Intent(this,AudioDatabaseActivity.class);
+
+        toAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(goToAudio);
             }
         });
     }
