@@ -69,7 +69,7 @@ public class TicketMasterActivity extends AppCompatActivity {
 
         /////////////////////////////////// building snackbar, cause its snack time ////////////////////////////////////////////////////////////////////
 //
-//        Snackbar cheesyPoof = Snackbar.make()
+          Snackbar snack =  Snackbar.make(findViewById(R.id.rootView_tktMstr), "You can see my snackbar !",  Snackbar.LENGTH_LONG);
 
         ////////////////////////////////// End of Snackbar   /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -83,6 +83,7 @@ public class TicketMasterActivity extends AppCompatActivity {
 
                 search_PB.setVisibility(View.VISIBLE);
                 SearchTktMstr req = new SearchTktMstr();
+                snack.show();
                 req.execute("https://app.ticketmaster.com/discovery/v2/events.json?apikey=ZeH2TvddeHJytkYTsWA4F3GQ9gIWaVZB&city=toronto&radius=100");
                 tempArray.add("hi");
                 myAdapter.notifyDataSetChanged();
