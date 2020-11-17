@@ -11,6 +11,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
     SharedPreferences prefs = null;
     Button toTicket;
+    Button toRecipe;
 
 
     @Override
@@ -18,7 +19,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toTicket = findViewById(R.id.toTicket);
+        toRecipe = findViewById(R.id.toRecipe);
+
         Intent goToTicket = new Intent(this,TicketMasterActivity.class);
+
+        //Recipe button goes to Recipe Activity
+        Intent goToRecipe = new Intent(this,RecipeActivity.class);
+        toRecipe.setOnClickListener(v -> startActivity(goToRecipe));
 
         toTicket.setOnClickListener(new View.OnClickListener() {
             @Override

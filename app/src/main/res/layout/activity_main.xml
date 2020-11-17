@@ -34,9 +34,10 @@
         android:layout_height="wrap_content"
         />
     <Button
-        android:id="@+id/toRecipies"
+        android:id="@+id/toRecipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/goToRecipe"
         />
     <Button
         android:id="@+id/toTicket"
