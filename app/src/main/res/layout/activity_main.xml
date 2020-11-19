@@ -29,9 +29,10 @@
 
         />
     <Button
-        android:id="@+id/toCoivd"
+        android:id="@+id/toCovid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Covid Data"
         />
     <Button
         android:id="@+id/toRecipe"
