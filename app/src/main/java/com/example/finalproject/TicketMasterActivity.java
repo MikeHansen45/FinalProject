@@ -197,8 +197,10 @@ public class TicketMasterActivity extends AppCompatActivity {
                            min = priceRanges.getJSONObject(0).getInt("min");
                            max = priceRanges.getJSONObject(0).getInt("max");
                        }
-                       else
+                       else{
                            min = -1;
+                       }
+
                        name = obj.getString("name");
                        type = obj.getString("type");
                        url1 = obj.getString("url");
