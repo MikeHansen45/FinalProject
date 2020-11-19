@@ -30,6 +30,11 @@ public class RecipeActivity extends AppCompatActivity {
     ArrayList<String> elements = new ArrayList<>();
     private MyListAdapter myAdapter;
 
+    /**
+     *Called when the activity is first created. This is where you should do all of your normal static set up: create views, bind data to lists, etc. This method also provides you with a Bundle containing the activity's previously frozen state, if there was one.
+     * Always followed by onStart().
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +93,10 @@ public class RecipeActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *Saves a string into a SharedPreferences object so that it appear each time this activity is visited.
+     * @param a The string that will be saved
+     */
     private void saveSharedPrefs (String a){
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("searchField", a);
@@ -96,21 +105,42 @@ public class RecipeActivity extends AppCompatActivity {
 
     private class MyListAdapter extends BaseAdapter {
 
+        /**
+         *
+         * @return the size of the arrayList
+         */
         @Override
         public int getCount() {
             return elements.size();
         }
 
+        /**
+         *
+         * @param position The index of the item that will be returned
+         * @return the item stored in the arrayList
+         */
         @Override
         public Object getItem(int position) {
             return elements.get(position);
         }
 
+        /**
+         *
+         * @param position The index of the item that will be returned
+         * @return The database id of the object
+         */
         @Override
         public long getItemId(int position) {
             return 0;
         }
 
+        /**
+         *
+         * @param position The index of the item that will be returned
+         * @param convertView The ListView that will hold the items
+         * @param parent
+         * @return The view that will be inflated to the ListView
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
