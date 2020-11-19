@@ -8,7 +8,7 @@
     tools:context=".RecipeActivity">
 
     <ProgressBar
-        android:id="@+id/RecipeProgressBar"
+        android:id="@+id/recipeProgressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
