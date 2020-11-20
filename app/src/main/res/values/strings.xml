@@ -4,4 +4,5 @@
     <string name='author'>Zavar Siddiqui,  Marek La Roche,  Michael Hansen, Benjamin Dalton </string>
     <string name='searchCity_TM'>Enter a city name: </string>
     <string name="searchRadius_TM">Enter a search radius</string>
+    <string name="toAudioButtonText">Audio Database</string>
 </resources>
