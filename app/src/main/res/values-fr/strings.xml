@@ -8,5 +8,6 @@
     <string name='searchCity_TM'>Entrez un nom de ville: </string>
     <string name="searchRadius_TM">Entrez un rayon de recherche</string>
     <string name="tktMstr_Alert">Voulez-vous le supprimer?</string>
-
+    <string name="toAudioButtonText">audio</string>
+    <string name="goToRecipe">recipie</string>
 </resources>
