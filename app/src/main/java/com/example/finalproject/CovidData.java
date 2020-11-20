@@ -27,17 +27,18 @@ public class CovidData extends AppCompatActivity {
         ListView Covidlist = findViewById(R.id.Covlist);
 
         Covidbtn.setOnClickListener( click -> {
-            Snackbar.make(Covidbtn, "Hello", Snackbar.LENGTH_LONG).show();
-            Toast.makeText(this, "Hello - Toast", Toast.LENGTH_SHORT).show();
+            Snackbar.make(Covidbtn, "Hello", Snackbar.LENGTH_LONG).show();//Creates snackbar with long lenght
+            Toast.makeText(this, "Hello - Toast", Toast.LENGTH_SHORT).show();//Creates toast with short duration
         });
 
         Covidlist.setAdapter(CovAdt);
 
         Covidlist.setOnItemClickListener((parent, view, position, id) -> {
+            //Creating alert
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("Covid data")
                     .setMessage("This is covid data")
-                    .setNegativeButton("Cancel", (click, arg) -> {})
+                    .setNegativeButton("Cancel", (click, arg) -> {})//Cancels the alert
                     .create().show();
         });
 
@@ -47,12 +48,12 @@ public class CovidData extends AppCompatActivity {
         @Override
         public int getCount() {
             return 3;
-        }
+        }//Returns 3 elements in the list
 
         @Override
         public String getItem(int position) {
             return "Covid" + position;
-        }
+        }//Item returned in the lsit
 
         @Override
         public long getItemId(int position) {
