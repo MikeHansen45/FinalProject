@@ -11,7 +11,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
     SharedPreferences prefs = null;
     Button toTicket;
-    Button toAudio;
+    Button toRecipe;
 
 
     @Override
@@ -19,7 +19,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toTicket = findViewById(R.id.toTicket);
+        toRecipe = findViewById(R.id.toRecipe);
+
         Intent goToTicket = new Intent(this,TicketMasterActivity.class);
+
+        //Recipe button goes to Recipe Activity
+        Intent goToRecipe = new Intent(this,RecipeActivity.class);
+        toRecipe.setOnClickListener(v -> startActivity(goToRecipe));
 
         toTicket.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,14 +34,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        toAudio = findViewById(R.id.toAudio);
-        Intent goToAudio = new Intent(this,AudioDatabaseActivity.class);
-
-        toAudio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(goToAudio);
-            }
-        });
+        Button covbutton = findViewById(R.id.toCovid);
+        covbutton.setOnClickListener( click -> {
+            Intent goToCovid = new Intent(MainActivity.this, CovidData.class);
+            startActivity(goToCovid);});
     }
 }
