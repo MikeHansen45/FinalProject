@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences prefs = null;
     Button toTicket;
     Button toRecipe;
-
+    Button toAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         toTicket = findViewById(R.id.toTicket);
         toRecipe = findViewById(R.id.toRecipe);
+        toAudio = (Button) findViewById(R.id.toAudio);
 
         Intent goToTicket = new Intent(this,TicketMasterActivity.class);
 
@@ -40,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(goToTicket);
             }
         });
+
+        Intent goToAudio = new Intent(this, AudioDatabaseActivity.class);
+        toAudio.setOnClickListener(v -> startActivity(goToAudio));
+
 
         Button covbutton = findViewById(R.id.toCovid);
         covbutton.setOnClickListener( click -> {

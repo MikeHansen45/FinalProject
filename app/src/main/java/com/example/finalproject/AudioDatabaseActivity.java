@@ -18,7 +18,7 @@ public class AudioDatabaseActivity extends AppCompatActivity {
     Button button;
     ProgressBar progressBar;
     EditText editText;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
