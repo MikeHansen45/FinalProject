@@ -11,7 +11,10 @@ package com.example.finalproject;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,13 +45,20 @@ import java.util.Iterator;
 
 public class TicketMasterActivity extends AppCompatActivity {
     private ImageButton search_IB;// Image button click to search
-    private EditText cityName_ET;// Edit text used to insert city name
+    private SearchView cityName_ET;// Edit text used to insert city name
     private EditText radius_ET;// EditText used to insert radius
     private ProgressBar search_PB;// Progress bar updated by search progress
     private ArrayList<Event> eventArray = new ArrayList<>();//array of Events
-    private ArrayList<String> tempArray = new ArrayList<>();// a temp list for demo 1
+    //private ArrayList<String> tempArray = new ArrayList<>();// a temp list for demo 1
     private ListView chatLView;// A list view in this page
+    private Event eventObj;// used to add events to the list and database;
     MyListAdapter myAdapter = new MyListAdapter();// the adapter to update the list
+
+    // Database variables
+
+    private SQLiteDatabase db;
+    private DatabaseHelper MyDatabaseHelper;
+    protected Cursor results;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +72,13 @@ public class TicketMasterActivity extends AppCompatActivity {
         search_PB = findViewById(R.id.searchPB);
         chatLView = findViewById(R.id.chatLView);
         chatLView.setAdapter(myAdapter);
+
+        //////////////////////////////////// Loading Database components /////////////////////////////
+
+        MyDatabaseHelper = new DatabaseHelper(this);
+        db = MyDatabaseHelper.getWritableDatabase();
+        String [] columns = {MyDatabaseHelper.COL_ID, MyDatabaseHelper.COL_NAME,MyDatabaseHelper.COL_TYPE,MyDatabaseHelper.COL_URL};
+        results = db.query(false,MyDatabaseHelper.TABLE_NAME, columns, null, null, null, null, null, null);
 
         //////////////////////////////////////// TOAST Just because it is required not sure where I want it for real ///////////////////////////////////
         Context context = getApplicationContext();
@@ -92,23 +110,38 @@ public class TicketMasterActivity extends AppCompatActivity {
                 //apikey=ZeH2TvddeHJytkYTsWA4F3GQ9gIWaVZB
                 // https://app.ticketmaster.com/discovery/v2/events.json?apikey=ZeH2TvddeHJytkYTsWA4F3GQ9gIWaVZB&city=toronto&radius=100
 
+
                 search_PB.setVisibility(View.VISIBLE);
                 SearchTktMstr req = new SearchTktMstr();
                 snack.show();
                 req.execute("https://app.ticketmaster.com/discovery/v2/events.json?apikey=ZeH2TvddeHJytkYTsWA4F3GQ9gIWaVZB&city=toronto&radius=100");
-                tempArray.add("hi");
+
                 myAdapter.notifyDataSetChanged();
             }
         });
 
-        ///Allows user to delete a list item and pops up a alert box
+        ///Allows user to save item to the database
         chatLView.setOnItemLongClickListener((parent, view, position, id) -> {
             androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_Alert))
-                    .setMessage("would you like to delete row " + position + " ?")
+                    .setMessage("Would you like to save this event: " + eventArray.get(position).getName() + " ?" + "\n \n" +
+                            "Event Type: " + eventArray.get(position).getType() + "\n \n"  +
+                            "Event URL: " + eventArray.get(position).getURL() + "\n \n" +
+                            "The price range is: " + eventArray.get(position).getPriceMin() + " to " + eventArray.get(position).getPriceMax() + " $")
 
                     .setPositiveButton("YES", (click, arg) -> {
-                        tempArray.remove(position);
+                    // save item to the db
+//                        ContentValues newRowValues = new ContentValues();
+//                        newRowValues.put(MyDatabaseHelper.COL_NAME,eventArray.get(position).getName());
+//                        newRowValues.put(MyDatabaseHelper.COL_TYPE,eventArray.get(position).getType());
+//                        newRowValues.put(MyDatabaseHelper.COL_URL,eventArray.get(position).getURL());
+//                        newRowValues.put(MyDatabaseHelper.COL_MAX,eventArray.get(position).getPriceMax());
+//                        newRowValues.put(MyDatabaseHelper.COL_MIN,eventArray.get(position).getPriceMin());
+//                        long newId = db.insert(MyDatabaseHelper.TABLE_NAME,null,newRowValues);
+                        eventArray.remove(position);
+
+
+//                        tempArray.remove(position);
                         myAdapter.notifyDataSetChanged();
 
                     })
@@ -127,9 +160,9 @@ public class TicketMasterActivity extends AppCompatActivity {
 // this class will be heavily modified so I have not added complete metadata.
     private class MyListAdapter extends BaseAdapter {
 
-        public int getCount() { return tempArray.size();}
+        public int getCount() { return eventArray.size();}
 
-        public Object getItem(int position) { return "This is row " + position; }
+        public Object getItem(int position) { return eventArray.get(position); }
 
         public long getItemId(int position) { return (long) position; }
 
@@ -169,8 +202,9 @@ public class TicketMasterActivity extends AppCompatActivity {
             String type;// type of the event
             String url1;// url to the event on ticket master
             int min, max;// the min and max price for tickets
+            int searchUpdate;// used to populate the progress bar
             String info;
-
+            eventArray.clear();
             try {
                 URL url = new URL(args[0]);
                 HttpURLConnection jsonUrlConnection = (HttpURLConnection) url.openConnection();
@@ -189,7 +223,7 @@ public class TicketMasterActivity extends AppCompatActivity {
                 JSONObject embeded = tktMstJSON.getJSONObject("_embedded");
                 JSONArray events = embeded.getJSONArray("events");
                 JSONArray priceRanges ;
-                Log.d("PLEASE FUCKING WORK", "WOROROROOROR");
+
                    for(int i =0; i<events.length();i++){
                        JSONObject obj = events.getJSONObject(i);
                        if(obj.has("priceRanges")) {
@@ -199,18 +233,24 @@ public class TicketMasterActivity extends AppCompatActivity {
                        }
                        else{
                            min = -1;
+                           max = -1;
                        }
 
                        name = obj.getString("name");
                        type = obj.getString("type");
                        url1 = obj.getString("url");
-                     //  info = obj.getString("info");
 
-
-                       Log.d(" NAME",name);
-                       Log.d(" TYPE",type);
-                       Log.d(" URL",url1);
-                       //Log.d("  INFO",info);
+//
+//                       Log.d(" NAME",name);
+//                       Log.d(" TYPE",type);
+//                       Log.d(" URL",url1);
+//                       Log.d("MIN", String.valueOf(min));
+//                       Log.d("MAX", String.valueOf(max));
+                       eventArray.add(new Event(name,type,url1,min,max) );// adds each event to the list
+                       Log.d("I", String.valueOf(i));
+                       Log.d("LENGTH", String.valueOf(events.length()));
+                       searchUpdate = (i*100/events.length()) ;
+                       publishProgress(searchUpdate);
 
                 }
 
@@ -223,6 +263,7 @@ public class TicketMasterActivity extends AppCompatActivity {
                 Log.d("IN CATCH", e.toString());
             }
             finally {
+                publishProgress(100);
                 // close connection
             }
 
@@ -230,13 +271,18 @@ public class TicketMasterActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
+        protected void onProgressUpdate(Integer... args) {
+            Log.d("OnProgressUpdate", String.valueOf(args[0]));
+            search_PB.setProgress(args[0]);
         }
+
+
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            search_PB.setVisibility(View.GONE);
+            search_PB.setProgress(0);
         }
     }
 
