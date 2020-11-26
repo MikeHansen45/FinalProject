@@ -4,30 +4,4 @@
     <string name='author'>Zavar Siddiqui,  Marek La Roche,  Michael Hansen, Benjamin Dalton </string>
     <string name='searchCity_TM'>Enter a city name: </string>
     <string name="searchRadius_TM">Enter a search radius</string>
-    <string name="tktMstr_Alert">Do you want to delete this?</string>
-    <string name="snack_message">This is my snackBar</string>
-    <string name="toast_message">No image found</string>
-    <string name="toAudioButtonText">Audio Database</string>
-    <string name="goToRecipe">Recipe Search</string>
-    <string name="recipeButton">Here\'s my button</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="recipeImageDescription">Recipe Image</string>
-    <string name="recipeFavButton">Recipe Favourites Button</string>
-    <string name="recipeFavSaved">Added to favourites!</string>
-    <string name="undo">undo</string>
-    <string name="goToRecipeFavs">Go to favourites</string>
-    <string name="recipeFavRemoved">Removed from favourites!</string>
-    <string name="ticketMaster">Ticket Master</string>
-    <string name="covid">Covid-19 Data</string>
-    <string name="help">help</string>
-    <string name="open" />
-    <string name="close" />
-    <string name="recipeAuthor">Author: Zavar Siddiqui</string>
-    <string name="fav">FAV</string>
-    <string name="directLink">Direct Link:</string>
-    <string name="ingredientsTitle">List of Ingredients:</string>
-    <string name="recipeHelp">Recipe Search Help</string>
-    <string name="recipeHelpMessage" />
-    <string name="ok">OK</string>
-
 </resources>
