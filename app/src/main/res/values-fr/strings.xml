@@ -8,4 +8,7 @@
     <string name='searchCity_TM'>Entrez un nom de ville: </string>
     <string name="searchRadius_TM">Entrez un rayon de recherche</string>
 
+    <string name="covid_data_btn">Obtenir Données</string>
+    <string name="covid_country">PAYS</string>
+
 </resources>

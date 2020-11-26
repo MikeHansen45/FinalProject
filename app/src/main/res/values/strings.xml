@@ -4,4 +4,7 @@
     <string name='author'>Zavar Siddiqui,  Marek La Roche,  Michael Hansen, Benjamin Dalton </string>
     <string name='searchCity_TM'>Enter a city name: </string>
     <string name="searchRadius_TM">Enter a search radius</string>
+
+    <string name="covid_data_btn">Get Data</string>
+    <string name="covid_country">COUNTRY</string>
 </resources>
