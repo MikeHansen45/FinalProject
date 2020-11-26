@@ -5,25 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Switch;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -39,9 +39,11 @@ public class RecipeActivity extends AppCompatActivity {
     private int duration = Toast.LENGTH_LONG;
     private int snackTime = Snackbar.LENGTH_LONG;
     SharedPreferences sp = null;
-    ArrayList<String> elements = new ArrayList<>();
+    ArrayList<Recipe> elements = new ArrayList<>();
     private MyListAdapter myAdapter;
     ProgressBar progress;
+    String q = "";
+    String i = "";
 
     /**
      * Called when the activity is first created. This is where you should do all of your normal static set up: create views, bind data to lists, etc. This method also provides you with a Bundle containing the activity's previously frozen state, if there was one.
@@ -56,41 +58,33 @@ public class RecipeActivity extends AppCompatActivity {
         progress = findViewById(R.id.recipeProgressBar);
         progress.setVisibility(View.VISIBLE);
 
-        MyHTTPRequest req = new MyHTTPRequest(); //creates a background thread
-        req.execute("http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3");  //Type 1
-
-        //temporarily adding to list view
-        elements.add("Recipe 1");
-        elements.add("Recipe 2");
-        elements.add("Recipe 3");
-
         //loading saved preferences
         sp =
 
                 getSharedPreferences("searchField", Context.MODE_PRIVATE);
 
         String search = sp.getString("searchField", "");
-        EditText recipeSearch = findViewById(R.id.searchRecipe);
-        recipeSearch.setText(search);
+        SearchView recipeSearch = findViewById(R.id.searchRecipe);
+        recipeSearch.setQuery(search, false);
 
         //listener which saves what's typed to saved preferences
-        recipeSearch.addTextChangedListener(new
+        recipeSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                q = query;
+                String searchURL = "http://www.recipepuppy.com/api/?format=JSON,i=" + i + "&q=" + q + "&p=3";
+                // need to make another new request if we want to run another search
+                MyHTTPRecipeRequest req = new MyHTTPRecipeRequest(); //creates a background thread
+                req.execute(searchURL);
+                return true;
+            }
 
-                                                    TextWatcher() {
-                                                        @Override
-                                                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                                                        }
-
-                                                        @Override
-                                                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                                            saveSharedPrefs(s.toString());
-                                                        }
-
-                                                        @Override
-                                                        public void afterTextChanged(Editable s) {
-                                                        }
-                                                    });
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                saveSharedPrefs(newText);
+                return false;
+            }
+        });
 
         //Recipe Button
         Button btn = findViewById(R.id.buttonRecipe);
@@ -150,7 +144,7 @@ public class RecipeActivity extends AppCompatActivity {
          */
         @Override
         public Object getItem(int position) {
-            return elements.get(position);
+            return elements.get(position).getRecipeTitle();
         }
 
         /**
@@ -174,15 +168,17 @@ public class RecipeActivity extends AppCompatActivity {
             View newView;
             newView = inflater.inflate(R.layout.recipe_list, parent, false);
             TextView info = newView.findViewById(R.id.recipeInfo);
-            info.setText(getItem(position).toString());
+            String title = (String)getItem(position);
+            info.setText(title);
             return newView;
         }
     }
 
-    private class MyHTTPRequest extends AsyncTask<String, Integer, String> {
+    private class MyHTTPRecipeRequest extends AsyncTask<String, Integer, String> {
 
         /**
          * Performs a computation in the background.
+         *
          * @param args The URLs that will be connected to in the background.
          * @return The string "Done"
          */
@@ -198,13 +194,38 @@ public class RecipeActivity extends AppCompatActivity {
                 //wait for data:
                 InputStream response = urlConnection.getInputStream();
 
-                //From part 3: slide 19
-                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-                factory.setNamespaceAware(false);
-                XmlPullParser xpp = factory.newPullParser();
-                xpp.setInput(response, "UTF-8"); //response is data from the server
+                //JSON reading:   Look at slide 26
+                //Build the entire string response:
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
+                StringBuilder sb = new StringBuilder();
 
-                publishProgress(100);
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                String result = sb.toString(); //result is the whole string
+
+
+                // convert string to JSON: Look at slide 27:
+                JSONObject recipeObject = new JSONObject(result);
+
+                //get the double associated with "value"
+                JSONArray recipeResults = recipeObject.getJSONArray("results");
+                Log.i("", recipeResults.toString());
+                onProgressUpdate(25);
+
+                for (int i = 0; i < recipeResults.length(); i++)
+                    try {
+                        JSONObject recipes = recipeResults.getJSONObject(i);
+                        // Pulling items from the array
+                        elements.add(new Recipe(recipes.getString("title"), recipes.getString("href"), recipes.getString("ingredients")));
+                        Log.i("", elements.toString());
+                        onProgressUpdate(100);
+
+                    } catch (JSONException e) {
+                        // handle the exception
+                    }
+
 
             } catch (Exception e) {
             }
@@ -213,6 +234,7 @@ public class RecipeActivity extends AppCompatActivity {
 
         /**
          * This method runs whenever publishProgress is called in doInBackground method.
+         *
          * @param values The values indicating the amount of progress that has occurred.
          */
         @Override
@@ -223,12 +245,14 @@ public class RecipeActivity extends AppCompatActivity {
         }
 
         /**
-         *  Runs after doInBackground has completed.
+         * Runs after doInBackground has completed.
+         *
          * @param fromDoInBackground The String "Done" which is returned from doInBackground
          */
         public void onPostExecute(String fromDoInBackground) {
             Log.i("HTTP", fromDoInBackground);
-//            progress.setVisibility(View.INVISIBLE);
+            myAdapter.notifyDataSetChanged();
+            progress.setVisibility(View.INVISIBLE);
         }
     }
 }
