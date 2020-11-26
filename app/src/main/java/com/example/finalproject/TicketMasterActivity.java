@@ -8,8 +8,10 @@ package com.example.finalproject;
  */
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,6 +21,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -53,6 +58,7 @@ public class TicketMasterActivity extends AppCompatActivity {
     private ListView chatLView;// A list view in this page
     private Event eventObj;// used to add events to the list and database;
     MyListAdapter myAdapter = new MyListAdapter();// the adapter to update the list
+    Toolbar tBar;//Toolbar item
 
     // Database variables
 
@@ -91,6 +97,19 @@ public class TicketMasterActivity extends AppCompatActivity {
 
 
         /////////////////////////////////////// End of toast, Times up /////////////////////////////////////////////////////////////////////////////////
+
+
+        /////////////////////////////////////// Adding toolbar to page and defining toolbar behaviour//////////////////////////////////////////////////
+        tBar = findViewById(R.id.toolbar);// set toolbar to the id of my toolbar in the ticket master xml
+        setSupportActionBar(tBar);
+
+
+
+
+
+
+
+        ////////////////////////////////////End of Toolbar ///////////////////////////////////////////////////////////////////////////////////////////
 
 
         /////////////////////////////////// building snackbar, cause its snack time ////////////////////////////////////////////////////////////////////
@@ -287,7 +306,44 @@ public class TicketMasterActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    /**
+     * onCreateOpetion(Menu menu) inflates the ticket_master_menu.xml to be used as a menu item for this view
+     * @param menu a menu item
+     *
+     */
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.ticket_master_menu, menu);
 
 
 
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.help_item:
+                androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_help_title))
+                        .setMessage("Enter a city name, and the radius around the city you would like to search." +
+                                "\npress the search icon and a list of events will appear in the list below." +
+                                "\n long click on an event to see more details. If the event interests you you can save it " +
+                                "by clicking on the yes button. Once the event is saved it will disapear from the list.")
+
+                        .setPositiveButton("YES", (click, arg) -> {
+                            // save item to the db
+
+                        })
+
+                        .create().show();
+                break;
+
+        }
+        return true;
+
+    }
 }
