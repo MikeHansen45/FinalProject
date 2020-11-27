@@ -4,6 +4,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import org.json.JSONArray;
@@ -39,13 +44,19 @@ public class AudioDatabaseActivity extends AppCompatActivity {
     Button button;
     ProgressBar progressBar;
     EditText editText;
+    //private int currPos = 0;
 
     //change arraylist object holding type to new audio item object
     ArrayList<AudioDBObject> elements = new ArrayList<AudioDBObject>();
 
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String TEXT = "text";
+    public static final String AUDIO_OBJ = "audioObj";
     private String text;
+
+    private SQLiteDatabase db;
+    private AudioDBOpener MyDatabaseHelper;
+    protected Cursor results;
 
     AudioDBAdapter myAdapter = new AudioDBAdapter();
 
@@ -69,6 +80,8 @@ public class AudioDatabaseActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.audioDBEditText);
         listView.setAdapter(myAdapter);
 
+        loadDataFromDatabase();
+
         listView.setOnItemClickListener((parent, view, pos, id) ->{
            AlertDialog.Builder  alertDialogBuilder = new AlertDialog.Builder(this);
            alertDialogBuilder.setTitle("Item");
@@ -82,13 +95,15 @@ public class AudioDatabaseActivity extends AppCompatActivity {
         });
 
         button.setOnClickListener(e-> {
-            elements = new ArrayList<AudioDBObject>();
+            //elements = new ArrayList<AudioDBObject>();
             Toast.makeText(this, "You pressed a button", Toast.LENGTH_LONG).show();
 
             Snackbar snackbar = Snackbar.make(listView, "searching for: " + editText.getText().toString(), Snackbar.LENGTH_LONG);
 
             snackbar.show();
 
+
+            //dont forget to add to database and to get the id for each object and set it
             //progressBar.setVisibility(View.VISIBLE);
             audioSearchTask req = new audioSearchTask();
             req.execute("https://www.theaudiodb.com/api/v1/json/1/searchalbum.php?s=" + editText.getText());
@@ -116,6 +131,7 @@ public class AudioDatabaseActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putString(TEXT, editText.getText().toString());
+        // use google GSON if its ok to shared prefs the arraylist?
         editor.apply();
     }
 
@@ -146,16 +162,44 @@ public class AudioDatabaseActivity extends AppCompatActivity {
             View newView = inflater.inflate(R.layout.audio_list_item, parent, false);
 
             TextView listItem = newView.findViewById(R.id.audioItemText);
-            //ImageView albumArt = newView.findViewById(R.id.audioItemPicture);
+            ImageView albumArt = newView.findViewById(R.id.audioItemPicture);
             Log.e(ACTIVITY_NAME, "getView: elements: " + elements.toString());
             listItem.setText(elements.get(position).toString());
-            // set picture from album
+            if (elements.get(position) != null) {
+                //currPos = position;
+                new DownloadImageTask(albumArt).execute(elements.get(position).getAlbumThumb());
+                //currPos = 0;
+            }
 
             return newView;
         }
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
 
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap bmp = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                bmp = BitmapFactory.decodeStream(in);
+                //elements.get(currPos).setAlbumArtBMP(bmp);
+
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return bmp;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
 
     private class audioSearchTask extends AsyncTask<String, Integer, String> {
 
@@ -178,6 +222,7 @@ public class AudioDatabaseActivity extends AppCompatActivity {
                 JSONObject audioObj = new JSONObject(audioResult);
                 JSONArray audioArray = audioObj.getJSONArray("album");
 
+                elements = new ArrayList<AudioDBObject>();
                 for (int i = 0; i < audioArray.length(); i++) {
                     JSONObject obj = audioArray.getJSONObject(i);
                     //add new audio item class object and its attributes
@@ -208,5 +253,29 @@ public class AudioDatabaseActivity extends AppCompatActivity {
             //Log.e(ACTIVITY_NAME, "elements: " + elements.toString());
             return null;
         }
+    }
+
+    private void loadDataFromDatabase() {
+        // finish from android labs
+    }
+
+    protected void deleteObject(AudioDBObject obj) {
+        db.delete(AudioDBOpener.TABLE_NAME, AudioDBOpener.COL_ID + "= ?", new String[] {Long.toString(obj.getId())});
+    }
+
+    public void printCursor(Cursor c, int version) {
+        c.moveToFirst();
+        Log.e("DATABASE VERSION NO: ", String.valueOf(db.getVersion()));
+        Log.e("NUMBER OF COLUMNS: ", String.valueOf(c.getColumnCount()));
+
+        String[] names = c.getColumnNames();
+
+        for (int i = 0; i < c.getColumnCount(); i++) {
+            Log.e("column name: ", names[i]);
+        }
+
+        Log.e("NUMBER OF ROWS", String.valueOf(c.getCount()));
+
+        // finish adding column indexes using android labs as example
     }
 }
