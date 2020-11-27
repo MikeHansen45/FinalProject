@@ -5,4 +5,6 @@
     <string name='searchCity_TM'>Enter a city name: </string>
     <string name="searchRadius_TM">Enter a search radius</string>
     <string name="toAudioButtonText">Audio Database</string>
+    <string name="artistNameHint">Enter Artist Name</string>
+    <string name="searchAudioDBButton">Search</string>
 </resources>

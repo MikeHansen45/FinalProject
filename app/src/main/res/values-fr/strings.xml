@@ -8,5 +8,7 @@
     <string name='searchCity_TM'>Entrez un nom de ville: </string>
     <string name="searchRadius_TM">Entrez un rayon de recherche</string>
     <string name="toAudioButtonText">Banque de Son</string>
+    <string name="artistNameHint">Entrez le nom de l\'artiste</string>
+    <string name="searchAudioDBButton">Chercher</string>
 
 </resources>

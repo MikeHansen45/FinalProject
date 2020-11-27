@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/audioDBButton"
-        android:text="Button"
+        android:text="@string/searchAudioDBButton"
         android:layout_alignParentTop="true"
         android:gravity="fill"
         />
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/audioDBEditText"
         android:layout_toRightOf="@+id/audioDBButton"
-
+        android:hint="@string/artistNameHint"
         />
 
 
