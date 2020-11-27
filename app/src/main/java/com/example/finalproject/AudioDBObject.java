@@ -1,6 +1,7 @@
 package com.example.finalproject;
 
 import org.json.JSONObject;
+import android.graphics.Bitmap;
 
 import static java.lang.Integer.parseInt;
 
@@ -14,6 +15,8 @@ public class AudioDBObject {
     String strGenre;
     String strAlbumThumb;
     int yearReleased;
+    long id;
+    //Bitmap albumArtBMP;
 
     AudioDBObject(String albumID, String artistID, String albumName, String artistName, String releaseYear, String genre, String imageURL) {
         idAlbum = albumID;
@@ -23,6 +26,19 @@ public class AudioDBObject {
         intYearReleased = releaseYear;
         strGenre = genre;
         strAlbumThumb = imageURL;
+
+        yearReleased = parseInt(releaseYear);
+    }
+
+    AudioDBObject(String albumID, String artistID, String albumName, String artistName, String releaseYear, String genre, String imageURL, long i) {
+        idAlbum = albumID;
+        idArtist = artistID;
+        strAlbum = albumName;
+        strArtist = artistName;
+        intYearReleased = releaseYear;
+        strGenre = genre;
+        strAlbumThumb = imageURL;
+        id = i;
 
         yearReleased = parseInt(releaseYear);
     }
@@ -91,5 +107,21 @@ public class AudioDBObject {
     public String getAlbumThumb() {
         return strAlbumThumb;
     }
+
+    public void setId(long i) {
+        id = i;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+//    public void setAlbumArtBMP(Bitmap b) {
+//        albumArtBMP = b;
+//    }
+//
+//    public Bitmap getAlbumArtBMP() {
+//        return albumArtBMP;
+//    }
 
 }
