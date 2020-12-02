@@ -3,11 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/backToTM"
+        android:id="@+id/backToAudio"
         app:showAsAction="always"
-        android:orderInCategory="1"
-        android:title="@string/ticketMaster"
-         />
+        android:orderInCategory="3"
+        android:title="@string/toAudioButtonText"
+        />
+
+    <item
+        android:id="@+id/backToCovid"
+        app:showAsAction="always"
+        android:orderInCategory="4"
+        android:title="@string/covid"
+        />
 
     <item
         android:id="@+id/backToRecipe"
@@ -17,17 +24,10 @@
          />
 
     <item
-        android:id="@+id/backToAudio"
+        android:id="@+id/backToTM"
         app:showAsAction="always"
-        android:orderInCategory="3"
-        android:title="@string/toAudioButtonText"
-         />
-
-    <item
-        android:id="@+id/backToCovid"
-        app:showAsAction="always"
-        android:orderInCategory="4"
-        android:title="@string/covid"
+        android:orderInCategory="1"
+        android:title="@string/ticketMaster"
         />
 
 </menu>
