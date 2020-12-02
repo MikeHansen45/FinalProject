@@ -12,17 +12,25 @@ public class Event {
     private String name, type,url;
     private double priceMin, priceMax;
     private Bitmap promotionalImg;
+    private long id;
 
     /**
      * Constructor for the Event Class. Used to populate the event more variable to come
      * @param NAME The name of the event
      * @param TYPE The type of event string format
      * @param URl the url to the ticketMaster event site
+     * @param min the min price of a ticket
+     * @param max the max price of a ticket
+     * @
      */
-    public Event(String NAME, String TYPE, String URl, String INFO){
+    public Event(String NAME, String TYPE, String URl, double min, double max,long ID){
         this.name = NAME;
         this.type = TYPE;
         this.url=URl;
+        this.priceMin = min ;
+        this.priceMax=max;
+        this.id =ID;
+
 
     }
 
@@ -30,6 +38,15 @@ public class Event {
     public String getName(){return this.name;}
     public String getType(){return this.type;}
     public String getURL(){return this.url;}
+    public double getPriceMin(){return this.priceMin;}
+    public double getPriceMax(){return this.priceMin;}
+    public long getId(){return this.id;}
+
+    //setter
+    public void setID(long dbID){
+        this.id = dbID;
+
+    }
 
 
     /**
@@ -38,10 +55,6 @@ public class Event {
      */
     @Override
     public String toString() {
-        return "Event{" +
-                "name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", url='" + url + '\'' +
-                + '}';
+        return name;
     }
 }

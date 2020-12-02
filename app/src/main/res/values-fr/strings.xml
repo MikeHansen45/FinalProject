@@ -13,4 +13,7 @@
     <string name="snack_message">Ceci est mon snackbar</string>
     <string name="toast_message">"C'est mon toast "</string>
     <string name="recipeButton">"Voici mon bouton "</string>
+    <string name="tktMstr_empty_search">Veuillez entrer une ville et un rayon pour terminer votre recherche</string>
+    <string name="open">Ouvert</string>
+    <string name="close">Fermer</string>
 </resources>

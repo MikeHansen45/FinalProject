@@ -10,5 +10,9 @@
     <string name="toAudioButtonText">audio</string>
     <string name="goToRecipe">Recipe</string>
     <string name="recipeButton">Here\'s my button</string>
+    <string name="tktMstr_help_title">Ticket Master Help</string>
+    <string name="tktMstr_empty_search">Please enter a City and Radius to complete your search</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 
 </resources>

@@ -9,12 +9,15 @@ package com.example.finalproject;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -35,6 +38,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -48,23 +52,25 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TicketMasterActivity extends AppCompatActivity {
+public class TicketMasterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ImageButton search_IB;// Image button click to search
-    private SearchView cityName_ET;// Edit text used to insert city name
+    private EditText cityName_ET;// Edit text used to insert city name
     private EditText radius_ET;// EditText used to insert radius
     private ProgressBar search_PB;// Progress bar updated by search progress
     private ArrayList<Event> eventArray = new ArrayList<>();//array of Events
     //private ArrayList<String> tempArray = new ArrayList<>();// a temp list for demo 1
     private ListView chatLView;// A list view in this page
     private Event eventObj;// used to add events to the list and database;
-    MyListAdapter myAdapter = new MyListAdapter();// the adapter to update the list
+    MyListAdapter myAdapter = new MyListAdapter();// the adapter to update the lisEd
     Toolbar tBar;//Toolbar item
+    Toolbar lBar;//Toolbar item for nav bar
+    SharedPreferences prefs = null;// A shared preferenc item
 
     // Database variables
 
     private SQLiteDatabase db;
-    private DatabaseHelper MyDatabaseHelper;
-    protected Cursor results;
+    private DatabaseHelper MyDatabaseHelper; //creates database helper object
+    protected Cursor results; // creates a cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +85,38 @@ public class TicketMasterActivity extends AppCompatActivity {
         chatLView = findViewById(R.id.chatLView);
         chatLView.setAdapter(myAdapter);
 
+        //populating the shared preferences in the radius and city edit texts
+        prefs = getSharedPreferences("tktMstrShardPref",Context.MODE_PRIVATE);
+        String savedCity = prefs.getString("city", "");
+        String savedRadius = prefs.getString("radius", "");
+        cityName_ET.setText(savedCity);
+        radius_ET.setText(savedRadius);
+
         //////////////////////////////////// Loading Database components /////////////////////////////
 
         MyDatabaseHelper = new DatabaseHelper(this);
         db = MyDatabaseHelper.getWritableDatabase();
-        String [] columns = {MyDatabaseHelper.COL_ID, MyDatabaseHelper.COL_NAME,MyDatabaseHelper.COL_TYPE,MyDatabaseHelper.COL_URL};
+        String [] columns = {MyDatabaseHelper.COL_ID, MyDatabaseHelper.COL_NAME,MyDatabaseHelper.COL_TYPE,MyDatabaseHelper.COL_URL, MyDatabaseHelper.COL_MIN, MyDatabaseHelper.COL_MAX};
         results = db.query(false,MyDatabaseHelper.TABLE_NAME, columns, null, null, null, null, null, null);
+        int idColIndex = results.getColumnIndex(MyDatabaseHelper.COL_ID);
+        int nameColIndex = results.getColumnIndex(MyDatabaseHelper.COL_NAME);
+        int typeColIndex= results.getColumnIndex(MyDatabaseHelper.COL_TYPE);
+        int  urlColIndex = results.getColumnIndex(MyDatabaseHelper.COL_URL);
+        int maxColIndex = results.getColumnIndex(MyDatabaseHelper.COL_MAX);
+        int minColIndex= results.getColumnIndex(MyDatabaseHelper.COL_MIN);
+
+
+        while (results.moveToNext()){
+            String dbName = results.getString(nameColIndex);
+            String dbType = results.getString(typeColIndex);
+            String dbURL = results.getString(urlColIndex);
+            int bdMax = results.getInt(maxColIndex);
+            int bdMin = results.getInt(minColIndex);
+
+            eventArray.add(new Event(dbName,dbType,dbURL,bdMin,bdMax,0));
+
+        }
+
 
         //////////////////////////////////////// TOAST Just because it is required not sure where I want it for real ///////////////////////////////////
         Context context = getApplicationContext();
@@ -99,24 +131,24 @@ public class TicketMasterActivity extends AppCompatActivity {
         /////////////////////////////////////// End of toast, Times up /////////////////////////////////////////////////////////////////////////////////
 
 
-        /////////////////////////////////////// Adding toolbar to page and defining toolbar behaviour//////////////////////////////////////////////////
+        /////////////////////////////////////// Adding toolbar and nav bar to page//////////////////////////////////////////////////
         tBar = findViewById(R.id.toolbar);// set toolbar to the id of my toolbar in the ticket master xml
         setSupportActionBar(tBar);
 
-
-
-
+        //  creating drawer layout
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout_tktmstr);// to be created in the xml for this file
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,tBar, R.string.open,R.string.close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
+//
+//        NavigationView navigationView = findViewById(R.id.nav_view);// to be created in the xml of this file
+//        navigationView.setNavigationItemSelectedListener(this);
 
 
 
         ////////////////////////////////////End of Toolbar ///////////////////////////////////////////////////////////////////////////////////////////
 
 
-        /////////////////////////////////// building snackbar, cause its snack time ////////////////////////////////////////////////////////////////////
-//
-          Snackbar snack =  Snackbar.make(findViewById(R.id.rootView_tktMstr), "You can see my snackbar !",  Snackbar.LENGTH_LONG);
-
-        ////////////////////////////////// End of Snackbar   /////////////////////////////////////////////////////////////////////////////////////////////
 
 
         /**
@@ -126,19 +158,43 @@ public class TicketMasterActivity extends AppCompatActivity {
         search_IB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String getCity = null;
+                String getRadius = null;
+                String url = null;
+
+                getCity =  cityName_ET.getText().toString();
+                getRadius = radius_ET.getText().toString();
+
+
+                Log.d("CITY_NAME:  ",  getCity);
+                Log.d("Radius:  ",  getRadius);
+
+
+                if(getCity.matches("") || getRadius.matches("")){
+
+                    /////////////////////////////////// building snackbar, cause its snack time ////////////////////////////////////////////////////////////////////
+//
+                    Snackbar snack =  Snackbar.make(findViewById(R.id.rootView_tktMstr), "p",  Snackbar.LENGTH_LONG);
+                    snack.show();
+
+                    ////////////////////////////////// End of Snackbar   /////////////////////////////////////////////////////////////////////////////////////////////
+
+                }
                 //apikey=ZeH2TvddeHJytkYTsWA4F3GQ9gIWaVZB
                 // https://app.ticketmaster.com/discovery/v2/events.json?apikey=ZeH2TvddeHJytkYTsWA4F3GQ9gIWaVZB&city=toronto&radius=100
+                else {
+                    saveSharedPrefs(getCity,getRadius);
+                    url = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=ZeH2TvddeHJytkYTsWA4F3GQ9gIWaVZB&city=" + getCity + "&radius=" + getRadius;
+                    search_PB.setVisibility(View.VISIBLE);
+                    SearchTktMstr req = new SearchTktMstr();
 
+                    req.execute(url);
 
-                search_PB.setVisibility(View.VISIBLE);
-                SearchTktMstr req = new SearchTktMstr();
-                snack.show();
-                req.execute("https://app.ticketmaster.com/discovery/v2/events.json?apikey=ZeH2TvddeHJytkYTsWA4F3GQ9gIWaVZB&city=toronto&radius=100");
-
-                myAdapter.notifyDataSetChanged();
+                    myAdapter.notifyDataSetChanged();
+                }
             }
         });
-
+        // create a save, delete and cancel button
         ///Allows user to save item to the database
         chatLView.setOnItemLongClickListener((parent, view, position, id) -> {
             androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -150,21 +206,21 @@ public class TicketMasterActivity extends AppCompatActivity {
 
                     .setPositiveButton("YES", (click, arg) -> {
                     // save item to the db
-//                        ContentValues newRowValues = new ContentValues();
-//                        newRowValues.put(MyDatabaseHelper.COL_NAME,eventArray.get(position).getName());
-//                        newRowValues.put(MyDatabaseHelper.COL_TYPE,eventArray.get(position).getType());
-//                        newRowValues.put(MyDatabaseHelper.COL_URL,eventArray.get(position).getURL());
-//                        newRowValues.put(MyDatabaseHelper.COL_MAX,eventArray.get(position).getPriceMax());
-//                        newRowValues.put(MyDatabaseHelper.COL_MIN,eventArray.get(position).getPriceMin());
-//                        long newId = db.insert(MyDatabaseHelper.TABLE_NAME,null,newRowValues);
-                        eventArray.remove(position);
+                        ContentValues newRowValues = new ContentValues();
+                        newRowValues.put(MyDatabaseHelper.COL_NAME,eventArray.get(position).getName());
+                        newRowValues.put(MyDatabaseHelper.COL_TYPE,eventArray.get(position).getType());
+                        newRowValues.put(MyDatabaseHelper.COL_URL,eventArray.get(position).getURL());
+                        newRowValues.put(MyDatabaseHelper.COL_MAX,eventArray.get(position).getPriceMax());
+                        newRowValues.put(MyDatabaseHelper.COL_MIN,eventArray.get(position).getPriceMin());
+                        long newId = db.insert(MyDatabaseHelper.TABLE_NAME,null,newRowValues);
+                        eventArray.get(position).setID(newId);
 
 
 //                        tempArray.remove(position);
                         myAdapter.notifyDataSetChanged();
 
                     })
-                    .setNegativeButton("NO", (click, arg) -> { })
+                    .setNegativeButton("Cancel", (click, arg) -> { })
                     .create().show();
             return true;
 
@@ -173,6 +229,8 @@ public class TicketMasterActivity extends AppCompatActivity {
 
     chatLView.setAdapter(myAdapter);
     }
+
+
 /////////////////////////////////////////////////////////////// MyListAdapter Code bellow /////////////////////////////////////////////////////////
 
 
@@ -265,7 +323,7 @@ public class TicketMasterActivity extends AppCompatActivity {
 //                       Log.d(" URL",url1);
 //                       Log.d("MIN", String.valueOf(min));
 //                       Log.d("MAX", String.valueOf(max));
-                       eventArray.add(new Event(name,type,url1,min,max) );// adds each event to the list
+                       eventArray.add(new Event(name,type,url1,min,max,0) );// adds each event to the list
                        Log.d("I", String.valueOf(i));
                        Log.d("LENGTH", String.valueOf(events.length()));
                        searchUpdate = (i*100/events.length()) ;
@@ -323,6 +381,11 @@ public class TicketMasterActivity extends AppCompatActivity {
     }
 
     @Override
+    /**
+     * creates a help file on the by creating an alert menu
+     * @param Item: is a the page menu item
+     * @return returns true.
+     */
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch(item.getItemId()){
@@ -345,5 +408,20 @@ public class TicketMasterActivity extends AppCompatActivity {
         }
         return true;
 
+    }
+
+    @Override
+    /*Creates the behaviour for the Navigation bar
+     *@param item, a menu item, the behavior of each item set bellow
+     */
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
+    }
+
+    private void saveSharedPrefs(String city, String radius){
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("city",city);
+        edit.putString("radius",radius);
+        edit.commit();
     }
 }
