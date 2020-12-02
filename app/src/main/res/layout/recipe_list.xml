@@ -9,6 +9,7 @@
         android:id="@+id/recipeInfo"
         android:textSize="16dp"
         android:gravity="left"
+        android:padding="5dp"
         />
 
 </LinearLayout>
