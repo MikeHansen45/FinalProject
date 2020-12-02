@@ -7,8 +7,8 @@
     <string name="tktMstr_Alert">Do you want to delete this?</string>
     <string name="snack_message">This is my snackBar</string>
     <string name="toast_message">This is my toast</string>
-    <string name="toAudioButtonText">audio</string>
-    <string name="goToRecipe">Recipe</string>
+    <string name="toAudioButtonText">Audio Database</string>
+    <string name="goToRecipe">Recipe Search</string>
     <string name="recipeButton">Here\'s my button</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="recipeImageDescription">Recipe Image</string>
@@ -18,7 +18,7 @@
     <string name="goToRecipeFavs">Go to favourites</string>
     <string name="recipeFavRemoved">Removed from favourites!</string>
     <string name="ticketMaster">Ticket Master</string>
-    <string name="covid">Covid</string>
+    <string name="covid">Covid-19 Data</string>
     <string name="help">help</string>
     <string name="open" />
     <string name="close" />
