@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -43,14 +44,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class RecipeActivity extends MainActivity{
+public class RecipeActivity extends MainActivity {
     private static final String TITLE_SELECTED = "Title";
     private static final String LINK_SELECTED = "Link";
     private static final String INGREDIENTS_SELECTED = "Ingredients";
     private static final String THUMBNAIL_SELECTED = "Thumbnail";
     private static final String ITEM_POSITION = "Position";
     private static final String ITEM_ID = "ID";
-    private int duration = Toast.LENGTH_LONG;
     SharedPreferences sp = null;
     ArrayList<Recipe> elements = new ArrayList<>();
     private MyListAdapter myAdapter = new MyListAdapter();
@@ -73,6 +73,8 @@ public class RecipeActivity extends MainActivity{
 
         //Set the toolbar
         Toolbar myToolbar = findViewById(R.id.toolbar);
+        myToolbar.setTitle(R.string.goToRecipe);
+        myToolbar.setSubtitle(R.string.recipeAuthor);
         setSupportActionBar(myToolbar);
 
         //For NavigationDrawer
@@ -90,7 +92,7 @@ public class RecipeActivity extends MainActivity{
         boolean isTablet = findViewById(R.id.recipeFragment) != null; //check if the FrameLayout is loaded
 
         Button toFavs = findViewById(R.id.buttonRecipe);
-        Intent goToRecipeFavs = new Intent(this,RecipeFavourites.class);
+        Intent goToRecipeFavs = new Intent(this, RecipeFavourites.class);
         toFavs.setOnClickListener(v -> startActivity(goToRecipeFavs));
 
         //loading saved preferences
@@ -121,17 +123,6 @@ public class RecipeActivity extends MainActivity{
             }
         });
 
-//        //Recipe Button
-//        Button btn = findViewById(R.id.buttonRecipe);
-//
-//        //Toast and snackbar on the button
-//        btn.setOnClickListener(v ->
-//
-//        {
-//            Toast.makeText(this, R.string.toast_message, duration).show();
-//            Snackbar.make(btn, R.string.snack_message, snackTime).show();
-//        });
-
         ListView results = findViewById(R.id.recipeList);
         results.setAdapter(myAdapter);
 
@@ -160,29 +151,35 @@ public class RecipeActivity extends MainActivity{
             }
         });
 
-        //alert dialog which shows more info about the recipe
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        //long click listener which triggers alert dialog
-        results.setOnItemLongClickListener((parent, view, pos, id) ->
-
-        {
-            alertDialogBuilder
-                    .setTitle("Recipe Title")
-                    .setMessage("Info")
-                    .create().show();
-            return true;
-        });
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        super.onCreateOptionsMenu(menu);
+        MenuItem helpButton = menu.findItem(R.id.menu1);
+        helpButton.setVisible(true);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        item.setOnMenuItemClickListener(v -> {
+            alertDialogBuilder
+                    .setTitle(R.string.recipeHelp)
+                    .setMessage(R.string.recipeHelpMessage)
+                    .setNeutralButton(R.string.ok, (click, arg) -> {
+                    })
+                    .create().show();
+            return true;
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return super.onNavigationItemSelected(item);
     }
 
     /**

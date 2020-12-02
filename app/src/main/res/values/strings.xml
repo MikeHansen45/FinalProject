@@ -6,7 +6,7 @@
     <string name="searchRadius_TM">Enter a search radius</string>
     <string name="tktMstr_Alert">Do you want to delete this?</string>
     <string name="snack_message">This is my snackBar</string>
-    <string name="toast_message">This is my toast</string>
+    <string name="toast_message">No image found</string>
     <string name="toAudioButtonText">Audio Database</string>
     <string name="goToRecipe">Recipe Search</string>
     <string name="recipeButton">Here\'s my button</string>
@@ -22,5 +22,12 @@
     <string name="help">help</string>
     <string name="open" />
     <string name="close" />
+    <string name="recipeAuthor">Author: Zavar Siddiqui</string>
+    <string name="fav">FAV</string>
+    <string name="directLink">Direct Link:</string>
+    <string name="ingredientsTitle">List of Ingredients:</string>
+    <string name="recipeHelp">Recipe Search Help</string>
+    <string name="recipeHelpMessage" />
+    <string name="ok">OK</string>
 
 </resources>
