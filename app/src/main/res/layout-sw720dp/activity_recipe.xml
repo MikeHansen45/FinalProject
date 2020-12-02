@@ -1,38 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".RecipeActivity">
 
-    <ProgressBar
-        android:id="@+id/recipeProgressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_alignParentTop="true"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <SearchView
-        android:id="@+id/searchRecipe"
-        android:layout_below="@id/recipeProgressBar"
         android:layout_height="wrap_content"
-        android:layout_width="300dp"
-        android:layout_alignParentLeft="true"
-        android:queryHint="Search here"
-        android:iconifiedByDefault="false"
-        />
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
 
-    <FrameLayout
-        android:id="@+id/recipeFragment"
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@id/recipeList"
-        />
+        tools:openDrawer="start">
+        <!-- THIS IS WHAT IS VISIBLE ON SCREEN:-->
 
-    <ListView
-        android:layout_width="300dp"
-        android:layout_below="@id/searchRecipe"
-        android:layout_height="match_parent"
-        android:id="@+id/recipeList"
-        />
-</RelativeLayout>
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".RecipeActivity">
+
+            <ProgressBar
+                android:id="@+id/recipeProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true" />
+
+            <SearchView
+                android:id="@+id/searchRecipe"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipeProgressBar"
+                android:layout_alignParentLeft="true"
+                android:iconifiedByDefault="false"
+                android:queryHint="Search here" />
+
+            <FrameLayout
+                android:id="@+id/recipeFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/recipeList" />
+
+            <ListView
+                android:id="@+id/recipeList"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_below="@id/searchRecipe" />
+        </RelativeLayout>
+        <!-- THIS IS WHAT IS WHAT POPS OUT FROM THE SIDE:-->
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/header_layout"
+            app:menu="@menu/nav_menu" />
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+</LinearLayout>

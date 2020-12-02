@@ -13,9 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -32,15 +34,23 @@ public class RecipeFragment extends Fragment {
     private static final String ITEM_POSITION = "Position";
     private static final String ITEM_ID = "ID";
     private int snackTime = Snackbar.LENGTH_LONG;
+    private int duration = Toast.LENGTH_LONG;
     public MyRecipeOpener dbOpener = new MyRecipeOpener(RecipeActivity.sContext);
     public SQLiteDatabase db = dbOpener.getWritableDatabase();
     ImageView thumbnail;
+    public Toast failed;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View recipeDetails = inflater.inflate(R.layout.fragment_recipe, container, false);
         Bundle data = getArguments();
+
+        failed = Toast.makeText(getActivity(), R.string.toast_message, duration);
+
+        Toolbar myToolbar = recipeDetails.findViewById(R.id.toolbar);
+        myToolbar.setTitle(R.string.goToRecipe);
+        myToolbar.setSubtitle(R.string.recipeAuthor);
 
         String thumbnailURL = data.getString(THUMBNAIL_SELECTED);
         MyThumbnailRequest req = new MyThumbnailRequest();
@@ -120,8 +130,11 @@ public class RecipeFragment extends Fragment {
 
         @Override
         public void onPostExecute(String strings) {
-            if (getImage() != null) thumbnail.setImageBitmap(getImage());
-            else Log.i("Thumbnail", "Failed to load");
+            if (getImage() != null) thumbnail.setImageBitmap(Bitmap.createScaledBitmap(getImage(), 500, 500, false));
+            else {
+                failed.show();
+                Log.i("Thumbnail", "Failed to load");
+            }
         }
     }
 
