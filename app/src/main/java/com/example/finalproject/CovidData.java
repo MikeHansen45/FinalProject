@@ -49,7 +49,7 @@ public class CovidData extends MainActivity {
     String city;
     int cases;
     SharedPreferences cvprefs = null;
-    CovidOpener cp;
+    //CovidOpener cp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

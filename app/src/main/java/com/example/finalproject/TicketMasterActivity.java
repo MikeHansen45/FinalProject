@@ -73,7 +73,7 @@ public class TicketMasterActivity extends AppCompatActivity {
 
         //Assigns all the xml item ids to their java variables
         search_IB = findViewById(R.id.search_IB);
-        cityName_ET = findViewById(R.id.cityName_ET);
+        //cityName_ET = findViewById(R.id.cityName_ET);
         radius_ET = findViewById(R.id.radius_ET);
         search_PB = findViewById(R.id.searchPB);
         chatLView = findViewById(R.id.chatLView);
@@ -140,35 +140,35 @@ public class TicketMasterActivity extends AppCompatActivity {
         });
 
         ///Allows user to save item to the database
-        chatLView.setOnItemLongClickListener((parent, view, position, id) -> {
-            androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_Alert))
-                    .setMessage("Would you like to save this event: " + eventArray.get(position).getName() + " ?" + "\n \n" +
-                            "Event Type: " + eventArray.get(position).getType() + "\n \n"  +
-                            "Event URL: " + eventArray.get(position).getURL() + "\n \n" +
-                            "The price range is: " + eventArray.get(position).getPriceMin() + " to " + eventArray.get(position).getPriceMax() + " $")
-
-                    .setPositiveButton("YES", (click, arg) -> {
-                    // save item to the db
-//                        ContentValues newRowValues = new ContentValues();
-//                        newRowValues.put(MyDatabaseHelper.COL_NAME,eventArray.get(position).getName());
-//                        newRowValues.put(MyDatabaseHelper.COL_TYPE,eventArray.get(position).getType());
-//                        newRowValues.put(MyDatabaseHelper.COL_URL,eventArray.get(position).getURL());
-//                        newRowValues.put(MyDatabaseHelper.COL_MAX,eventArray.get(position).getPriceMax());
-//                        newRowValues.put(MyDatabaseHelper.COL_MIN,eventArray.get(position).getPriceMin());
-//                        long newId = db.insert(MyDatabaseHelper.TABLE_NAME,null,newRowValues);
-                        eventArray.remove(position);
-
-
-//                        tempArray.remove(position);
-                        myAdapter.notifyDataSetChanged();
-
-                    })
-                    .setNegativeButton("NO", (click, arg) -> { })
-                    .create().show();
-            return true;
-
-        });
+//        chatLView.setOnItemLongClickListener((parent, view, position, id) -> {
+//            androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//            alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_Alert))
+//                    .setMessage("Would you like to save this event: " + eventArray.get(position).getName() + " ?" + "\n \n" +
+//                            "Event Type: " + eventArray.get(position).getType() + "\n \n"  +
+//                            "Event URL: " + eventArray.get(position).getURL() + "\n \n" +
+//                            "The price range is: " + eventArray.get(position).getPriceMin() + " to " + eventArray.get(position).getPriceMax() + " $")
+//
+//                    .setPositiveButton("YES", (click, arg) -> {
+//                    // save item to the db
+////                        ContentValues newRowValues = new ContentValues();
+////                        newRowValues.put(MyDatabaseHelper.COL_NAME,eventArray.get(position).getName());
+////                        newRowValues.put(MyDatabaseHelper.COL_TYPE,eventArray.get(position).getType());
+////                        newRowValues.put(MyDatabaseHelper.COL_URL,eventArray.get(position).getURL());
+////                        newRowValues.put(MyDatabaseHelper.COL_MAX,eventArray.get(position).getPriceMax());
+////                        newRowValues.put(MyDatabaseHelper.COL_MIN,eventArray.get(position).getPriceMin());
+////                        long newId = db.insert(MyDatabaseHelper.TABLE_NAME,null,newRowValues);
+//                        eventArray.remove(position);
+//
+//
+////                        tempArray.remove(position);
+//                        myAdapter.notifyDataSetChanged();
+//
+//                    })
+//                    .setNegativeButton("NO", (click, arg) -> { })
+//                    .create().show();
+//            return true;
+//
+//        });
 
 
     chatLView.setAdapter(myAdapter);
@@ -265,7 +265,7 @@ public class TicketMasterActivity extends AppCompatActivity {
 //                       Log.d(" URL",url1);
 //                       Log.d("MIN", String.valueOf(min));
 //                       Log.d("MAX", String.valueOf(max));
-                       eventArray.add(new Event(name,type,url1,min,max) );// adds each event to the list
+                       //eventArray.add(new Event(name,type,url1,min,max) );// adds each event to the list
                        Log.d("I", String.valueOf(i));
                        Log.d("LENGTH", String.valueOf(events.length()));
                        searchUpdate = (i*100/events.length()) ;
@@ -328,7 +328,8 @@ public class TicketMasterActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.help_item:
                 androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_help_title))
+//                alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_help_title))
+                alertDialogBuilder.setTitle("msg")
                         .setMessage("Enter a city name, and the radius around the city you would like to search." +
                                 "\npress the search icon and a list of events will appear in the list below." +
                                 "\n long click on an event to see more details. If the event interests you you can save it " +

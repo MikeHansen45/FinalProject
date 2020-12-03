@@ -125,6 +125,9 @@ public class AudioDatabaseActivity extends MainActivity {
 
             //Set the toolbar
             Toolbar myToolbar = findViewById(R.id.toolbar);
+            // CHANGE THESE STRINGS
+            myToolbar.setTitle(R.string.goToRecipe);
+            myToolbar.setSubtitle(R.string.recipeAuthor);
             setSupportActionBar(myToolbar);
 //For NavigationDrawer
             DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -146,7 +149,10 @@ public class AudioDatabaseActivity extends MainActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        super.onCreateOptionsMenu(menu);
+        MenuItem helpButton = menu.findItem(R.id.menu1);
+        helpButton.setVisible(true);
+        return true;
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
