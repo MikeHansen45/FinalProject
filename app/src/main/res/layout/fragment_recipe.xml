@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".RecipeFragment">
 
@@ -10,38 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:layout_alignParentTop="true"
-            android:theme="?attr/actionBarTheme" />
-
     <TextView
         android:id="@+id/recipeTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:layout_toLeftOf="@id/favRecipeSwitch"
+        android:layout_alignParentTop="true"
         android:padding="10sp"
         android:textSize="25sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:id="@+id/favText"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"
-            android:text="@string/fav"
-            android:layout_toRightOf="@id/recipeTitle"
-            android:textSize="15sp" />
 
     <Switch
         android:id="@+id/favRecipeSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/favText"
+        android:layout_below="@id/recipeTitle"
         android:layout_alignParentRight="true"
 />
 
@@ -49,7 +31,7 @@
         android:id="@+id/thumbnailImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/recipeTitle"
+        android:layout_below="@id/favRecipeSwitch"
         android:padding="5sp"
         android:contentDescription="@string/recipeImageDescription" />
 
@@ -69,6 +51,7 @@
         android:layout_below="@id/linkTitle"
         android:textSize="15sp"
         android:autoLink="web"
+        android:textIsSelectable="true"
         android:layout_height="wrap_content" />
 
         <TextView
@@ -87,6 +70,14 @@
         android:padding="5sp"
         android:textSize="15sp"
         android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/backToRecipe"
+            android:text="@string/backToRecipe"
+            android:layout_alignParentBottom="true"
+            />
     </RelativeLayout>
 
 </FrameLayout>

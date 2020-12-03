@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,6 +27,12 @@ import java.util.ArrayList;
 
 public class RecipeFavourites extends MainActivity {
 
+    private static final String TITLE_SELECTED = "Title";
+    private static final String LINK_SELECTED = "Link";
+    private static final String INGREDIENTS_SELECTED = "Ingredients";
+    private static final String THUMBNAIL_SELECTED = "Thumbnail";
+    private static final String ITEM_POSITION = "Position";
+    private static final String ITEM_ID = "ID";
     SQLiteDatabase db;
     ArrayList<Recipe> elements = new ArrayList<>();
     private MyRecipeFavAdapter myAdapter = new MyRecipeFavAdapter();
@@ -33,6 +41,7 @@ public class RecipeFavourites extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_favourites);
+        boolean isTablet = findViewById(R.id.recipeFragment) != null; //check if the FrameLayout is loaded
 
         //Set the toolbar
         Toolbar myToolbar = findViewById(R.id.toolbar);
@@ -51,6 +60,31 @@ public class RecipeFavourites extends MainActivity {
         loadDataFromDatabase();
         ListView favList = findViewById(R.id.favList);
         favList.setAdapter(myAdapter);
+
+        favList.setOnItemClickListener((list, item, position, id) -> {
+            //Create a bundle to pass data to the new fragment
+            Bundle dataToPass = new Bundle();
+            dataToPass.putString(TITLE_SELECTED, elements.get(position).getRecipeTitle());
+            dataToPass.putString(LINK_SELECTED, elements.get(position).getRecipeLink());
+            dataToPass.putString(INGREDIENTS_SELECTED, elements.get(position).getIngredients());
+            dataToPass.putString(THUMBNAIL_SELECTED, elements.get(position).getThumbnail());
+            dataToPass.putInt(ITEM_POSITION, position);
+            dataToPass.putLong(ITEM_ID, id);
+
+            RecipeFragment rFragment = new RecipeFragment(); //add a DetailFragment
+            rFragment.setArguments(dataToPass); //pass it a bundle for information
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.recipeFragment, rFragment) //Add the fragment in FrameLayout
+                    .commit(); //actually load the fragment. Calls onCreate() in DetailFragment
+        });
+
+        Button backToSearch = findViewById(R.id.backToRecipeSearch);
+        backToSearch.setOnClickListener(v -> startActivity(new Intent(RecipeFavourites.this, RecipeActivity.class)));
+    }
+
+    public void updateListFromFragment() {
+        myAdapter.notifyDataSetChanged();
     }
 
     @Override
