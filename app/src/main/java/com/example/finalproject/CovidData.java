@@ -1,5 +1,7 @@
 package com.example.finalproject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +10,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -16,8 +20,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,16 +36,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class CovidData extends AppCompatActivity {
+public class CovidData extends MainActivity {
 
     CovListAdapter CovAdt = new CovListAdapter();
     ArrayList<Covid> CovArray = new ArrayList();
     Covid c;
     String country;
+    String countryCode;
     String province;
     String city;
     int cases;
     SharedPreferences cvprefs = null;
+    CovidOpener cp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,20 +60,35 @@ public class CovidData extends AppCompatActivity {
         EditText edt = findViewById(R.id.cvedt);
         Covidlist.setAdapter(CovAdt);
 
-        cvprefs = getSharedPreferences("FileName", Context.MODE_PRIVATE);
-        String cvsavedString = cvprefs.getString("ReserveName", "def");
+        cvprefs = getSharedPreferences("Input_Data", Context.MODE_PRIVATE);
+        String cvsavedString = cvprefs.getString("COUNTRY", "");
+
+        edt.setText(cvsavedString);
+
+        //Set the toolbar
+        Toolbar myToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
+        //For NavigationDrawer
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, myToolbar, R.string.open, R.string.close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView nav = findViewById(R.id.nav_view);
+        nav.setNavigationItemSelectedListener(this);
 
         CovSearchbtn.setOnClickListener(click -> {
-            //Snackbar.make(Covidbtn, "Hello", Snackbar.LENGTH_LONG).show();//Creates snackbar with long lenght
-            //Toast.makeText(this, "Hello - Toast", Toast.LENGTH_SHORT).show();//Creates toast with short duration
+            //Declare and execute a search query
             CovidQuery cq = new CovidQuery();
             cq.execute("https://api.covid19api.com/country/" + edt.getText() + "/status/confirmed/live?from=2020-10-14T00:00:00Z&to=2020-10-15T00:00:00Z");
             CovAdt.notifyDataSetChanged();
 
+            //Saves the query from the edit text into the file
             SharedPreferences.Editor editor = cvprefs.edit();
             String stringToSave = edt.getText().toString();
-            editor.putString("ReserveName", stringToSave);
-            editor.commit();
+            editor.putString("COUNTRY", stringToSave);
+            editor.apply();
         });
 
         Covidbtn.setOnClickListener(click -> {
@@ -76,9 +100,9 @@ public class CovidData extends AppCompatActivity {
         Covidlist.setOnItemClickListener((parent, view, position, id) -> {
             //Creating alert
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setTitle("Covid data")
-                    .setMessage("This is covid data")
-                    .setNegativeButton("Cancel", (click, arg) -> {})//Cancels the alert
+            alert.setTitle(getString(R.string.cvalert_t))
+                    .setMessage(getString(R.string.cvalert_mess))
+                    .setNegativeButton(getString(R.string.cvalert_negative), (click, arg) -> {})//Cancels the alert
                     .create().show();
         });
 
@@ -86,6 +110,21 @@ public class CovidData extends AppCompatActivity {
         cq.execute("https://api.covid19api.com/country/CANADA/status/confirmed/live?from=2020-10-14T00:00:00Z&to=2020-10-15T00:00:00ZV");
         CovAdt.notifyDataSetChanged();*/
         Covidlist.setAdapter(CovAdt);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item){
+        return super.onNavigationItemSelected(item);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        return super.onOptionsItemSelected(item);
     }
 
     public class CovidQuery extends AsyncTask<String, Integer, String>{
@@ -109,24 +148,17 @@ public class CovidData extends AppCompatActivity {
 
                 //Declare JSON array
                 JSONArray covobj = new JSONArray(covresult);
-                /*JSONArray jarray = covobj.getJSONArray("");
-                int i = 0;
 
-                while (i<jarray.length()) {
-                    JSONObject jo = jarray.getJSONObject(i);
-                    c.country = jo.getString("Country");
-                    c.province = jo.getString("Province");
-                    c.city = jo.getString("City");
-                    c.cases = jo.getInt("Cases");
-                    i++;*/
                 //https://www.semicolonworld.com/question/47685/get-jsonarray-without-array-name
+                //Loop through the array to add elements to a list view
                 for(int i=0;i<covobj.length();i++){
                     JSONObject obj = covobj.getJSONObject(i);
                 country = obj.getString("Country");
+                countryCode = obj.getString("CountryCode");
                 province = obj.getString("Province");
                 city = obj.getString("City");
                 cases = obj.getInt("Cases");
-                    CovArray.add(new Covid(country, province, city, cases));
+                    CovArray.add(new Covid(countryCode, province, city, cases));
                 }
 
             } catch (Exception e) {

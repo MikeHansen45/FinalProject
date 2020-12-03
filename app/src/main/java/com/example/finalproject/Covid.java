@@ -13,8 +13,8 @@ public class Covid {
     String date;
     int lat, lon, cases;
 
-    Covid(String country, String province, String city, int cases){
-        this.country = country;
+    Covid(String countryCode, String province, String city, int cases){
+        this.countryCode = countryCode;
         this.province = province;
         this.city = city;
         this.cases = cases;
@@ -115,7 +115,7 @@ public class Covid {
 
     @Override
     public String toString(){
-        return country + ", " + province + ", " + city + " " + cases + " cases";
+        return countryCode + ", " + province + ", " + city + " " + cases + " cases";
     }
 
 }

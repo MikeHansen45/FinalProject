@@ -7,4 +7,8 @@
 
     <string name="covid_data_btn">Get Data</string>
     <string name="covid_country">COUNTRY</string>
+    <string name="cvalert_t">Covid data</string>
+    <string name="cvalert_mess">Here is the covid data</string>
+    <string name="cvalert_negative">Cancel</string>
+    <string name="search_info_cv">Enter a country name, all caps</string>
 </resources>
