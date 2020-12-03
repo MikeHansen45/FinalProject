@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CovidData">
     tools:context=".CovidData"
-    android:orientation="horizontal">
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -27,35 +25,66 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
+        <ListView
+            android:id="@+id/Covlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/Cvstv"/>
 
-    <ListView
-        android:id="@+id/Covlist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/Covbtn"/>
+        <Button
+            android:id="@+id/Covbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="covid"
+            android:layout_above="@id/Covpgbar"/>
+        <Button
+            android:id="@+id/Resultbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="@string/covid_data_btn"
+            android:layout_above="@id/Covbtn"/>
 
-    <Button
-        android:id="@+id/Covbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_above="@id/Covpgbar"/>
+        <EditText
+            android:id="@+id/cvedt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_toLeftOf="@id/Resultbtn"
+            android:layout_above="@id/Covbtn"
+            android:hint="@string/covid_country"
+            android:inputType="textCapCharacters"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignEnd="@id/Covbtn"
-        android:layout_above="@id/Covpgbar"
-        android:inputType="text"/>
+        <TextView
+            android:id="@+id/Cvstv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/cvedt"
+            android:layout_alignLeft="@id/Covbtn"
+            android:layout_alignParentStart="true"
+            android:text="@string/search_info_cv"/>
 
-    <ProgressBar
-        android:id="@+id/Covpgbar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        <ProgressBar
+            android:id="@+id/Covpgbar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
 
 
-</RelativeLayout>
+        <com.google.android.material.navigation.NavigationView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/header_layout"
+            app:menu="@menu/nav_menu"
+            android:id="@+id/nav_view"/>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+</LinearLayout>
