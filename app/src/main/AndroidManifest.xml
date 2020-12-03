@@ -13,6 +13,11 @@
         android:theme="@style/Theme.FinalProject">
         <activity android:name=".CovidData"/>
         <activity android:name=".TicketMasterActivity" />
+        <activity android:name=".RecipeFavourites"></activity>
+        <activity android:name=".TicketMasterActivity" />
+        <activity android:name=".AudioDatabaseActivity" />
+        <activity android:name=".CovidData" />
+        <activity android:name=".RecipeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

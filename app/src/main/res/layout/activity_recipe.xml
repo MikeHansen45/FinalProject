@@ -21,40 +21,64 @@
         android:layout_height="match_parent"
         tools:openDrawer="start">
         <!-- THIS IS WHAT IS VISIBLE ON SCREEN:-->
-        <RelativeLayout
+        <FrameLayout
+            android:id="@+id/recipeFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".RecipeActivity">
+            android:layout_height="match_parent">
 
-            <ProgressBar
-                android:id="@+id/recipeProgressBar"
-                style="?android:attr/progressBarStyleHorizontal"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true" />
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                tools:context=".RecipeActivity">
 
-            <SearchView
-                android:id="@+id/searchRecipe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/recipeProgressBar"
-                android:iconifiedByDefault="false"
-                android:queryHint="Search here" />
+                <ProgressBar
+                    android:id="@+id/recipeProgressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true" />
 
-            <Button
-                android:id="@+id/buttonRecipe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:text="@string/goToRecipeFavs" />
+                <TextView
+                    android:id="@+id/recipeSearchTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/recipeProgressBar"
+                    android:text="@string/recipeSearchTitle"
+                    android:textSize="20sp" />
 
-            <ListView
-                android:id="@+id/recipeList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/buttonRecipe"
-                android:layout_below="@id/searchRecipe" />
-        </RelativeLayout>
+                <SearchView
+                    android:id="@+id/searchRecipe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/recipeSearchTitle"
+                    android:iconifiedByDefault="false"
+                    android:queryHint="@string/byRecipeName" />
+
+                <SearchView
+                    android:id="@+id/searchIngredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/searchRecipe"
+                    android:iconifiedByDefault="false"
+                    android:queryHint="@string/byIngredients" />
+
+                <Button
+                    android:id="@+id/buttonRecipe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:text="@string/goToRecipeFavs" />
+
+                <ListView
+                    android:id="@+id/recipeList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/buttonRecipe"
+                    android:layout_below="@id/searchIngredients" />
+            </RelativeLayout>
+        </FrameLayout>
+
         <!-- THIS IS WHAT IS WHAT POPS OUT FROM THE SIDE:-->
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"

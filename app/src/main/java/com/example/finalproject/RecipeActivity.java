@@ -101,15 +101,21 @@ public class RecipeActivity extends MainActivity {
                 getSharedPreferences("searchField", Context.MODE_PRIVATE);
 
         String search = sp.getString("searchField", "");
+        String ingredients = sp.getString("ingredientsField", "");
         SearchView recipeSearch = findViewById(R.id.searchRecipe);
+        SearchView ingredientsSearch = findViewById(R.id.searchIngredients);
         recipeSearch.setQuery(search, false);
+        ingredientsSearch.setQuery(ingredients, false);
 
         //listener which saves what's typed to saved preferences
         recipeSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 q = query;
-                String searchURL = "http://www.recipepuppy.com/api/?format=JSON,i=" + i + "&q=" + q + "&p=3";
+                if (ingredientsSearch.getQuery() != null)
+                    i = ingredientsSearch.getQuery().toString();
+                Log.i("RecipeSearch:", ingredientsSearch.getQuery().toString());
+                String searchURL = "http://www.recipepuppy.com/api/?i=" + i + "&q=" + q + "&p=3";
                 MyHTTPRecipeRequest req = new MyHTTPRecipeRequest(); //creates a background thread
                 req.execute(searchURL);
                 myAdapter.notifyDataSetChanged();
@@ -118,7 +124,27 @@ public class RecipeActivity extends MainActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                saveSharedPrefs(newText);
+                saveSharedPrefs(newText, true);
+                return false;
+            }
+        });
+
+        ingredientsSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                i = query;
+                if (recipeSearch.getQuery() != null) q = recipeSearch.getQuery().toString();
+                Log.i("RecipeSearch:", recipeSearch.getQuery().toString());
+                String searchURL = "http://www.recipepuppy.com/api/?i=" + i + "&q=" + q + "&p=3";
+                MyHTTPRecipeRequest req = new MyHTTPRecipeRequest(); //creates a background thread
+                req.execute(searchURL);
+                myAdapter.notifyDataSetChanged();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                saveSharedPrefs(newText, false);
                 return false;
             }
         });
@@ -136,19 +162,13 @@ public class RecipeActivity extends MainActivity {
             dataToPass.putInt(ITEM_POSITION, position);
             dataToPass.putLong(ITEM_ID, id);
 
-            if (isTablet) {
-                RecipeFragment rFragment = new RecipeFragment(); //add a DetailFragment
-                rFragment.setArguments(dataToPass); //pass it a bundle for information
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.recipeFragment, rFragment) //Add the fragment in FrameLayout
-                        .commit(); //actually load the fragment. Calls onCreate() in DetailFragment
-            } else //isPhone
-            {
-                Intent nextActivity = new Intent(RecipeActivity.this, EmptyRecipeActivity.class);
-                nextActivity.putExtras(dataToPass); //send data to next activity
-                startActivity(nextActivity); //make the transition
-            }
+            RecipeFragment rFragment = new RecipeFragment(); //add a DetailFragment
+            rFragment.setArguments(dataToPass); //pass it a bundle for information
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.recipeFragment, rFragment) //Add the fragment in FrameLayout
+                    .commit(); //actually load the fragment. Calls onCreate() in DetailFragment
+
         });
 
     }
@@ -187,9 +207,10 @@ public class RecipeActivity extends MainActivity {
      *
      * @param a The string that will be saved
      */
-    private void saveSharedPrefs(String a) {
+    private void saveSharedPrefs(String a, boolean b) {
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("searchField", a);
+        if (b) editor.putString("searchField", a);
+        else editor.putString("ingredientsField", a);
         editor.commit();
     }
 
