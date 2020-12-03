@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalProject">
         <activity android:name=".RecipeFavourites"></activity>
-        <activity android:name=".EmptyRecipeActivity" />
         <activity android:name=".TicketMasterActivity" />
         <activity android:name=".AudioDatabaseActivity" />
         <activity android:name=".CovidData" />

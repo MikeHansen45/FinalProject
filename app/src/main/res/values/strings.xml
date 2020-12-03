@@ -29,5 +29,12 @@
     <string name="recipeHelp">Recipe Search Help</string>
     <string name="recipeHelpMessage" />
     <string name="ok">OK</string>
+    <string name="recipeSearchTitle">Search for a recipe...</string>
+    <string name="byRecipeName">by name</string>
+    <string name="byIngredients">by ingredients</string>
+    <string name="setFav">Set as Favourite</string>
+    <string name="removeFav">Remove from Favourites</string>
+    <string name="backToRecipe">Back</string>
+    <string name="backToRecipeSearch">Back to Search</string>
 
 </resources>
