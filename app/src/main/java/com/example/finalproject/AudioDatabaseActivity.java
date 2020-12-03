@@ -1,7 +1,11 @@
 package com.example.finalproject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -12,6 +16,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -23,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.reflect.Array;
@@ -38,7 +45,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Iterator;
 
-public class AudioDatabaseActivity extends AppCompatActivity {
+public class AudioDatabaseActivity extends MainActivity {
     public static final String ACTIVITY_NAME = "AUDIO_DB_ACTIVITY";
     ListView listView;
     Button button;
@@ -116,6 +123,18 @@ public class AudioDatabaseActivity extends AppCompatActivity {
                 }
             });
 
+            //Set the toolbar
+            Toolbar myToolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(myToolbar);
+//For NavigationDrawer
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                    drawer, myToolbar, R.string.open, R.string.close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+            NavigationView nav = findViewById(R.id.nav_view);
+            nav.setNavigationItemSelectedListener(this);
+
             saveData();
 
         });
@@ -123,6 +142,19 @@ public class AudioDatabaseActivity extends AppCompatActivity {
         loadData();
         updateViews();
         listView.setAdapter(myAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return super.onNavigationItemSelected(item);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     public void saveData() {
