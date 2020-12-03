@@ -13,13 +13,8 @@ public class Covid {
     String date;
     int lat, lon, cases;
 
-<<<<<<< HEAD
-    Covid(String country, String province, String city, int cases){
-        this.country = country;
-=======
     Covid(String countryCode, String province, String city, int cases){
         this.countryCode = countryCode;
->>>>>>> remotes/origin/CovidData
         this.province = province;
         this.city = city;
         this.cases = cases;
@@ -120,11 +115,7 @@ public class Covid {
 
     @Override
     public String toString(){
-<<<<<<< HEAD
-        return country + ", " + province + ", " + city + " " + cases + " cases";
-=======
         return countryCode + ", " + province + ", " + city + " " + cases + " cases";
->>>>>>> remotes/origin/CovidData
     }
 
 }
