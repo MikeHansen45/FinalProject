@@ -46,7 +46,6 @@ public class AudioDatabaseActivity extends AppCompatActivity {
     EditText editText;
     //private int currPos = 0;
 
-    //change arraylist object holding type to new audio item object
     ArrayList<AudioDBObject> elements = new ArrayList<AudioDBObject>();
 
     public static final String SHARED_PREFS = "sharedPrefs";
