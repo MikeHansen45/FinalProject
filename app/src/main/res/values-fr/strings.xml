@@ -7,8 +7,17 @@
     <string name='author'>Zavar Siddiqui,  Marek La Roche,  Michael Hansen, Benjamin Dalton </string>
     <string name='searchCity_TM'>Entrez un nom de ville: </string>
     <string name="searchRadius_TM">Entrez un rayon de recherche</string>
+    <string name="open" />
+    <string name="close" />
     <string name="toAudioButtonText">Banque de Son</string>
     <string name="artistNameHint">Entrez le nom de l\'artiste</string>
     <string name="searchAudioDBButton">Chercher</string>
+
+    <string name="covid_data_btn">Obtenir Données</string>
+    <string name="covid_country">PAYS</string>
+    <string name="cvalert_t">Données covid</string>
+    <string name="cvalert_mess">Voici les données du covid</string>
+    <string name="cvalert_negative">Annuler</string>
+    <string name="search_info_cv">Entrer un pays en majuscule</string>
 
 </resources>
