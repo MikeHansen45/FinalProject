@@ -3,11 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu1"
-        android:title="@string/help"
+        android:id="@+id/menu2"
         android:orderInCategory="1"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
+        android:title="@string/home"
+        android:icon="@drawable/icons8_home_24"
         />
 
+    <item
+        android:id="@+id/menu3"
+        android:orderInCategory="2"
+        app:showAsAction="ifRoom"
+        android:title="@string/toAudioButtonText"
+        android:icon="@drawable/icons8_audio_wave_24"
+        />
+
+    <item
+        android:id="@+id/menu4"
+        android:orderInCategory="3"
+        app:showAsAction="ifRoom"
+        android:title="@string/covid"
+        android:icon="@drawable/icons8_combo_chart_24"
+        />
+
+    <item
+        android:id="@+id/menu5"
+        android:orderInCategory="4"
+        app:showAsAction="ifRoom"
+        android:title="@string/goToRecipe"
+        android:icon="@drawable/icons8_restaurant_24"
+        />
+
+    <item
+        android:id="@+id/menu6"
+        android:orderInCategory="5"
+        app:showAsAction="ifRoom"
+        android:title="@string/ticketMaster"
+        android:icon="@drawable/icons8_performance_24"
+        />
+
+    <item
+        android:id="@+id/menu1"
+        android:orderInCategory="6"
+        app:showAsAction="never"
+        android:title="@string/help"
+        android:icon="@drawable/icons8_info_24"
+        />
 
 </menu>

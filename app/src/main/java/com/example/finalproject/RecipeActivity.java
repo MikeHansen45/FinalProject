@@ -78,7 +78,7 @@ public class RecipeActivity extends MainActivity {
 
         //Set the toolbar, title, and subtitle
         Toolbar myToolbar = findViewById(R.id.toolbar);
-        myToolbar.setTitle(R.string.goToRecipe + "1.0");
+        myToolbar.setTitle(R.string.goToRecipe);
         myToolbar.setSubtitle(R.string.recipeAuthor);
         setSupportActionBar(myToolbar);
 
@@ -190,8 +190,8 @@ public class RecipeActivity extends MainActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        MenuItem helpButton = menu.findItem(R.id.menu1);
-        helpButton.setVisible(true);
+//        MenuItem helpButton = menu.findItem(R.id.menu1);
+//        helpButton.setVisible(true);
         return true;
     }
 
@@ -202,11 +202,32 @@ public class RecipeActivity extends MainActivity {
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        item.setOnMenuItemClickListener(v -> {
-            alt.show();
-            return true;
-        });
-        return false;
+        Intent goToTicket = new Intent(this,TicketMasterActivity.class);
+        Intent goToRecipe = new Intent(this,RecipeActivity.class);
+        Intent goToAudio = new Intent(this, AudioDatabaseActivity.class);
+        Intent goToCovid = new Intent(this, CovidData.class);
+        Intent goHome = new Intent(this, MainActivity.class);
+        switch (item.getItemId()) {
+            case R.id.menu2:
+                startActivity(goHome);
+                break;
+            case R.id.menu6:
+                startActivity(goToTicket);
+                break;
+            case R.id.menu5:
+                startActivity(goToRecipe);
+                break;
+            case R.id.menu3:
+                startActivity(goToAudio);
+                break;
+            case R.id.menu4:
+                startActivity(goToCovid);
+                break;
+            case R.id.menu1:
+                alt.show();
+                break;
+        }
+        return true;
     }
 
     /**

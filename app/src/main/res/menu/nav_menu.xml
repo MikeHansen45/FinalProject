@@ -3,31 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/home"
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        android:title="@string/home"
+        android:icon="@drawable/icons8_home_24"
+        />
+
+    <item
         android:id="@+id/backToAudio"
         app:showAsAction="always"
-        android:orderInCategory="3"
+        android:orderInCategory="2"
         android:title="@string/toAudioButtonText"
+        android:icon="@drawable/icons8_audio_wave_24"
         />
 
     <item
         android:id="@+id/backToCovid"
         app:showAsAction="always"
-        android:orderInCategory="4"
+        android:orderInCategory="3"
         android:title="@string/covid"
+        android:icon="@drawable/icons8_combo_chart_24"
         />
 
     <item
         android:id="@+id/backToRecipe"
         app:showAsAction="always"
-        android:orderInCategory="2"
+        android:orderInCategory="4"
         android:title="@string/goToRecipe"
+        android:icon="@drawable/icons8_restaurant_24"
          />
 
     <item
         android:id="@+id/backToTM"
         app:showAsAction="always"
-        android:orderInCategory="1"
+        android:orderInCategory="5"
         android:title="@string/ticketMaster"
+        android:icon="@drawable/icons8_performance_24"
         />
 
 </menu>

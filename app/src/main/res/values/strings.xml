@@ -37,5 +37,6 @@
     <string name="backToRecipe">Back</string>
     <string name="backToRecipeSearch">Back to Search</string>
     <string name="Favtitle">Favourite Recipes</string>
+    <string name="home">Home</string>
 
 </resources>

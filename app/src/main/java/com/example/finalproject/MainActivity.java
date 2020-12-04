@@ -26,6 +26,7 @@ import android.widget.Button;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
     SharedPreferences prefs = null;
     Button toTicket;
     Button toRecipe;
@@ -78,21 +79,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Intent goToTicket = new Intent(this,TicketMasterActivity.class);
-        Intent goToRecipe = new Intent(this,RecipeActivity.class);
-        Intent goToAudio = new Intent(this, AudioDatabaseActivity.class);
-        Intent goToCovid = new Intent(this, CovidData.class);
         switch (item.getItemId()) {
+            case R.id.home:
+                Intent goHome = new Intent(this, MainActivity.class);
+                startActivity(goHome);
+                break;
             case R.id.backToTM:
+                Intent goToTicket = new Intent(this,TicketMasterActivity.class);
                 startActivity(goToTicket);
                 break;
             case R.id.backToRecipe:
+                Intent goToRecipe = new Intent(this,RecipeActivity.class);
                 startActivity(goToRecipe);
                 break;
             case R.id.backToAudio:
+                Intent goToAudio = new Intent(this, AudioDatabaseActivity.class);
                 startActivity(goToAudio);
                 break;
             case R.id.backToCovid:
+                Intent goToCovid = new Intent(this, CovidData.class);
                 startActivity(goToCovid);
                 break;
         }
@@ -101,9 +106,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        //this is for the help button fi you want to use it
-        //Override this method in your own code and write the alert dialog code
-        //change helpButton.setVisible(false); to true in onCreateOptionsMenu in your activity
+        switch (item.getItemId()) {
+            case R.id.menu2:
+                Intent goHome = new Intent(this, MainActivity.class);
+                startActivity(goHome);
+                break;
+            case R.id.menu6:
+            Intent goToTicket = new Intent(this,TicketMasterActivity.class);
+                startActivity(goToTicket);
+                break;
+            case R.id.menu5:
+            Intent goToRecipe = new Intent(this,RecipeActivity.class);
+                startActivity(goToRecipe);
+                break;
+            case R.id.menu3:
+                Intent goToAudio = new Intent(this, AudioDatabaseActivity.class);
+                startActivity(goToAudio);
+                break;
+            case R.id.menu4:
+                Intent goToCovid = new Intent(this, CovidData.class);
+                startActivity(goToCovid);
+                break;
+            case R.id.menu1:
+//                this is for help button if it is set to visible
+                break;
+        }
         return true;
     }
 
@@ -112,8 +139,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu, menu);
-        MenuItem helpButton = menu.findItem(R.id.menu1);
-        helpButton.setVisible(false);
         return true;
     }
 }
