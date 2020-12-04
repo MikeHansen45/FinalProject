@@ -36,5 +36,6 @@
     <string name="removeFav">Remove from Favourites</string>
     <string name="backToRecipe">Back</string>
     <string name="backToRecipeSearch">Back to Search</string>
+    <string name="Favtitle">Favourite Recipes</string>
 
 </resources>

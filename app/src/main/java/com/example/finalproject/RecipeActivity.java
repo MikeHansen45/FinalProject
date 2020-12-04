@@ -3,22 +3,17 @@ package com.example.finalproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +23,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,19 +38,20 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class RecipeActivity extends MainActivity {
-    private static final String TITLE_SELECTED = "Title";
-    private static final String LINK_SELECTED = "Link";
+    private MyListAdapter myRecipeAdapter = new MyListAdapter();
     private static final String INGREDIENTS_SELECTED = "Ingredients";
     private static final String THUMBNAIL_SELECTED = "Thumbnail";
     private static final String ITEM_POSITION = "Position";
-    private static final String ITEM_ID = "ID";
-    SharedPreferences sp = null;
+    private static final String TITLE_SELECTED = "Title";
+    private static final String LINK_SELECTED = "Link";
     ArrayList<Recipe> elements = new ArrayList<>();
-    private MyListAdapter myAdapter = new MyListAdapter();
+    private static final String ITEM_ID = "ID";
+    public static Context sContext;
+    SharedPreferences sp = null;
     ProgressBar progress;
+    AlertDialog alt;
     String q = "";
     String i = "";
-    public static Context sContext;
 
     /**
      * Called when the activity is first created. This is where you should do all of your normal static set up: create views, bind data to lists, etc. This method also provides you with a Bundle containing the activity's previously frozen state, if there was one.
@@ -69,11 +63,22 @@ public class RecipeActivity extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+
+        //getting the context for the fragments to access the database later
         sContext = getApplicationContext();
 
-        //Set the toolbar
+        //making the help alert dialog
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alt = alertDialogBuilder
+                .setTitle(R.string.recipeHelp)
+                .setMessage(R.string.recipeHelpMessage)
+                .setNeutralButton(R.string.ok, (click, arg) -> {
+                })
+                .create();
+
+        //Set the toolbar, title, and subtitle
         Toolbar myToolbar = findViewById(R.id.toolbar);
-        myToolbar.setTitle(R.string.goToRecipe);
+        myToolbar.setTitle(R.string.goToRecipe + "1.0");
         myToolbar.setSubtitle(R.string.recipeAuthor);
         setSupportActionBar(myToolbar);
 
@@ -83,31 +88,32 @@ public class RecipeActivity extends MainActivity {
                 drawer, myToolbar, R.string.open, R.string.close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView nav = findViewById(R.id.nav_view);
         nav.setNavigationItemSelectedListener(this);
 
+        //progress bar
         progress = findViewById(R.id.recipeProgressBar);
         progress.setVisibility(View.INVISIBLE);
-        boolean isTablet = findViewById(R.id.recipeFragment) != null; //check if the FrameLayout is loaded
 
+        //go to favourites button
         Button toFavs = findViewById(R.id.buttonRecipe);
         Intent goToRecipeFavs = new Intent(this, RecipeFavourites.class);
         toFavs.setOnClickListener(v -> startActivity(goToRecipeFavs));
 
-        //loading saved preferences
-        sp =
-
-                getSharedPreferences("searchField", Context.MODE_PRIVATE);
-
+        //getting the strings from saved preferences
+        sp = getSharedPreferences("searchField", Context.MODE_PRIVATE);
         String search = sp.getString("searchField", "");
         String ingredients = sp.getString("ingredientsField", "");
+
+        //setting up the searchViews
         SearchView recipeSearch = findViewById(R.id.searchRecipe);
         SearchView ingredientsSearch = findViewById(R.id.searchIngredients);
         recipeSearch.setQuery(search, false);
         ingredientsSearch.setQuery(ingredients, false);
 
         //listener which saves what's typed to saved preferences
+        //starts async task to search for query
+        //updates listView once complete
         recipeSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -118,7 +124,7 @@ public class RecipeActivity extends MainActivity {
                 String searchURL = "http://www.recipepuppy.com/api/?i=" + i + "&q=" + q + "&p=3";
                 MyHTTPRecipeRequest req = new MyHTTPRecipeRequest(); //creates a background thread
                 req.execute(searchURL);
-                myAdapter.notifyDataSetChanged();
+                myRecipeAdapter.notifyDataSetChanged();
                 return false;
             }
 
@@ -129,16 +135,17 @@ public class RecipeActivity extends MainActivity {
             }
         });
 
+        //same listener but for second searchView
         ingredientsSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 i = query;
                 if (recipeSearch.getQuery() != null) q = recipeSearch.getQuery().toString();
                 Log.i("RecipeSearch:", recipeSearch.getQuery().toString());
-                String searchURL = "http://www.recipepuppy.com/api/?i=" + i + "&q=" + q + "&p=3";
+                String searchURL = "http://www.recipepuppy.com/api/?i=" + i + "&q=" + q + "&p=3&";
                 MyHTTPRecipeRequest req = new MyHTTPRecipeRequest(); //creates a background thread
                 req.execute(searchURL);
-                myAdapter.notifyDataSetChanged();
+                myRecipeAdapter.notifyDataSetChanged();
                 return false;
             }
 
@@ -149,9 +156,11 @@ public class RecipeActivity extends MainActivity {
             }
         });
 
+        //setting up the listView
         ListView results = findViewById(R.id.recipeList);
-        results.setAdapter(myAdapter);
+        results.setAdapter(myRecipeAdapter);
 
+        //listener for listView that opens recipeDetail fragment
         results.setOnItemClickListener((list, item, position, id) -> {
             //Create a bundle to pass data to the new fragment
             Bundle dataToPass = new Bundle();
@@ -162,17 +171,22 @@ public class RecipeActivity extends MainActivity {
             dataToPass.putInt(ITEM_POSITION, position);
             dataToPass.putLong(ITEM_ID, id);
 
-            RecipeFragment rFragment = new RecipeFragment(); //add a DetailFragment
+            RecipeFragment rFragment = new RecipeFragment(); //create fragment object
             rFragment.setArguments(dataToPass); //pass it a bundle for information
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.recipeFragment, rFragment) //Add the fragment in FrameLayout
-                    .commit(); //actually load the fragment. Calls onCreate() in DetailFragment
+                    .commit(); //actually load the fragment.
 
         });
 
     }
 
+    /**
+     * This method creates the toolbar menu.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -181,22 +195,25 @@ public class RecipeActivity extends MainActivity {
         return true;
     }
 
+    /**
+     * Listener for items on the toolbar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         item.setOnMenuItemClickListener(v -> {
-            alertDialogBuilder
-                    .setTitle(R.string.recipeHelp)
-                    .setMessage(R.string.recipeHelpMessage)
-                    .setNeutralButton(R.string.ok, (click, arg) -> {
-                    })
-                    .create().show();
+            alt.show();
             return true;
         });
-
-        return true;
+        return false;
     }
 
+    /**
+     * Listener for items in the navigation menu.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return super.onNavigationItemSelected(item);
@@ -322,6 +339,10 @@ public class RecipeActivity extends MainActivity {
         }
 
 
+        /**
+         * This method runs after the completion of doInBackground. The results can be modified here for usage in the application.
+         * @param result The results from doInBackground
+         */
         public void onPostExecute(String result) {
             if (elements != null) elements.clear();
             try {
@@ -345,7 +366,7 @@ public class RecipeActivity extends MainActivity {
             } catch (JSONException e) {
 
             }
-            myAdapter.notifyDataSetChanged();
+            myRecipeAdapter.notifyDataSetChanged();
             progress.setVisibility(View.INVISIBLE);
         }
     }
