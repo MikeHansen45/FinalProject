@@ -45,4 +45,7 @@
     <string name="cvalert_mess">Here is the covid data</string>
     <string name="cvalert_negative">Cancel</string>
     <string name="search_info_cv">Enter a country name, all caps</string>
+    <string name="audioAuthor">Benjamin Dalton</string>
+    <string name="audioHelp">Audio DB Help</string>
+    <string name="audioHelpMessage">audio Help Message goes here</string>
 </resources>

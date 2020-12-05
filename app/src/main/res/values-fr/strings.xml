@@ -19,5 +19,7 @@
     <string name="cvalert_mess">Voici les données du covid</string>
     <string name="cvalert_negative">Annuler</string>
     <string name="search_info_cv">Entrer un pays en majuscule</string>
+    <string name="audioAuthor">Benjamin Dalton</string>
+    <string name="audioHelp">Audio DB Help</string>
 
 </resources>
