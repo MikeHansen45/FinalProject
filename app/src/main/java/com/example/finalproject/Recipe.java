@@ -4,28 +4,38 @@ import android.graphics.Bitmap;
 
 public class Recipe {
 
+    private long id;
     private String recipeTitle;
     private String recipeLink;
     private String ingredients;
-    private Bitmap thumbnail;
+    private String thumbnailURL;
 
     public Recipe() {
 
     }
 
-    public Recipe(String title, String URL, String ingredients) {
-       this(title, URL, ingredients, null);
-    }
-
-    public Recipe(String title, String URL, String ingredients, Bitmap thumbnail) {
+    public Recipe(long id, String title, String URL, String ingredients, String thumbnailURL) {
+        this.id = id;
         recipeTitle = title;
         recipeLink = URL;
         this.ingredients = ingredients;
-        this.thumbnail = thumbnail;
+        this.thumbnailURL = thumbnailURL;
     }
 
-    public Bitmap getThumbnail() {
-        return thumbnail;
+    public Recipe(String title, String URL, String ingredients, String thumbnailURL) {
+        this(0, title, URL, ingredients, thumbnailURL);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getThumbnail() {
+        return thumbnailURL;
     }
 
     public String getIngredients() {
@@ -53,11 +63,11 @@ public class Recipe {
     }
 
     public void setThumbnail(Bitmap thumbnail) {
-        this.thumbnail = thumbnail;
+        this.thumbnailURL = thumbnailURL;
     }
 
     @Override
     public String toString() {
-      return getRecipeTitle();
+        return getRecipeTitle();
     }
 }
