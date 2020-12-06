@@ -113,7 +113,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
             int bdMax = results.getInt(maxColIndex);
             int bdMin = results.getInt(minColIndex);
 
-            eventArray.add(new Event(dbName,dbType,dbURL,bdMin,bdMax,0));
+            eventArray.add(new Event(dbName,dbType,dbURL,bdMin,bdMax,0,"",""));
 
         }
 
@@ -280,6 +280,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
             String url1;// url to the event on ticket master
             int min, max;// the min and max price for tickets
             int searchUpdate;// used to populate the progress bar
+            String urlIMG;
             String info;
             eventArray.clear();
             try {
@@ -323,7 +324,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
 //                       Log.d(" URL",url1);
 //                       Log.d("MIN", String.valueOf(min));
 //                       Log.d("MAX", String.valueOf(max));
-                       eventArray.add(new Event(name,type,url1,min,max,0) );// adds each event to the list
+                       eventArray.add(new Event(name,type,url1,min,max,0,"","") );// adds each event to the list
                        Log.d("I", String.valueOf(i));
                        Log.d("LENGTH", String.valueOf(events.length()));
                        searchUpdate = (i*100/events.length()) ;
