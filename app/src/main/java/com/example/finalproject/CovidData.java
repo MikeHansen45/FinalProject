@@ -58,15 +58,19 @@ public class CovidData extends MainActivity {
         Button CovSearchbtn = findViewById(R.id.Resultbtn);
         ListView Covidlist = findViewById(R.id.Covlist);
         EditText edt = findViewById(R.id.cvedt);
+        EditText edtd = findViewById(R.id.dateedt);
+        EditText edtt = findViewById(R.id.timeedt);
+        EditText edtd2 = findViewById(R.id.dateedt2);
+        EditText edtt2 = findViewById(R.id.timeedt2);
         Covidlist.setAdapter(CovAdt);
 
         cvprefs = getSharedPreferences("Input_Data", Context.MODE_PRIVATE);
         String cvsavedString = cvprefs.getString("COUNTRY", "");
 
-        edt.setText(cvsavedString);
+       edt.setText(cvsavedString);
 
         //Set the toolbar
-        Toolbar myToolbar = findViewById(R.id.toolbar);
+        /*Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
         //For NavigationDrawer
@@ -76,12 +80,14 @@ public class CovidData extends MainActivity {
         toggle.syncState();
 
         NavigationView nav = findViewById(R.id.nav_view);
-        nav.setNavigationItemSelectedListener(this);
+        nav.setNavigationItemSelectedListener(this);*/
 
         CovSearchbtn.setOnClickListener(click -> {
             //Declare and execute a search query
+            //CovArray.clear();
             CovidQuery cq = new CovidQuery();
             cq.execute("https://api.covid19api.com/country/" + edt.getText() + "/status/confirmed/live?from=2020-10-14T00:00:00Z&to=2020-10-15T00:00:00Z");
+            //cq.execute("https://api.covid19api.com/country/" +edt.getText()+ "/status/confirmed/live?from=" +edtd.getText()+ "T" +edtt.getText()+ "Z&to=" +edtd2.getText()+ "T" +edtt2.getText()+ "Z");}
             CovAdt.notifyDataSetChanged();
 
             //Saves the query from the edit text into the file
@@ -112,7 +118,7 @@ public class CovidData extends MainActivity {
         Covidlist.setAdapter(CovAdt);
     }
 
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu){
         return super.onCreateOptionsMenu(menu);
     }
@@ -125,7 +131,7 @@ public class CovidData extends MainActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     public class CovidQuery extends AsyncTask<String, Integer, String>{
 
