@@ -16,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public final static String COL_URL = "URL";
     public final static String COL_MAX = "max";
     public final static String COL_MIN = "min";
+    public final static String COL_SAVED="saved";
 
     public DatabaseHelper(Context ctx)
     {
@@ -30,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_TYPE  + " text,"
                 + COL_URL + " text,"
                 + COL_MAX + " int,"
+                + COL_SAVED + " text,"
                 + COL_MIN + " int);");
 
     }

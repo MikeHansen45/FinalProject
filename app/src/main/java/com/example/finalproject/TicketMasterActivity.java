@@ -17,9 +17,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,8 +34,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -56,6 +62,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
     private ImageButton search_IB;// Image button click to search
     private EditText cityName_ET;// Edit text used to insert city name
     private EditText radius_ET;// EditText used to insert radius
+    private Button toTicketSaved;
     private ProgressBar search_PB;// Progress bar updated by search progress
     private ArrayList<Event> eventArray = new ArrayList<>();//array of Events
     //private ArrayList<String> tempArray = new ArrayList<>();// a temp list for demo 1
@@ -65,6 +72,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
     Toolbar tBar;//Toolbar item
     Toolbar lBar;//Toolbar item for nav bar
     SharedPreferences prefs = null;// A shared preferenc item
+    Bitmap image =null;
 
     // Database variables
 
@@ -92,6 +100,13 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
         cityName_ET.setText(savedCity);
         radius_ET.setText(savedRadius);
 
+
+        //// button to go to saved events ///////////////////////////////
+        toTicketSaved = findViewById(R.id.toTktSaved);
+        Intent savedPage = new Intent(this,activity_tktmstr_saved.class);
+
+        toTicketSaved.setOnClickListener(v -> {startActivity(savedPage);});
+
         //////////////////////////////////// Loading Database components /////////////////////////////
 
         MyDatabaseHelper = new DatabaseHelper(this);
@@ -106,16 +121,16 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
         int minColIndex= results.getColumnIndex(MyDatabaseHelper.COL_MIN);
 
 
-        while (results.moveToNext()){
-            String dbName = results.getString(nameColIndex);
-            String dbType = results.getString(typeColIndex);
-            String dbURL = results.getString(urlColIndex);
-            int bdMax = results.getInt(maxColIndex);
-            int bdMin = results.getInt(minColIndex);
-
-            eventArray.add(new Event(dbName,dbType,dbURL,bdMin,bdMax,0,"",""));
-
-        }
+//        while (results.moveToNext()){
+//            String dbName = results.getString(nameColIndex);
+//            String dbType = results.getString(typeColIndex);
+//            String dbURL = results.getString(urlColIndex);
+//            int bdMax = results.getInt(maxColIndex);
+//            int bdMin = results.getInt(minColIndex);
+//
+//            eventArray.add(new Event(dbName,dbType,dbURL,bdMin,bdMax,0,"","SAVED"));
+//
+//        }
 
 
         //////////////////////////////////////// TOAST Just because it is required not sure where I want it for real ///////////////////////////////////
@@ -136,13 +151,13 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
         setSupportActionBar(tBar);
 
         //  creating drawer layout
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout_tktmstr);// to be created in the xml for this file
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,tBar, R.string.open,R.string.close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        NavigationView navigationView = findViewById(R.id.nav_view);// to be created in the xml of this file
-//        navigationView.setNavigationItemSelectedListener(this);
+        DrawerLayout drawer = findViewById(R.id.drawr_layout);// to be created in the xml for this file
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,tBar, R.string.open,R.string.close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);// to be created in the xml of this file
+        navigationView.setNavigationItemSelectedListener(this);
 
 
 
@@ -197,44 +212,80 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
         // create a save, delete and cancel button
         ///Allows user to save item to the database
         chatLView.setOnItemLongClickListener((parent, view, position, id) -> {
+            Bitmap temp =null;
+            LayoutInflater li= getLayoutInflater();
+            View thisRow =  li.inflate(R.layout.alert_image_layout, null, false);
+            ImageView image =thisRow.findViewById(R.id.theimage);
+            try{
+
+                URL tempImgURL =new URL(eventArray.get(position).getImgURL());
+                temp = getIcon(tempImgURL);
+                ImageLoader il = new ImageLoader(image, tempImgURL);
+                il.execute();
+            }
+
+            catch (Exception e){
+                Log.d("DUCK", "DUCK");
+            }
+//
+            //          image.setImageBitmap(temp);
+
+
+
             androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_Alert))
                     .setMessage("Would you like to save this event: " + eventArray.get(position).getName() + " ?" + "\n \n" +
                             "Event Type: " + eventArray.get(position).getType() + "\n \n"  +
-                            "Event URL: " + eventArray.get(position).getURL() + "\n \n" +
+                            "Event URL: " + eventArray.get(position).getURL() + "\n \n " +
                             "The price range is: " + eventArray.get(position).getPriceMin() + " to " + eventArray.get(position).getPriceMax() + " $")
 
                     .setPositiveButton("YES", (click, arg) -> {
-                    // save item to the db
+                        eventArray.get(position).setSaved("Saved");
+                        // save item to the db
                         ContentValues newRowValues = new ContentValues();
                         newRowValues.put(MyDatabaseHelper.COL_NAME,eventArray.get(position).getName());
                         newRowValues.put(MyDatabaseHelper.COL_TYPE,eventArray.get(position).getType());
                         newRowValues.put(MyDatabaseHelper.COL_URL,eventArray.get(position).getURL());
                         newRowValues.put(MyDatabaseHelper.COL_MAX,eventArray.get(position).getPriceMax());
                         newRowValues.put(MyDatabaseHelper.COL_MIN,eventArray.get(position).getPriceMin());
+//                        newRowValues.put(MyDatabaseHelper.COL_SAVED,eventArray.get(position).getSaved());
                         long newId = db.insert(MyDatabaseHelper.TABLE_NAME,null,newRowValues);
-                        eventArray.get(position).setID(newId);
+                        //eventArray.get(position).setID(newId);
 
 
 //                        tempArray.remove(position);
                         myAdapter.notifyDataSetChanged();
 
                     })
+
+
+
+
+                    .setNeutralButton("Delete",(click,arg)->{
+
+                        eventArray.remove(position);
+
+                        myAdapter.notifyDataSetChanged();
+
+                    })
                     .setNegativeButton("Cancel", (click, arg) -> { })
+                    .setView(thisRow)
                     .create().show();
+
+
             return true;
 
         });
 
 
-    chatLView.setAdapter(myAdapter);
+        chatLView.setAdapter(myAdapter);
     }
 
 
 /////////////////////////////////////////////////////////////// MyListAdapter Code bellow /////////////////////////////////////////////////////////
 
 
-// this class will be heavily modified so I have not added complete metadata.
+    // this class will be heavily modified so I have not added complete metadata.
     private class MyListAdapter extends BaseAdapter {
 
         public int getCount() { return eventArray.size();}
@@ -253,6 +304,8 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
             //set what the text should be for this row:
             TextView tView = newView.findViewById(R.id.event_details_tv);
             tView.setText( getItem(position).toString() );
+
+
 
             //return it to be put in the table
             return newView;
@@ -278,11 +331,15 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
             String name;// name of the event
             String type;// type of the event
             String url1;// url to the event on ticket master
+            String imgURL;//the url to the promotional image of the event
             int min, max;// the min and max price for tickets
             int searchUpdate;// used to populate the progress bar
-            String urlIMG;
             String info;
             eventArray.clear();
+
+
+
+
             try {
                 URL url = new URL(args[0]);
                 HttpURLConnection jsonUrlConnection = (HttpURLConnection) url.openConnection();
@@ -301,34 +358,42 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
                 JSONObject embeded = tktMstJSON.getJSONObject("_embedded");
                 JSONArray events = embeded.getJSONArray("events");
                 JSONArray priceRanges ;
+                JSONArray img;
 
-                   for(int i =0; i<events.length();i++){
-                       JSONObject obj = events.getJSONObject(i);
-                       if(obj.has("priceRanges")) {
-                           priceRanges = obj.getJSONArray("priceRanges");
-                           min = priceRanges.getJSONObject(0).getInt("min");
-                           max = priceRanges.getJSONObject(0).getInt("max");
-                       }
-                       else{
-                           min = -1;
-                           max = -1;
-                       }
+                for(int i =0; i<events.length();i++){
+                    JSONObject obj = events.getJSONObject(i);
+                    if(obj.has("images")){
+                        img = obj.getJSONArray("images");
+                        imgURL = img.getJSONObject(0).getString("url");
+                    }
+                    else{
+                        imgURL = "";
+                    }
+                    if(obj.has("priceRanges")) {
+                        priceRanges = obj.getJSONArray("priceRanges");
+                        min = priceRanges.getJSONObject(0).getInt("min");
+                        max = priceRanges.getJSONObject(0).getInt("max");
+                    }
+                    else{
+                        min = -1;
+                        max = -1;
+                    }
 
-                       name = obj.getString("name");
-                       type = obj.getString("type");
-                       url1 = obj.getString("url");
+                    name = obj.getString("name");
+                    type = obj.getString("type");
+                    url1 = obj.getString("url");
 
 //
-//                       Log.d(" NAME",name);
+                    //                Log.d(" IMAGE URL URLRURLRLRLLRLRLRLRLLRL:",imgURL);
 //                       Log.d(" TYPE",type);
 //                       Log.d(" URL",url1);
 //                       Log.d("MIN", String.valueOf(min));
 //                       Log.d("MAX", String.valueOf(max));
-                       eventArray.add(new Event(name,type,url1,min,max,0,"","") );// adds each event to the list
-                       Log.d("I", String.valueOf(i));
-                       Log.d("LENGTH", String.valueOf(events.length()));
-                       searchUpdate = (i*100/events.length()) ;
-                       publishProgress(searchUpdate);
+                    eventArray.add(new Event(name,type,url1,min,max,0,imgURL,"") );// adds each event to the list
+                    Log.d("I", String.valueOf(i));
+                    Log.d("LENGTH", String.valueOf(events.length()));
+                    searchUpdate = (i*100/events.length()) ;
+                    publishProgress(searchUpdate);
 
                 }
 
@@ -350,7 +415,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
 
         @Override
         protected void onProgressUpdate(Integer... args) {
-            Log.d("OnProgressUpdate", String.valueOf(args[0]));
+//            Log.d("OnProgressUpdate", String.valueOf(args[0]));
             search_PB.setProgress(args[0]);
         }
 
@@ -419,10 +484,71 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
         return false;
     }
 
+
+    /**
+     * Allows the search EditText boxes to populate data from the last search
+     * @param city: the name of the city that was last searched
+     * @param radius: the radius used in the last search
+     */
     private void saveSharedPrefs(String city, String radius){
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("city",city);
         edit.putString("radius",radius);
         edit.commit();
     }
+
+
+    private Bitmap getIcon(URL imgURL){
+        Log.i("IN GET IMAGE","START");
+        HttpURLConnection imgConn = null;
+        try{
+            imgConn = (HttpURLConnection) imgURL.openConnection();
+            imgConn.connect();
+            int imgResponseCode = imgConn.getResponseCode();
+            if(imgResponseCode == 200){
+                image = BitmapFactory.decodeStream(imgConn.getInputStream());
+                return image;
+            }
+            else{
+                return null;
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        finally{
+            imgConn.disconnect();
+
+        }
+
+
+
+    }
+    public class ImageLoader extends AsyncTask<Void, Void, Bitmap>
+    {
+        ImageView i;
+        URL s;
+        public ImageLoader(ImageView anIV, URL source)
+        {
+            i = anIV;
+            s = source;
+        }
+        public Bitmap  doInBackground(Void ... v){
+            try {
+                return getIcon(s);
+            }catch(Exception e){
+
+            }
+            return null;
+        }
+
+        public void onPostExecute(Bitmap b)
+        {
+            i.setImageBitmap(b);
+
+        }
+    }
+
+
 }
