@@ -11,7 +11,7 @@ import android.graphics.Bitmap;
 public class Event {
     private String name, type,url;
     private double priceMin, priceMax;
-    private String imgURL, saved;
+    private String imgURL, date;
     private long id;
 
     /**
@@ -23,7 +23,7 @@ public class Event {
      * @param max the max price of a ticket
      * @param IMGURL the image url of the event
      */
-    public Event(String NAME, String TYPE, String URl, double min, double max,long ID,String IMGURL, String SAVED){
+    public Event(String NAME, String TYPE, String URl, double min, double max,long ID,String IMGURL, String DATE){
         this.name = NAME;
         this.type = TYPE;
         this.url=URl;
@@ -31,7 +31,7 @@ public class Event {
         this.priceMax=max;
         this.id =ID;
         this.imgURL= IMGURL;
-        this.saved = SAVED;
+        this.date = DATE;
 
 
     }
@@ -41,10 +41,10 @@ public class Event {
     public String getType(){return this.type;}
     public String getURL(){return this.url;}
     public double getPriceMin(){return this.priceMin;}
-    public double getPriceMax(){return this.priceMin;}
+    public double getPriceMax(){return this.priceMax;}
     public long getId(){return this.id;}
     public String getImgURL(){return this.imgURL;}
-    public String getSaved(){return this.saved;}
+    public String getDate(){return this.date;}
 
     //setter
     public void setID(long dbID){
@@ -52,7 +52,7 @@ public class Event {
 
     }
     public void setSaved(String s){
-        this.saved=s;
+        this.date=s;
     }
 
 

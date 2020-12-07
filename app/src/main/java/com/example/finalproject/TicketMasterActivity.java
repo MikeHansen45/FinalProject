@@ -101,6 +101,10 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
         radius_ET.setText(savedRadius);
 
 
+        ////// Fragment //////
+        boolean isTablet = findViewById(R.id.fragmentLocation_tkt) !=null; //isTablet is a boolean var that checkes to see if fragment lcation is load which is an id in the 720dp activity_ticket_master
+
+
         //// button to go to saved events ///////////////////////////////
         toTicketSaved = findViewById(R.id.toTktSaved);
         Intent savedPage = new Intent(this,activity_tktmstr_saved.class);
@@ -111,7 +115,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
 
         MyDatabaseHelper = new DatabaseHelper(this);
         db = MyDatabaseHelper.getWritableDatabase();
-        String [] columns = {MyDatabaseHelper.COL_ID, MyDatabaseHelper.COL_NAME,MyDatabaseHelper.COL_TYPE,MyDatabaseHelper.COL_URL, MyDatabaseHelper.COL_MIN, MyDatabaseHelper.COL_MAX};
+        String [] columns = {MyDatabaseHelper.COL_ID, MyDatabaseHelper.COL_NAME,MyDatabaseHelper.COL_TYPE,MyDatabaseHelper.COL_URL, MyDatabaseHelper.COL_MIN,MyDatabaseHelper.COL_MAX };
         results = db.query(false,MyDatabaseHelper.TABLE_NAME, columns, null, null, null, null, null, null);
         int idColIndex = results.getColumnIndex(MyDatabaseHelper.COL_ID);
         int nameColIndex = results.getColumnIndex(MyDatabaseHelper.COL_NAME);
@@ -119,6 +123,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
         int  urlColIndex = results.getColumnIndex(MyDatabaseHelper.COL_URL);
         int maxColIndex = results.getColumnIndex(MyDatabaseHelper.COL_MAX);
         int minColIndex= results.getColumnIndex(MyDatabaseHelper.COL_MIN);
+        int dateCol= results.getColumnIndex(MyDatabaseHelper.COL_DATE);
 
 
 //        while (results.moveToNext()){
@@ -176,6 +181,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
                 String getCity = null;
                 String getRadius = null;
                 String url = null;
+                String date=null;
 
                 getCity =  cityName_ET.getText().toString();
                 getRadius = radius_ET.getText().toString();
@@ -230,49 +236,62 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
 //
             //          image.setImageBitmap(temp);
 
+            ///////////// setting up bundle to pass to the new fragment //////
+            Bundle dataToPass = new Bundle(); //bundel object to hold event data from the on click
+            dataToPass.putString("NAME",eventArray.get(position).getName());
+            dataToPass.putString("TYPE",eventArray.get(position).getType());
+            dataToPass.putDouble("MIN",eventArray.get(position).getPriceMin());
+            dataToPass.putDouble("NAME",eventArray.get(position).getName());
+            dataToPass.putString("NAME",eventArray.get(position).getName());
 
+            if(isTablet){
+                fragment_tktmstr dFragment = new fragment_tktmstr();//creates an object of my frag class
+                dFragment.setArguments(dataToPass);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLocation_tkt,dFragment).commit();
 
-            androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_Alert))
-                    .setMessage("Would you like to save this event: " + eventArray.get(position).getName() + " ?" + "\n \n" +
-                            "Event Type: " + eventArray.get(position).getType() + "\n \n"  +
-                            "Event URL: " + eventArray.get(position).getURL() + "\n \n " +
-                            "The price range is: " + eventArray.get(position).getPriceMin() + " to " + eventArray.get(position).getPriceMax() + " $")
+            }
+            else {
+                androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_Alert))
+                        .setMessage("Would you like to save this event: " + eventArray.get(position).getName() + " ?" + "\n \n" +
+                                "Event Type: " + eventArray.get(position).getType() + "\n \n" +
+                                "Event URL: " + eventArray.get(position).getURL() + "\n \n " +
+                                "Date: " + eventArray.get(position).getDate() + "\n \n" +
+                                "The price range is: " + eventArray.get(position).getPriceMin() + " to " + eventArray.get(position).getPriceMax() + " $")
 
-                    .setPositiveButton("YES", (click, arg) -> {
-                        eventArray.get(position).setSaved("Saved");
-                        // save item to the db
-                        ContentValues newRowValues = new ContentValues();
-                        newRowValues.put(MyDatabaseHelper.COL_NAME,eventArray.get(position).getName());
-                        newRowValues.put(MyDatabaseHelper.COL_TYPE,eventArray.get(position).getType());
-                        newRowValues.put(MyDatabaseHelper.COL_URL,eventArray.get(position).getURL());
-                        newRowValues.put(MyDatabaseHelper.COL_MAX,eventArray.get(position).getPriceMax());
-                        newRowValues.put(MyDatabaseHelper.COL_MIN,eventArray.get(position).getPriceMin());
-//                        newRowValues.put(MyDatabaseHelper.COL_SAVED,eventArray.get(position).getSaved());
-                        long newId = db.insert(MyDatabaseHelper.TABLE_NAME,null,newRowValues);
-                        //eventArray.get(position).setID(newId);
+                        .setPositiveButton("YES", (click, arg) -> {
+                            eventArray.get(position).setSaved("Saved");
+                            // save item to the db
+                            ContentValues newRowValues = new ContentValues();
+                            newRowValues.put(MyDatabaseHelper.COL_NAME, eventArray.get(position).getName());
+                            newRowValues.put(MyDatabaseHelper.COL_TYPE, eventArray.get(position).getType());
+                            newRowValues.put(MyDatabaseHelper.COL_URL, eventArray.get(position).getURL());
+                            newRowValues.put(MyDatabaseHelper.COL_MAX, eventArray.get(position).getPriceMax());
+                            newRowValues.put(MyDatabaseHelper.COL_MIN, eventArray.get(position).getPriceMin());
+                            //newRowValues.put(MyDatabaseHelper.COL_DATE,eventArray.get(position).getDate());
+                            long newId = db.insert(MyDatabaseHelper.TABLE_NAME, null, newRowValues);
+                            //eventArray.get(position).setID(newId);
 
 
 //                        tempArray.remove(position);
-                        myAdapter.notifyDataSetChanged();
+                            myAdapter.notifyDataSetChanged();
 
-                    })
-
-
+                        })
 
 
-                    .setNeutralButton("Delete",(click,arg)->{
+                        .setNeutralButton("Delete", (click, arg) -> {
 
-                        eventArray.remove(position);
+                            eventArray.remove(position);
 
-                        myAdapter.notifyDataSetChanged();
+                            myAdapter.notifyDataSetChanged();
 
-                    })
-                    .setNegativeButton("Cancel", (click, arg) -> { })
-                    .setView(thisRow)
-                    .create().show();
+                        })
+                        .setNegativeButton("Cancel", (click, arg) -> {
+                        })
+                        .setView(thisRow)
+                        .create().show();
 
-
+            }
             return true;
 
         });
@@ -334,7 +353,8 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
             String imgURL;//the url to the promotional image of the event
             int min, max;// the min and max price for tickets
             int searchUpdate;// used to populate the progress bar
-            String info;
+            String date;
+
             eventArray.clear();
 
 
@@ -358,6 +378,9 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
                 JSONObject embeded = tktMstJSON.getJSONObject("_embedded");
                 JSONArray events = embeded.getJSONArray("events");
                 JSONArray priceRanges ;
+                JSONArray dateArray;
+                JSONObject dateObj;
+                JSONObject dateObj1;
                 JSONArray img;
 
                 for(int i =0; i<events.length();i++){
@@ -378,18 +401,25 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
                         min = -1;
                         max = -1;
                     }
+                    if(obj.has("dates")){
+                        dateObj = obj.getJSONObject("dates");
+                        dateObj1 = dateObj.getJSONObject("start");
+                        date = dateObj1.getString("localDate");
+
+                    }
+                    else{date="";}
+
 
                     name = obj.getString("name");
                     type = obj.getString("type");
                     url1 = obj.getString("url");
 
-//
-                    //                Log.d(" IMAGE URL URLRURLRLRLLRLRLRLRLLRL:",imgURL);
+                    Log.d("Date date date date:",date);
 //                       Log.d(" TYPE",type);
 //                       Log.d(" URL",url1);
 //                       Log.d("MIN", String.valueOf(min));
 //                       Log.d("MAX", String.valueOf(max));
-                    eventArray.add(new Event(name,type,url1,min,max,0,imgURL,"") );// adds each event to the list
+                    eventArray.add(new Event(name,type,url1,min,max,0,imgURL,date) );// adds each event to the list
                     Log.d("I", String.valueOf(i));
                     Log.d("LENGTH", String.valueOf(events.length()));
                     searchUpdate = (i*100/events.length()) ;

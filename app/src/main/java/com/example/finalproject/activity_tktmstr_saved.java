@@ -84,7 +84,7 @@ public class activity_tktmstr_saved extends AppCompatActivity implements Navigat
 
         MyDatabaseHelper = new DatabaseHelper(this);
         db = MyDatabaseHelper.getWritableDatabase();
-        String [] columns = {MyDatabaseHelper.COL_ID, MyDatabaseHelper.COL_NAME,MyDatabaseHelper.COL_TYPE,MyDatabaseHelper.COL_URL, MyDatabaseHelper.COL_MIN, MyDatabaseHelper.COL_MAX};
+        String [] columns = {MyDatabaseHelper.COL_ID, MyDatabaseHelper.COL_NAME,MyDatabaseHelper.COL_TYPE,MyDatabaseHelper.COL_URL, MyDatabaseHelper.COL_MIN,MyDatabaseHelper.COL_MAX};
         results1 = db.query(false,MyDatabaseHelper.TABLE_NAME, columns, null, null, null, null, null, null);
         int idColIndex = results1.getColumnIndex(MyDatabaseHelper.COL_ID);
         int nameColIndex = results1.getColumnIndex(MyDatabaseHelper.COL_NAME);
@@ -92,7 +92,7 @@ public class activity_tktmstr_saved extends AppCompatActivity implements Navigat
         int  urlColIndex = results1.getColumnIndex(MyDatabaseHelper.COL_URL);
         int maxColIndex = results1.getColumnIndex(MyDatabaseHelper.COL_MAX);
         int minColIndex= results1.getColumnIndex(MyDatabaseHelper.COL_MIN);
-
+        //int dateColIndex=results1.getColumnIndex(MyDatabaseHelper.COL_DATE);
 
         while (results1.moveToNext()){
             long id = results1.getLong(idColIndex);
@@ -101,6 +101,7 @@ public class activity_tktmstr_saved extends AppCompatActivity implements Navigat
             String dbURL = results1.getString(urlColIndex);
             int bdMax = results1.getInt(maxColIndex);
             int bdMin = results1.getInt(minColIndex);
+
 
             savedEvents.add(new Event(dbName,dbType,dbURL,bdMin,bdMax,id,"","SAVED"));
 
@@ -157,6 +158,8 @@ public class activity_tktmstr_saved extends AppCompatActivity implements Navigat
             TextView tView = newView.findViewById(R.id.save_event_name_TV);
             TextView tViewName = newView.findViewById(R.id.save_event_Type_TV);
             TextView tViewURL = newView.findViewById(R.id.save_event_url_TV);
+            TextView tViewPrice = newView.findViewById(R.id.save_event_price_TV);
+            tViewPrice.setText("Price :" + ((Event) getItem(i)).getPriceMin() + "$ " + " -  " + ((Event) getItem(i)).getPriceMax() + " $") ;
             tViewName.setText(((Event) getItem(i)).getType());
             tViewURL.setText(((Event) getItem(i)).getURL());
             tView.setText( event.toString() );
