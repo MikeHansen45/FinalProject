@@ -34,4 +34,20 @@
     <string name="Favtitle">"Recettes préférées "</string>
     <string name="home">"Accueil "</string>
     <string name="recipeHelpMessage">"Recherchez une recette par nom de recette ou par ingrédients en tapant dans les champs respectifs et en appuyant sur \"Entrée\". Votre terme de recherche ne peut pas contenir d'espaces. Vous pouvez rechercher plusieurs ingrédients en les séparant par une virgule. Enregistrez une recette dans vos favoris en cliquant sur la recette et en cliquant sur le bouton. "</string>
+    <string name="artistNameHint">Entrez le nom de l\'artiste</string>
+    <string name="searchAudioDBButton">Chercher</string>
+
+    <string name="covid_data_btn">Obtenir Données</string>
+    <string name="covid_country">PAYS</string>
+    <string name="cvalert_t">Données covid</string>
+    <string name="cvalert_mess">Voici les données du covid</string>
+    <string name="cvalert_negative">Annuler</string>
+    <string name="search_info_cv">Entrer un pays en majuscule</string>
+    <string name="audioAuthor">Benjamin Dalton</string>
+    <string name="audioHelp">Audio DB Help</string>
+    <string name="tktMstr_empty_search">Veuillez entrer une ville et un rayon pour terminer votre recherche</string>
+    <string name="toTicketSave">Événements enregistrés</string>
+    <string name="tktMstr_delete_saved">Souhaitez-vous supprimer cet événement?</string>
+    <string name="tktMstr_Yes">Out</string>
+    <string name="tktMstr_cancel">Annuler</string>
 </resources>

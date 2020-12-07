@@ -26,10 +26,27 @@
     <string name="byIngredients">by ingredients</string>
     <string name="backToRecipe">Back</string>
     <string name="backToRecipeSearch">Back to Search</string>
+    <string name="searchAudioDBButton">Search</string>
+    <string name="artistNameHint">Enter Artist Name</string>
     <string name="Favtitle">Favourite Recipes</string>
     <string name="home">Home</string>
     <string name="undo">UNDO</string>
     <string name="recipeFavRemoved">Removed from favourites!</string>
     <string name="help">Info</string>
 
+    <string name="covid_data_btn">Get Data</string>
+    <string name="covid_country">COUNTRY</string>
+    <string name="cvalert_t">Covid data</string>
+    <string name="cvalert_mess">Here is the covid data</string>
+    <string name="cvalert_negative">Cancel</string>
+    <string name="search_info_cv">Enter a country name, all caps</string>
+    <string name="audioAuthor">Benjamin Dalton</string>
+    <string name="audioHelp">Audio DB Help</string>
+    <string name="audioHelpMessage">audio Help Message goes here</string>
+    <string name="tktMstr_help_title">Ticket Master Help</string>
+    <string name="tktMstr_empty_search">Please enter a City and Radius to complete your search</string>
+    <string name="toTicketSave">Saved Events</string>
+    <string name="tktMstr_delete_saved">Would you like to delete this event?</string>
+    <string name="tktMstr_Yes">Yes</string>
+    <string name="tktMstr_cancel">Cancel</string>
 </resources>
