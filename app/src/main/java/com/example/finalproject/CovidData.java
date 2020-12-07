@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -87,7 +88,7 @@ public class CovidData extends MainActivity {
             //CovArray.clear();
             CovidQuery cq = new CovidQuery();
             cq.execute("https://api.covid19api.com/country/" + edt.getText() + "/status/confirmed/live?from=2020-10-14T00:00:00Z&to=2020-10-15T00:00:00Z");
-            //cq.execute("https://api.covid19api.com/country/" +edt.getText()+ "/status/confirmed/live?from=" +edtd.getText()+ "T" +edtt.getText()+ "Z&to=" +edtd2.getText()+ "T" +edtt2.getText()+ "Z");}
+            //cq.execute("https://api.covid19api.com/country/" +edt.getText()+ "/status/confirmed/live?from=" +edtd.getText()+ "T" +edtt.getText()+ "Z&to=" +edtd2.getText()+ "T" +edtt2.getText()+ "Z");
             CovAdt.notifyDataSetChanged();
 
             //Saves the query from the edit text into the file

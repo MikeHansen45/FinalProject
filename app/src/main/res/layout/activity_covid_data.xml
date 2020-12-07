@@ -12,7 +12,8 @@
         android:id="@+id/Covlist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/linedt"/>
+        android:layout_above="@id/Covpgbar"
+        android:layout_below="@id/lineedt"/>
 
     <Button
         android:id="@+id/Covbtn"
@@ -21,13 +22,13 @@
         android:layout_alignParentEnd="true"
         android:text="covid"
         android:layout_above="@id/Covpgbar"/>
+
     <Button
         android:id="@+id/Resultbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:text="@string/covid_data_btn"
-        android:layout_above="@id/Covbtn"/>
+        android:layout_above="@id/lineedt"/>
 
     <EditText
         android:id="@+id/cvedt"
@@ -38,7 +39,7 @@
         android:inputType="textCapCharacters" />
 
     <LinearLayout
-        android:id="@+id/linedt"
+        android:id="@+id/lineedt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/cvedt">
