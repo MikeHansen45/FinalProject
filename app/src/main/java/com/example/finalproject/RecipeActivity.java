@@ -184,56 +184,34 @@ public class RecipeActivity extends MainActivity {
 
     /**
      * This method creates the toolbar menu.
-     * @param menu
-     * @return
+     * @param menu The menu object used to create the toolbar
+     * @return true
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-//        MenuItem helpButton = menu.findItem(R.id.menu1);
-//        helpButton.setVisible(true);
+        MenuItem helpButton = menu.findItem(R.id.menu1);
+        helpButton.setVisible(true);
         return true;
     }
 
     /**
      * Listener for items on the toolbar
-     * @param item
-     * @return
+     * @param item the buttons on the toolbar menu
+     * @return true
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Intent goToTicket = new Intent(this,TicketMasterActivity.class);
-        Intent goToRecipe = new Intent(this,RecipeActivity.class);
-        Intent goToAudio = new Intent(this, AudioDatabaseActivity.class);
-        Intent goToCovid = new Intent(this, CovidData.class);
-        Intent goHome = new Intent(this, MainActivity.class);
-        switch (item.getItemId()) {
-            case R.id.menu2:
-                startActivity(goHome);
-                break;
-            case R.id.menu6:
-                startActivity(goToTicket);
-                break;
-            case R.id.menu5:
-                startActivity(goToRecipe);
-                break;
-            case R.id.menu3:
-                startActivity(goToAudio);
-                break;
-            case R.id.menu4:
-                startActivity(goToCovid);
-                break;
-            case R.id.menu1:
-                alt.show();
-                break;
+        if (item.getItemId() == R.id.menu1) {
+            alt.show();
         }
         return true;
     }
 
     /**
      * Listener for items in the navigation menu.
-     * @param item
-     * @return
+     * @param item the menu items in the navigation drawer
+     * @return true
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -283,7 +261,7 @@ public class RecipeActivity extends MainActivity {
         /**
          * @param position    The index of the item that will be returned
          * @param convertView The ListView that will hold the items
-         * @param parent
+         * @param parent the parent ViewGroup
          * @return The view that will be inflated to the ListView
          */
         @Override
@@ -330,7 +308,7 @@ public class RecipeActivity extends MainActivity {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
                 StringBuilder sb = new StringBuilder();
 
-                String line = null;
+                String line;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line + "\n");
                 }
