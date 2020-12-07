@@ -2,7 +2,6 @@ package com.example.finalproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -35,13 +34,18 @@ public class RecipeFavourites extends MainActivity {
     private static final String ITEM_ID = "ID";
     SQLiteDatabase db;
     ArrayList<Recipe> elements = new ArrayList<>();
-    private MyRecipeFavAdapter myAdapter = new MyRecipeFavAdapter();
+    private MyRecipeFavAdapter myRecipeAdapter = new MyRecipeFavAdapter();
 
+    /**
+     * Called when the activity is first created. This is where you should do all of your normal static set up: create views, bind data to lists, etc. This method also provides you with a Bundle containing the activity's previously frozen state, if there was one.
+     * Always followed by onStart().
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_favourites);
-        boolean isTablet = findViewById(R.id.recipeFragment) != null; //check if the FrameLayout is loaded
 
         //Set the toolbar
         Toolbar myToolbar = findViewById(R.id.toolbar);
@@ -53,14 +57,17 @@ public class RecipeFavourites extends MainActivity {
                 drawer, myToolbar, R.string.open, R.string.close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView nav = findViewById(R.id.nav_view);
         nav.setNavigationItemSelectedListener(this);
 
+        //load data from database into the ArrayList
         loadDataFromDatabase();
-        ListView favList = findViewById(R.id.favList);
-        favList.setAdapter(myAdapter);
 
+        //setting up the listView
+        ListView favList = findViewById(R.id.favList);
+        favList.setAdapter(myRecipeAdapter);
+
+        //When an item in ListView is clicked, open the same fragment as RecipeActivity
         favList.setOnItemClickListener((list, item, position, id) -> {
             //Create a bundle to pass data to the new fragment
             Bundle dataToPass = new Bundle();
@@ -79,24 +86,54 @@ public class RecipeFavourites extends MainActivity {
                     .commit(); //actually load the fragment. Calls onCreate() in DetailFragment
         });
 
+        //setting up the button that goes back to recipe search
         Button backToSearch = findViewById(R.id.backToRecipeSearch);
         backToSearch.setOnClickListener(v -> startActivity(new Intent(RecipeFavourites.this, RecipeActivity.class)));
     }
 
+    /**
+     * Updates the favourites list from the fragment by calling the parent activity's adapter class.
+     * It will remove all items from the array list and load it again from the database in case any items were deleted from the fragment
+     */
     public void updateListFromFragment() {
-        myAdapter.notifyDataSetChanged();
+        elements.clear();
+        loadDataFromDatabase();
+        myRecipeAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * This method creates the toolbar menu.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Listener for items on the toolbar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Listener for items in the navigation menu.
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return super.onNavigationItemSelected(item);
+    }
+
+    /**
+     * Loads data from the recipe database and adds it to the ArrayList to be displayed in a ListView
+     */
     private void loadDataFromDatabase() {
         MyRecipeOpener dbOpener = new MyRecipeOpener(this);
         db = dbOpener.getWritableDatabase();
@@ -123,6 +160,11 @@ public class RecipeFavourites extends MainActivity {
         printCursor(results, MyRecipeOpener.VERSION_NUM);
     }
 
+    /**
+     * prints the results of the cursor from the database for error checking
+     * @param c Cursor returned from querying the database
+     * @param version database version number
+     */
     private void printCursor(Cursor c, int version) {
         String names = "";
         for (String col : c.getColumnNames()) {
@@ -144,9 +186,6 @@ public class RecipeFavourites extends MainActivity {
 
     }
 
-    protected void deleteMessage(Recipe r) {
-        db.delete(MyRecipeOpener.TABLE_NAME, MyRecipeOpener.COL_ID + "= ?", new String[]{Long.toString(r.getId())});
-    }
 
     private class MyRecipeFavAdapter extends BaseAdapter {
 
