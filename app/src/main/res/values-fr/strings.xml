@@ -7,6 +7,19 @@
     <string name='author'>Zavar Siddiqui,  Marek La Roche,  Michael Hansen, Benjamin Dalton </string>
     <string name='searchCity_TM'>Entrez un nom de ville: </string>
     <string name="searchRadius_TM">Entrez un rayon de recherche</string>
+    <string name="tktMstr_Alert">Voulez-vous le supprimer?</string>
+
+    <string name="goToRecipe">"Recette "</string>
+    <string name="snack_message">Ceci est mon snackbar</string>
+    <string name="toast_message">"C'est mon toast "</string>
+    <string name="recipeButton">"Voici mon bouton "</string>
+    <string name="tktMstr_empty_search">Veuillez entrer une ville et un rayon pour terminer votre recherche</string>
+    <string name="open">Ouvert</string>
+    <string name="close">Fermer</string>
+
+    <string name="toAudioButtonText">Banque de Son</string>
+    <string name="artistNameHint">Entrez le nom de l\'artiste</string>
+    <string name="searchAudioDBButton">Chercher</string>
 
     <string name="covid_data_btn">Obtenir Données</string>
     <string name="covid_country">PAYS</string>
@@ -14,5 +27,10 @@
     <string name="cvalert_mess">Voici les données du covid</string>
     <string name="cvalert_negative">Annuler</string>
     <string name="search_info_cv">Entrer un pays en majuscule</string>
+
+    <string name="toTicketSave">Événements enregistrés</string>
+    <string name="tktMstr_delete_saved">Souhaitez-vous supprimer cet événement?</string>
+    <string name="tktMstr_Yes">Out</string>
+    <string name="tktMstr_cancel">Annuler</string>
 
 </resources>

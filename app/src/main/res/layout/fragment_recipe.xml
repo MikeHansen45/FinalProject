@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".RecipeFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/recipeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="10sp"
+        android:textSize="25sp" />
+
+    <Switch
+        android:id="@+id/favRecipeSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recipeTitle"
+        android:layout_alignParentRight="true"
+/>
+
+    <ImageView
+        android:id="@+id/thumbnailImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/favRecipeSwitch"
+        android:padding="5sp"
+        android:contentDescription="@string/recipeImageDescription" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_below="@id/thumbnailImage"
+            android:id="@+id/linkTitle"
+            android:text="@string/directLink"
+            />
+
+    <TextView
+        android:id="@+id/recipeLink"
+        android:layout_width="match_parent"
+        android:padding="5sp"
+        android:layout_below="@id/linkTitle"
+        android:textSize="15sp"
+        android:autoLink="web"
+        android:textIsSelectable="true"
+        android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/listIngredients"
+            android:layout_width="match_parent"
+            android:padding="5sp"
+            android:layout_below="@id/recipeLink"
+            android:textSize="20sp"
+            android:text="@string/ingredientsTitle"
+            android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/ingredientsView"
+        android:layout_width="match_parent"
+        android:layout_below="@id/listIngredients"
+        android:padding="5sp"
+        android:textSize="15sp"
+        android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/backToRecipe"
+            android:text="@string/backToRecipe"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
+
+</FrameLayout>

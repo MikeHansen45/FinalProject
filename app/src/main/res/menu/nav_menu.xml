@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/backToAudio"
+        app:showAsAction="always"
+        android:orderInCategory="3"
+        android:title="@string/toAudioButtonText"
+        />
+
+    <item
+        android:id="@+id/backToCovid"
+        app:showAsAction="always"
+        android:orderInCategory="4"
+        android:title="@string/covid"
+        />
+
+    <item
+        android:id="@+id/backToRecipe"
+        app:showAsAction="always"
+        android:orderInCategory="2"
+        android:title="@string/goToRecipe"
+         />
+
+    <item
+        android:id="@+id/backToTM"
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        android:title="@string/ticketMaster"
+        />
+
+</menu>

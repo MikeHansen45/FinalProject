@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/toAudio_mi"
+        android:title="Audio"
+        android:icon="@drawable/music_mi"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+
+        />
+    <item
+        android:id="@+id/toCovid_mi"
+        android:title="Covid"
+        android:orderInCategory="200"
+        android:icon="@drawable/booger_mi"
+        app:showAsAction="always"
+
+        />
+    <item
+        android:id="@+id/toRecipe_mi"
+        android:title="Recipe"
+        android:orderInCategory="400"
+        android:icon="@drawable/recipe_mi"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/toTicket_mi"
+        android:title="Ticket Master"
+        android:orderInCategory="500"
+        android:icon="@drawable/event_mi"
+        app:showAsAction="always"/>
+
+</menu>

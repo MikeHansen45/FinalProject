@@ -7,44 +7,77 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/activityM_TV1"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ma_TV"
-        android:gravity="center" />
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
 
-    <TextView
-        android:id="@+id/activityM_TV2"
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/author"
-        android:gravity="center"
-        android:textSize="13sp"
-        />
-    <Button
-        android:id="@+id/toMusic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        tools:openDrawer="start">
+        <!-- THIS IS WHAT IS VISIBLE ON SCREEN:-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        />
-    <Button
-        android:id="@+id/toCovid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Covid Data"
-        />
-    <Button
-        android:id="@+id/toRecipies"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-    <Button
-        android:id="@+id/toTicket"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ticket Master"
-        />
+            <TextView
+                android:id="@+id/activityM_TV1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ma_TV"
+                android:gravity="center" />
+            <TextView
+                android:id="@+id/activityM_TV2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/author"
+                android:gravity="center"
+                android:textSize="13sp"
+                />
+            <Button
+                android:id="@+id/toAudio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/toAudioButtonText"
 
+                />
+            <Button
+                android:id="@+id/toCovid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Covid Data"
+                />
+            <Button
+                android:id="@+id/toRecipe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/goToRecipe"
+                />
+            <Button
+                android:id="@+id/toTicket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ticket Master"
+                />
+
+        </LinearLayout>
+
+        <!-- THIS IS WHAT IS WHAT POPS OUT FROM THE SIDE:-->
+        <com.google.android.material.navigation.NavigationView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/header_layout"
+            app:menu="@menu/nav_menu"
+            android:id="@+id/nav_view"/>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 </LinearLayout>
