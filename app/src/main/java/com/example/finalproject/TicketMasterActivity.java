@@ -13,6 +13,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.ContentValues;
@@ -115,7 +116,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
 
         MyDatabaseHelper = new DatabaseHelper(this);
         db = MyDatabaseHelper.getWritableDatabase();
-        String [] columns = {MyDatabaseHelper.COL_ID, MyDatabaseHelper.COL_NAME,MyDatabaseHelper.COL_TYPE,MyDatabaseHelper.COL_URL, MyDatabaseHelper.COL_MIN,MyDatabaseHelper.COL_MAX };
+        String [] columns = {MyDatabaseHelper.COL_ID, MyDatabaseHelper.COL_NAME,MyDatabaseHelper.COL_TYPE,MyDatabaseHelper.COL_URL, MyDatabaseHelper.COL_MIN,MyDatabaseHelper.COL_MAX};
         results = db.query(false,MyDatabaseHelper.TABLE_NAME, columns, null, null, null, null, null, null);
         int idColIndex = results.getColumnIndex(MyDatabaseHelper.COL_ID);
         int nameColIndex = results.getColumnIndex(MyDatabaseHelper.COL_NAME);
@@ -153,7 +154,9 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
 
         /////////////////////////////////////// Adding toolbar and nav bar to page//////////////////////////////////////////////////
         tBar = findViewById(R.id.toolbar);// set toolbar to the id of my toolbar in the ticket master xml
+
         setSupportActionBar(tBar);
+        getSupportActionBar().setTitle(R.string.tktMstr_by_mh);
 
         //  creating drawer layout
         DrawerLayout drawer = findViewById(R.id.drawr_layout);// to be created in the xml for this file
@@ -231,7 +234,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
             }
 
             catch (Exception e){
-                Log.d("DUCK", "DUCK");
+                Log.d("DUCK", String.valueOf(e));
             }
 //
             //          image.setImageBitmap(temp);
@@ -241,8 +244,9 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
             dataToPass.putString("NAME",eventArray.get(position).getName());
             dataToPass.putString("TYPE",eventArray.get(position).getType());
             dataToPass.putDouble("MIN",eventArray.get(position).getPriceMin());
-            dataToPass.putDouble("NAME",eventArray.get(position).getName());
-            dataToPass.putString("NAME",eventArray.get(position).getName());
+            dataToPass.putDouble("MAX",eventArray.get(position).getPriceMax());
+            dataToPass.putString("URL",eventArray.get(position).getURL());
+            dataToPass.putString("DATE",eventArray.get(position).getDate());
 
             if(isTablet){
                 fragment_tktmstr dFragment = new fragment_tktmstr();//creates an object of my frag class
@@ -253,13 +257,13 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
             else {
                 androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_Alert))
-                        .setMessage("Would you like to save this event: " + eventArray.get(position).getName() + " ?" + "\n \n" +
-                                "Event Type: " + eventArray.get(position).getType() + "\n \n" +
-                                "Event URL: " + eventArray.get(position).getURL() + "\n \n " +
+                        .setMessage( eventArray.get(position).getName() + " ?" + "\n \n" +
+                                "Type: " + eventArray.get(position).getType() + "\n \n" +
+                                "URL: "  + eventArray.get(position).getURL() + " \n \n " +
                                 "Date: " + eventArray.get(position).getDate() + "\n \n" +
-                                "The price range is: " + eventArray.get(position).getPriceMin() + " to " + eventArray.get(position).getPriceMax() + " $")
+                                "Price: " + eventArray.get(position).getPriceMin() + " - " + eventArray.get(position).getPriceMax() + " $")
 
-                        .setPositiveButton("YES", (click, arg) -> {
+                        .setPositiveButton(R.string.tktMstr_Yes, (click, arg) -> {
                             eventArray.get(position).setSaved("Saved");
                             // save item to the db
                             ContentValues newRowValues = new ContentValues();
@@ -279,14 +283,14 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
                         })
 
 
-                        .setNeutralButton("Delete", (click, arg) -> {
+                        .setNeutralButton(R.string.tktMstr_Delete, (click, arg) -> {
 
                             eventArray.remove(position);
 
                             myAdapter.notifyDataSetChanged();
 
                         })
-                        .setNegativeButton("Cancel", (click, arg) -> {
+                        .setNegativeButton(R.string.tktMstr_cancel, (click, arg) -> {
                         })
                         .setView(thisRow)
                         .create().show();
@@ -487,13 +491,10 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
         switch(item.getItemId()){
             case R.id.help_item:
                 androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_help_title))
-                        .setMessage("Enter a city name, and the radius around the city you would like to search." +
-                                "\npress the search icon and a list of events will appear in the list below." +
-                                "\n long click on an event to see more details. If the event interests you you can save it " +
-                                "by clicking on the yes button. Once the event is saved it will disapear from the list.")
+                alertDialogBuilder.setTitle(R.string.ticket_master_help_title)
+                        .setMessage(R.string.tktMstr_main_help)
 
-                        .setPositiveButton("YES", (click, arg) -> {
+                        .setPositiveButton(R.string.tktMstr_Yes, (click, arg) -> {
                             // save item to the db
 
                         })
@@ -511,7 +512,34 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
      *@param item, a menu item, the behavior of each item set bellow
      */
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Intent goToTicket = new Intent(this,TicketMasterActivity.class);
+        Intent goToRecipe = new Intent(this,RecipeActivity.class);
+        Intent goToAudio = new Intent(this, AudioDatabaseActivity.class);
+        Intent goToCovid = new Intent(this, CovidData.class);
+        switch (item.getItemId()){
+            case R.id.toAudio_mi:
+                startActivity(goToAudio);
+                break;
+            case R.id.toCovid_mi:
+                startActivity(goToCovid);
+                break;
+            case R.id.toRecipe_mi:
+                startActivity(goToRecipe);
+                break;
+            case R.id.toTicket_mi:
+                startActivity(goToTicket);
+                break;
+
+        }
+
+
+
+
+
+
         return false;
+
+
     }
 
 

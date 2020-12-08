@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/toAudio_mi"
-        android:title="Audio"
+        android:title="@string/toAudioButtonText"
         android:icon="@drawable/music_mi"
         android:orderInCategory="100"
         app:showAsAction="always"
@@ -11,7 +11,7 @@
         />
     <item
         android:id="@+id/toCovid_mi"
-        android:title="Covid"
+        android:title="COVID"
         android:orderInCategory="200"
         android:icon="@drawable/booger_mi"
         app:showAsAction="always"
@@ -19,7 +19,7 @@
         />
     <item
         android:id="@+id/toRecipe_mi"
-        android:title="Recipe"
+        android:title="@string/goToRecipe"
         android:orderInCategory="400"
         android:icon="@drawable/recipe_mi"
         app:showAsAction="always"/>

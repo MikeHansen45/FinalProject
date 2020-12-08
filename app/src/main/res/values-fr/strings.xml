@@ -27,10 +27,22 @@
     <string name="cvalert_mess">Voici les données du covid</string>
     <string name="cvalert_negative">Annuler</string>
     <string name="search_info_cv">Entrer un pays en majuscule</string>
-
+    <string name="ticket_master_help_title">Aide</string>
     <string name="toTicketSave">Événements enregistrés</string>
     <string name="tktMstr_delete_saved">Souhaitez-vous supprimer cet événement?</string>
-    <string name="tktMstr_Yes">Out</string>
+    <string name="tktMstr_Event">Evénement</string>
+    <string name="tktMstr_date">Date</string>
+    <string name="tktMstr_URL">URL</string>
+    <string name="tktMstr_Type">Event</string>
+    <string name="tktMstr_Cost">Prix</string>
+    <string name="tktMstr_Delete">Supprime</string>
+    <string name="tktMstr_Yes">Oui</string>
+    <string name="tktMstr_by_mh">Ticket Master par M.Hansen</string>
     <string name="tktMstr_cancel">Annuler</string>
+    <string name="tktMst_help_saved">Cliquez longuement sur un événement enregistré. Sélectionnez le bouton de suppression pour supprimer \ n et le bouton d\'annulation pour annuler</string>
+    <string name="tktMstr_main_help">Entrez un nom de ville et le rayon autour de la ville que vous souhaitez rechercher.
+                                \n Appuyez sur l\'icône de recherche et une liste d\'événements apparaîtra dans la liste ci-dessous.
+                                \n cliquez longuement sur un événement pour voir plus de détails. Si l\'événement vous intéresse, vous pouvez l\'enregistrer
+                                en cliquant sur le bouton oui. Une fois l\'événement enregistré, il disparaîtra de la liste</string>
 
 </resources>

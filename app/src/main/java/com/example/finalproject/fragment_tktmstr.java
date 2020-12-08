@@ -9,10 +9,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class fragment_tktmstr extends Fragment {
 private Bundle dataFromActivity;
 private AppCompatActivity parentActivity;
+private TextView name, type,url,price,date;
+private ImageView img;
+
 
 
     @Override

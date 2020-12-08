@@ -37,7 +37,7 @@
     <string name="backToRecipeSearch">Back to Search</string>
     <string name="searchAudioDBButton">Search</string>
     <string name="artistNameHint">Enter Artist Name</string>
-    <string name="tktMstr_help_title">Ticket Master Help</string>
+    <string name="tktMstr_by_mh">Ticket Master by M.Hansen</string>
     <string name="tktMstr_empty_search">Please enter a City and Radius to complete your search</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -48,9 +48,23 @@
     <string name="cvalert_negative"></string>
     <string name="cvalert_mess"></string>
     <string name="cvalert_t"></string>
+    <string name="ticket_master_help_title">Help</string>
     <string name="tktMstr_delete_saved">Would you like to delete this event?</string>
     <string name="tktMstr_Yes">Yes</string>
     <string name="tktMstr_cancel">Cancel</string>
+    <string name="tktMstr_Event">Event</string>
+    <string name="tktMstr_date">Date</string>
+    <string name="tktMstr_URL">URL</string>
+    <string name="tktMstr_Type">Event</string>
+    <string name="tktMstr_Cost">Price</string>
+    <string name="tktMstr_Delete">Supprimer</string>
+    <string name="tktMst_help_saved">Long click on a saved event. Select the delete button to delete \n and the cancel button to cancel</string>
+
+    <string name="tktMstr_main_help">Enter a city name, and the radius around the city you would like to search.
+                                \npress the search icon and a list of events will appear in the list below.
+                                \n long click on an event to see more details. If the event interests you you can save it
+                                by clicking on the yes button. Once the event is saved it will disapear from the list.</string>
+
 
 
 </resources>

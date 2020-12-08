@@ -19,6 +19,28 @@
             android:textSize="20dp"
             android:layout_below="@id/tktmst_frag_name"
             android:text="@string/hello_blank_fragment" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+
+            android:id="@+id/tktmstr_frag_save_BT"
+            android:text="save"
+
+            />
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="Cancel"
+            android:id="@+id/tktmstr_frag_cancel_BT"
+
+            />
+
+
     </RelativeLayout>
 
 </FrameLayout>

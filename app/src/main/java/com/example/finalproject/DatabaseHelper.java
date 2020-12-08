@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public final static String COL_URL = "URL";
     public final static String COL_MAX = "max";
     public final static String COL_MIN = "min";
-    public final static String COL_DATE = "date";
+    public final static String COL_DATE = "dated";
 
 
 
