@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CovidData"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"/>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:openDrawer="start">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
     <ListView
         android:id="@+id/Covlist"
@@ -16,33 +33,26 @@
         android:layout_below="@id/lineedt"/>
 
     <Button
-        android:id="@+id/Covbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:text="covid"
-        android:layout_above="@id/Covpgbar"/>
-
-    <Button
         android:id="@+id/Resultbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_above="@id/lineedt"/>
 
+
     <EditText
         android:id="@+id/cvedt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:hint="@string/covid_country"
+        android:hint="COUNTRY"
         android:inputType="textCapCharacters" />
 
-    <LinearLayout
-        android:id="@+id/lineedt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/cvedt">
+        <LinearLayout
+            android:id="@+id/lineedt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cvedt">
 
     <EditText
         android:id="@+id/dateedt"
@@ -82,6 +92,34 @@
 
     </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/btnlyt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_above="@id/Covpgbar">
+
+        <Button
+            android:id="@+id/Covbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="covid"/>
+
+            <Button
+                android:id="@+id/gotobtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="go"/>
+
+            <Button
+                android:id="@+id/clearbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
     <ProgressBar
         android:id="@+id/Covpgbar"
         style="?android:attr/progressBarStyleHorizontal"
@@ -89,5 +127,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/>
 
-</RelativeLayout>
+    </RelativeLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/header_layout"
+        app:menu="@menu/nav_menu"
+        android:id="@+id/nav_view"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>
+
+</LinearLayout>
 

@@ -1,12 +1,16 @@
-package com.example.finalproject;
+ package com.example.finalproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -46,9 +50,11 @@ public class CovidData extends MainActivity {
     String countryCode;
     String province;
     String city;
+    String date;
+    long id;
     int cases;
     SharedPreferences cvprefs = null;
-    CovidOpener cp;
+    SQLiteDatabase cdb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,8 @@ public class CovidData extends MainActivity {
 
         Button Covidbtn = findViewById(R.id.Covbtn);
         Button CovSearchbtn = findViewById(R.id.Resultbtn);
+        Button Gotobtn = findViewById(R.id.gotobtn);
+        Button clearbtn = findViewById(R.id.clearbtn);
         ListView Covidlist = findViewById(R.id.Covlist);
         EditText edt = findViewById(R.id.cvedt);
         EditText edtd = findViewById(R.id.dateedt);
@@ -65,13 +73,15 @@ public class CovidData extends MainActivity {
         EditText edtt2 = findViewById(R.id.timeedt2);
         Covidlist.setAdapter(CovAdt);
 
+        //loadDataFromCovidDatabase();
+
         cvprefs = getSharedPreferences("Input_Data", Context.MODE_PRIVATE);
         String cvsavedString = cvprefs.getString("COUNTRY", "");
 
        edt.setText(cvsavedString);
 
         //Set the toolbar
-        /*Toolbar myToolbar = findViewById(R.id.toolbar);
+        Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
         //For NavigationDrawer
@@ -81,14 +91,19 @@ public class CovidData extends MainActivity {
         toggle.syncState();
 
         NavigationView nav = findViewById(R.id.nav_view);
-        nav.setNavigationItemSelectedListener(this);*/
+        nav.setNavigationItemSelectedListener(this);
 
         CovSearchbtn.setOnClickListener(click -> {
             //Declare and execute a search query
-            //CovArray.clear();
+            CovArray.clear();
+            String ec = edt.getText().toString();
             CovidQuery cq = new CovidQuery();
-            cq.execute("https://api.covid19api.com/country/" + edt.getText() + "/status/confirmed/live?from=2020-10-14T00:00:00Z&to=2020-10-15T00:00:00Z");
+            if (ec.isEmpty()) {
+            cq.execute("https://api.covid19api.com/country/CANADA/status/confirmed/live?from=2020-10-14T00:00:00Z&to=2020-10-15T00:00:00Z");}
+            else{
+            cq.execute("https://api.covid19api.com/country/" + ec +"/status/confirmed/live?from=2020-10-14T00:00:00Z&to=2020-10-15T00:00:00Z");}
             //cq.execute("https://api.covid19api.com/country/" +edt.getText()+ "/status/confirmed/live?from=" +edtd.getText()+ "T" +edtt.getText()+ "Z&to=" +edtd2.getText()+ "T" +edtt2.getText()+ "Z");
+
             CovAdt.notifyDataSetChanged();
 
             //Saves the query from the edit text into the file
@@ -98,7 +113,7 @@ public class CovidData extends MainActivity {
             editor.apply();
         });
 
-        Covidbtn.setOnClickListener(click -> {
+       Covidbtn.setOnClickListener(click -> {
             Snackbar.make(Covidbtn, "Hello", Snackbar.LENGTH_LONG).show();//Creates snackbar with long lenght
             Toast.makeText(this, "Hello - Toast", Toast.LENGTH_SHORT).show();//Creates toast with short duration
         });
@@ -106,10 +121,14 @@ public class CovidData extends MainActivity {
 
         Covidlist.setOnItemClickListener((parent, view, position, id) -> {
             //Creating alert
+            Covid cvpos = CovArray.get(position);
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setTitle(getString(R.string.cvalert_t))
+           /* alert.setTitle(getString(R.string.cvalert_t))
                     .setMessage(getString(R.string.cvalert_mess))
-                    .setNegativeButton(getString(R.string.cvalert_negative), (click, arg) -> {})//Cancels the alert
+                    .setNegativeButton(getString(R.string.cvalert_negative), (click, arg) -> {})//Cancels the alert*/
+            alert.setTitle("Information")
+                    .setMessage("There are "+cvpos.cases+" cases in "+cvpos.country+", "+cvpos.displayCityProvince()+" as of "+cvpos.convertDate())
+                    .setNegativeButton(("Close"), (click, arg) -> {})
                     .create().show();
         });
 
@@ -117,11 +136,26 @@ public class CovidData extends MainActivity {
         cq.execute("https://api.covid19api.com/country/CANADA/status/confirmed/live?from=2020-10-14T00:00:00Z&to=2020-10-15T00:00:00ZV");
         CovAdt.notifyDataSetChanged();*/
         Covidlist.setAdapter(CovAdt);
+
+
+        Gotobtn.setOnClickListener(click -> {
+
+            Intent phonefm = new Intent(CovidData.this, CovidSavedDate.class);
+            startActivity(phonefm);
+        });
+
+        clearbtn.setOnClickListener(click ->{
+            CovArray.clear();
+            edt.setText("");edtd.setText("");edtd2.setText("");edtt.setText("");edtt2.setText("");
+        });
     }
 
-   /* @Override
+   @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        return super.onCreateOptionsMenu(menu);
+        super.onCreateOptionsMenu(menu);
+       MenuItem helpButton = menu.findItem(R.id.menu1);
+       helpButton.setVisible(true);
+       return true;
     }
 
     @Override
@@ -132,12 +166,11 @@ public class CovidData extends MainActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 
     public class CovidQuery extends AsyncTask<String, Integer, String>{
 
-        @Override
-        protected String doInBackground(String... strings) {
+        public String doInBackground(String... strings) {
             try{
                 URL covurl = new URL(strings[0]);
                 //Create connection
@@ -165,13 +198,51 @@ public class CovidData extends MainActivity {
                 province = obj.getString("Province");
                 city = obj.getString("City");
                 cases = obj.getInt("Cases");
-                    CovArray.add(new Covid(countryCode, province, city, cases));
+                date = obj.getString("Date");
+                    CovArray.add(new Covid(country, countryCode, province, city, cases, date, id));
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
+        }
+
+
+    public void onProgressUpdate(Integer ... value){
+
+    }
+
+    public void onPostExecute(String fromDoInBackground){
+        CovAdt.notifyDataSetChanged();
+    }
+    }
+
+    public void loadDataFromCovidDatabase(){
+        CovidOpener cpHelper = new CovidOpener(this);
+        cdb = cpHelper.getWritableDatabase();
+
+        String [] columns = {CovidOpener.COL_COUNTRYCODE, CovidOpener.COL_PROVINCE, CovidOpener.COL_CITY, CovidOpener.COL_CASES, CovidOpener.COL_DATE};
+
+        Cursor results = cdb.query(false, CovidOpener.TABLE_NAME, columns, null, null, null, null, null, null);
+
+        int countryColIndex = results.getColumnIndex(CovidOpener.COL_COUNTRY);
+        int countryCodeColIndex = results.getColumnIndex(CovidOpener.COL_COUNTRYCODE);
+        int provinceColIndex = results.getColumnIndex(CovidOpener.COL_PROVINCE);
+        int cityColIndex = results.getColumnIndex(CovidOpener.COL_CITY);
+        int casesColIndex = results.getColumnIndex(CovidOpener.COL_CASES);
+        int dateColIndex = results.getColumnIndex(CovidOpener.COL_DATE);
+        int idColIndex = results.getColumnIndex(CovidOpener.COL_ID);
+
+        while(results.moveToNext()){
+            country = results.getString(countryColIndex);
+            countryCode = results.getString(countryCodeColIndex);
+            province = results.getString(provinceColIndex);
+            city = results.getString(cityColIndex);
+            cases = results.getInt(casesColIndex);
+            date = results.getString(dateColIndex);
+            id = results.getLong(idColIndex);
+            CovArray.add(new Covid(country, countryCode, province, city, cases, date, id));
         }
     }
 
@@ -189,7 +260,7 @@ public class CovidData extends MainActivity {
 
         @Override
         public long getItemId(int position) {
-            return position;
+            return getItem(position).getId();
         }
 
         @Override

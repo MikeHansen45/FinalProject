@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalProject">
-        <activity android:name=".activity_tktmstr_saved"></activity>
+        <activity android:name=".CovidEmpty"></activity>
+        <activity android:name=".CovidSavedDate" />
+        <activity android:name=".activity_tktmstr_saved" />
         <activity android:name=".CovidData" />
         <activity android:name=".TicketMasterActivity" />
         <activity android:name=".RecipeFavourites" />
