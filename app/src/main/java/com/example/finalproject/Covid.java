@@ -12,6 +12,7 @@ public class Covid {
     int lat, lon, cases;
     long id;
 
+
     Covid(String country, String countryCode, String province, String city, int cases, String date, long id){
         this.country = country;
         this.countryCode = countryCode;

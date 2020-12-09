@@ -12,10 +12,10 @@ public class CovidOpener extends SQLiteOpenHelper {
     protected final static int VERSION_NUM = 1;
     public static final String TABLE_NAME = "COVID_DATA";
     public static final String COL_COUNTRY = "COUNTRY";
-    public static final String COL_COUNTRYCODE = "COUNTRY-CODE";
+    public static final String COL_COUNTRYCODE = "COUNTRY_CODE";
     public static final String COL_PROVINCE = "PROVINCE";
     public static final String COL_CITY = "CITY";
-    public static final String COL_CITYCODE = "CITY-CODE";
+    public static final String COL_CITYCODE = "CITY_CODE";
     public static final String COL_LAT = "LAT";
     public static final String COL_LON = "LON";
     public static final String COL_CASES = "CASES";

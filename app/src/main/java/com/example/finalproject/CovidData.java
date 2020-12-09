@@ -45,6 +45,7 @@ public class CovidData extends MainActivity {
 
     CovListAdapter CovAdt = new CovListAdapter();
     ArrayList<Covid> CovArray = new ArrayList();
+    ArrayList<Covid> Dates = new ArrayList();
     Covid c;
     String country;
     String countryCode;
@@ -73,7 +74,8 @@ public class CovidData extends MainActivity {
         EditText edtt2 = findViewById(R.id.timeedt2);
         Covidlist.setAdapter(CovAdt);
 
-        //loadDataFromCovidDatabase();
+        initDatabase();
+        loadDataFromCovidDatabase();
 
         cvprefs = getSharedPreferences("Input_Data", Context.MODE_PRIVATE);
         String cvsavedString = cvprefs.getString("COUNTRY", "");
@@ -116,6 +118,9 @@ public class CovidData extends MainActivity {
        Covidbtn.setOnClickListener(click -> {
             Snackbar.make(Covidbtn, "Hello", Snackbar.LENGTH_LONG).show();//Creates snackbar with long lenght
             Toast.makeText(this, "Hello - Toast", Toast.LENGTH_SHORT).show();//Creates toast with short duration
+
+           for (int i=0; CovArray.size() > i; i++){
+           insertDatabase(CovArray.get(i).getCountry(),CovArray.get(i).getCountryCode(),CovArray.get(i).getProvince(),CovArray.get(i).getCity(),CovArray.get(i).getCases(),CovArray.get(i).getDate());}
         });
 
 
@@ -129,6 +134,8 @@ public class CovidData extends MainActivity {
             alert.setTitle("Information")
                     .setMessage("There are "+cvpos.cases+" cases in "+cvpos.country+", "+cvpos.displayCityProvince()+" as of "+cvpos.convertDate())
                     .setNegativeButton(("Close"), (click, arg) -> {})
+                    .setPositiveButton(("Save"), (click, arg) -> {
+                    })
                     .create().show();
         });
 
@@ -219,10 +226,8 @@ public class CovidData extends MainActivity {
     }
 
     public void loadDataFromCovidDatabase(){
-        CovidOpener cpHelper = new CovidOpener(this);
-        cdb = cpHelper.getWritableDatabase();
 
-        String [] columns = {CovidOpener.COL_COUNTRYCODE, CovidOpener.COL_PROVINCE, CovidOpener.COL_CITY, CovidOpener.COL_CASES, CovidOpener.COL_DATE};
+        String [] columns = {CovidOpener.COL_COUNTRY, CovidOpener.COL_COUNTRYCODE, CovidOpener.COL_PROVINCE, CovidOpener.COL_CITY, CovidOpener.COL_CASES, CovidOpener.COL_DATE, CovidOpener.COL_ID};
 
         Cursor results = cdb.query(false, CovidOpener.TABLE_NAME, columns, null, null, null, null, null, null);
 
@@ -244,6 +249,39 @@ public class CovidData extends MainActivity {
             id = results.getLong(idColIndex);
             CovArray.add(new Covid(country, countryCode, province, city, cases, date, id));
         }
+        printCursor(results);
+    }
+
+    public void printCursor(Cursor c){
+        c.moveToFirst();
+        while (!c.isAfterLast()){
+            country = c.getString(c.getColumnIndex(CovidOpener.COL_COUNTRY));
+            countryCode = c.getString(c.getColumnIndex(CovidOpener.COL_COUNTRYCODE));
+            province = c.getString(c.getColumnIndex(CovidOpener.COL_PROVINCE));
+            city = c.getString(c.getColumnIndex(CovidOpener.COL_CITY));
+            cases = c.getInt(c.getColumnIndex(CovidOpener.COL_CASES));
+            date = c.getString(c.getColumnIndex(CovidOpener.COL_DATE));
+            id = c.getLong(c.getColumnIndex(CovidOpener.COL_ID));
+            c.moveToNext();
+        }
+    }
+
+    //Initializes the database
+    public void initDatabase(){
+        CovidOpener cpHelper = new CovidOpener(this);
+        cdb = cpHelper.getWritableDatabase();
+    }
+
+    //Saves list items into the database
+    public long insertDatabase(String country, String countryCode, String province, String city, int cases, String date){
+        ContentValues newRowValues = new ContentValues();
+        newRowValues.put(CovidOpener.COL_COUNTRY, country);
+        newRowValues.put(CovidOpener.COL_COUNTRYCODE, countryCode);
+        newRowValues.put(CovidOpener.COL_PROVINCE, province);
+        newRowValues.put(CovidOpener.COL_CITY, city);
+        newRowValues.put(CovidOpener.COL_CASES, cases);
+        newRowValues.put(CovidOpener.COL_DATE, date);
+        return cdb.insert(CovidOpener.TABLE_NAME, null, newRowValues);
     }
 
     class CovListAdapter extends BaseAdapter {
