@@ -30,6 +30,11 @@
       android:layout_height="325dp"
       android:layout_alignParentTop="true">
 
+      <ListView
+          android:id="@+id/datelv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
   </RelativeLayout>
 
     <RelativeLayout
