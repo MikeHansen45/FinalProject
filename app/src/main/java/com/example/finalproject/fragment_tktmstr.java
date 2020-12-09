@@ -15,9 +15,8 @@ import android.widget.TextView;
 public class fragment_tktmstr extends Fragment {
 private Bundle dataFromActivity;
 private AppCompatActivity parentActivity;
-private TextView name, type,url,price,date;
+private TextView nameTV, typeTV,urlTV,priceTV,dateTV;
 private ImageView img;
-
 
 
     @Override
@@ -25,7 +24,28 @@ private ImageView img;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+        dataFromActivity = getArguments();
+
         View results = inflater.inflate(R.layout.fragment_tktmstr,container,false);
+        String eventName = dataFromActivity.getString("NAME");
+        nameTV = results.findViewById(R.id.tktmst_frag_name);
+        nameTV.setText(eventName);
+
+        String eventType = dataFromActivity.getString("TYPE");
+        typeTV = results.findViewById(R.id.tktmst_frag_type);
+        typeTV.setText(eventType);
+
+        String eventDate = dataFromActivity.getString("DATE");
+        dateTV = results.findViewById(R.id.tktmst_frag_date);
+        dateTV.setText("Date:" + eventDate);
+
+        double eventPriceMIN = dataFromActivity.getDouble("MIN");
+        double eventPriceMAX = dataFromActivity.getDouble("MAX");
+        priceTV = results.findViewById(R.id.tktmst_frag_price);
+        priceTV.setText(eventPriceMIN + "$" + " - " + eventPriceMAX + "$");
+
+
+
         return results;
     }
     @Override
