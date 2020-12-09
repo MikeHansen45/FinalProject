@@ -4,10 +4,10 @@
 
     <item
         android:id="@+id/menu1"
-        android:title="@string/help"
-        android:orderInCategory="1"
+        android:orderInCategory="6"
         app:showAsAction="always"
+        android:title="@string/help"
+        android:icon="@drawable/icons8_info_24"
         />
-
 
 </menu>
