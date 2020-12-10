@@ -99,5 +99,6 @@ Pour obtenir les résultats de la recherche, commencez par entrer un pays et les
                                 \n Appuyez sur l\'icône de recherche et une liste d\'événements apparaîtra dans la liste ci-dessous.
                                 \n cliquez longuement sur un événement pour voir plus de détails. Si l\'événement vous intéresse, vous pouvez l\'enregistrer
                                 en cliquant sur le bouton oui. Une fois l\'événement enregistré, il disparaîtra de la liste</string>
+    <string name="ticket_toast">" Bienvenue dans l'application de recherche de ticket master"</string>
 
 </resources>

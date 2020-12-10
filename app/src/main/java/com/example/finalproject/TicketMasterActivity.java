@@ -132,7 +132,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
 
         //////////////////////////////////////// TOAST Just because it is required not sure where I want it for real ///////////////////////////////////
         Context context = getApplicationContext();
-        CharSequence text = "Welcome to the ticket master search app";// change to french
+        int text = R.string.ticket_toast;// change to french
         int duration = Toast.LENGTH_SHORT;
 
         Toast toast = Toast.makeText(context, text,duration);

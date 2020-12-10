@@ -21,6 +21,7 @@
     <string name="directLink">Direct Link:</string>
     <string name="ingredientsTitle">List of Ingredients:</string>
     <string name="recipeHelp">Recipe Search Help</string>
+    <string name="ticket_toast">Welcome to the ticket master search app</string>
     <string name="recipeHelpMessage">Search for a recipe by recipe name or by ingredients by typing in the respective fields and pressing "Enter". Your search term cannot contain spaces. You can search for more than one ingredient by separating each with a comma. Save a recipe to your favourites by clicking on the recipe and clicking the switch. </string>
     <string name="ok">OK</string>
     <string name="recipeSearchTitle">Search for a recipe…</string>
