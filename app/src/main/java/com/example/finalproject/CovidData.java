@@ -162,11 +162,10 @@ public class CovidData extends MainActivity {
         });
 
        Covidbtn.setOnClickListener(click -> {
-
-           for (int i=0; CovArray.size() > i; i++){
-           insertDatabase(CovArray.get(i).getCountry(),CovArray.get(i).getCountryCode(),CovArray.get(i).getProvince(),CovArray.get(i).getCity(),CovArray.get(i).getCases(),CovArray.get(i).getDate());}
-
            Toast.makeText(this, getString(R.string.csaveToastAll), Toast.LENGTH_SHORT).show();
+           for (int i=0; CovArray.size() > i; i++){
+           insertDatabase(CovArray.get(i).getCountry(),CovArray.get(i).getCountryCode(),CovArray.get(i).getProvince(),CovArray.get(i).getCity(),CovArray.get(i).getCases(),CovArray.get(i).getDate());
+           }
         });
 
 
@@ -179,9 +178,10 @@ public class CovidData extends MainActivity {
                     .setMessage(getString(R.string.cinfo1)+" "+cvpos.cases+" "+getString(R.string.cinfo2)+" "+cvpos.country+", "+cvpos.displayCityProvince()+" "+getString(R.string.cinfo3)+" "+cvpos.convertDate())
                     .setNegativeButton((getString(R.string.calertBtnClose)), (click, arg) -> {})
                     .setPositiveButton((getString(R.string.calertBtnSave)), (click, arg) -> {
+                        Toast.makeText(this, getString(R.string.csaveToastDate), Toast.LENGTH_LONG).show();
                         for (int i=0; CovArray.size() > i; i++){
                         insertDatabase(CovArray.get(i).getCountry(),CovArray.get(i).getCountryCode(), CovArray.get(i).getProvince(), CovArray.get(i).getCity(), CovArray.get(i).getCases(), CovArray.get(position).getDate());
-                            Toast.makeText(this, getString(R.string.csaveToastDate), Toast.LENGTH_SHORT).show();
+
                     }})
                     .create().show();
         });
