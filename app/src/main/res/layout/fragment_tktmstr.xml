@@ -42,21 +42,21 @@
 
 
         <Button
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
 
             android:id="@+id/tktmstr_frag_save_BT"
-            android:text="save"
+            android:text="@string/tktMstr_save"
 
             />
         <Button
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:text="Cancel"
+            android:text="@string/tktMstr_cancel"
             android:id="@+id/tktmstr_frag_cancel_BT"
 
             />

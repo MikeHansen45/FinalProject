@@ -50,7 +50,7 @@
     <string name="audioHelpMessage">Pour utiliser cette page, recherchez un artiste avec la barre de recherche.S\'ils ont des espaces dans leur nom, vous devez ajouter un trait de soulignement à la place de l\'espace. Cette base de données ne contient pas tous les artistes.</string>
     <string name="audioDBResultsCount">"résultats: "</string>
     <string name="ticket_master_help_title">Aide</string>
-
+    <string name="tktMstr_save">Vnregistrer</string>
 
     <string name="tktMstr_empty_search">Veuillez entrer une ville et un rayon pour terminer votre recherche</string>
     <string name="toTicketSave">Événements enregistrés</string>
