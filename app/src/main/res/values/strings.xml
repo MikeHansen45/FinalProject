@@ -8,6 +8,7 @@
     <string name="toast_message">No image found</string>
     <string name="toAudioButtonText">Audio Database</string>
     <string name="goToRecipe">Recipe Search</string>
+    <string name="recipeTitle">Recipe Search 1.0</string>
     <string name="recipeImageDescription">Recipe Image</string>
     <string name="recipeFavSaved">Added to favourites!</string>
     <string name="goToRecipeFavs">Go to favourites</string>
@@ -19,7 +20,7 @@
     <string name="directLink">Direct Link:</string>
     <string name="ingredientsTitle">List of Ingredients:</string>
     <string name="recipeHelp">Recipe Search Help</string>
-    <string name="recipeHelpMessage">Search for a recipe by recipe name or by ingredients by typing in the respective fields and pressing "Enter". Your search term cannot contain spaces. You can search for more than one ingredient by separating each with a comma. Save a recipe to your favourites by clicking on the recipe and clicking the switch. </string>
+    <string name="recipeHelpMessage">Search for a recipe by recipe name or by ingredients by typing in the respective fields and pressing "Enter". You can search for more than one ingredient by separating each with a comma. Save a recipe to your favourites by clicking on the recipe and clicking the switch. </string>
     <string name="ok">OK</string>
     <string name="recipeSearchTitle">Search for a recipe…</string>
     <string name="byRecipeName">by name</string>

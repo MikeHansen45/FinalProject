@@ -8,12 +8,13 @@
     <string name='searchCity_TM'>Entrez un nom de ville: </string>
     <string name="searchRadius_TM">Entrez un rayon de recherche</string>
     <string name="tktMstr_Alert">Voulez-vous le supprimer?</string>
-    <string name="toAudioButtonText">audio</string>
-    <string name="goToRecipe">"Recette "</string>
-    <string name="toast_message">"C'est mon toast "</string>
+    <string name="toAudioButtonText">Base de données audio</string>
+    <string name="goToRecipe">Recherche de recette</string>
+    <string name="recipeTitle">Recherche de recette 1.0</string>
+    <string name="toast_message">Aucune image trouvée</string>
     <string name="recipeImageDescription">"Image de recette "</string>
     <string name="recipeFavSaved">"Ajouté aux favoris! "</string>
-    <string name="undo">"ANNULER "</string>
+    <string name="undo">ANNULER</string>
     <string name="goToRecipeFavs">"Aller aux favoris "</string>
     <string name="recipeFavRemoved">"Retiré des favoris! "</string>
     <string name="ticketMaster">Ticket Master</string>
@@ -33,7 +34,7 @@
     <string name="backToRecipeSearch">"Retour à la recherche "</string>
     <string name="Favtitle">"Recettes préférées "</string>
     <string name="home">"Accueil "</string>
-    <string name="recipeHelpMessage">"Recherchez une recette par nom de recette ou par ingrédients en tapant dans les champs respectifs et en appuyant sur \"Entrée\". Votre terme de recherche ne peut pas contenir d'espaces. Vous pouvez rechercher plusieurs ingrédients en les séparant par une virgule. Enregistrez une recette dans vos favoris en cliquant sur la recette et en cliquant sur le bouton. "</string>
+    <string name="recipeHelpMessage">"Recherchez une recette par nom de recette ou par ingrédients en tapant dans les champs respectifs et en appuyant sur \"Entrée\". Vous pouvez rechercher plusieurs ingrédients en les séparant par une virgule. Enregistrez une recette dans vos favoris en cliquant sur la recette et en cliquant sur le bouton. "</string>
     <string name="artistNameHint">Entrez le nom de l\'artiste</string>
     <string name="searchAudioDBButton">Chercher</string>
 

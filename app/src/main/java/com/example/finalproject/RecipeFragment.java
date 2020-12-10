@@ -38,22 +38,25 @@ public class RecipeFragment extends Fragment {
     private static final String THUMBNAIL_SELECTED = "Thumbnail";
     private int snackTime = Snackbar.LENGTH_LONG;
     private int duration = Toast.LENGTH_LONG;
-    public MyRecipeOpener dbOpener = new MyRecipeOpener(RecipeActivity.sContext);
-    public SQLiteDatabase db = dbOpener.getWritableDatabase();
+    private MyRecipeOpener dbOpener;
+    private SQLiteDatabase db;
     ImageView thumbnail;
     public Toast failed;
 
     /**
      * creates the fragment which is inflated into the parent activity
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
+     *
+     * @param inflater used to inflate the layout
+     * @param container the container ViewGroup
+     * @param savedInstanceState the previously savedInstanceState
      * @return
      */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View recipeDetails = inflater.inflate(R.layout.fragment_recipe, container, false);
+        dbOpener = new MyRecipeOpener(RecipeActivity.sContext);
+        db = dbOpener.getWritableDatabase();
 
         //gets the data passed from the activity
         Bundle data = getArguments();
@@ -101,7 +104,8 @@ public class RecipeFragment extends Fragment {
         fav.setOnCheckedChangeListener((a, b) -> {
 
             Log.i("The switch is", String.valueOf(b));
-            Snackbar snk = Snackbar.make(fav, (b ? R.string.recipeFavSaved : R.string.recipeFavRemoved), snackTime);
+            final View viewPos = recipeDetails.findViewById(R.id.snackbarlocation);
+            Snackbar snk = Snackbar.make(viewPos, (b ? R.string.recipeFavSaved : R.string.recipeFavRemoved), snackTime);
             snk.setAction(R.string.undo, click -> {
                 fav.setChecked(!b);
                 Log.i("After snk the switch is", String.valueOf(b));
@@ -131,12 +135,14 @@ public class RecipeFragment extends Fragment {
 
     /**
      * Saves the recipe in this fragment to the database.
-     * @param title the recipe title passed from the bundle
-     * @param URL the direct link to the recipe
+     *
+     * @param title       the recipe title passed from the bundle
+     * @param URL         the direct link to the recipe
      * @param ingredients the list of ingredients
-     * @param thumbnail the thumbnail url from the bundle
+     * @param thumbnail   the thumbnail url from the bundle
      * @return long database id of the newly saved recipe
      */
+
     public long saveFavourite(String title, String URL, String ingredients, String thumbnail) {
         ContentValues newRowValues = new ContentValues();
         newRowValues.put(MyRecipeOpener.COL_TITLE, title);
@@ -159,6 +165,7 @@ public class RecipeFragment extends Fragment {
 
     /**
      * Checks to see if the recipe already exists in the database by name. So no two recipes can exist with the same name.
+     *
      * @param title the recipe title being searching for in the database
      * @return the database id if found or 0 if not found
      */
@@ -182,6 +189,7 @@ public class RecipeFragment extends Fragment {
 
     /**
      * Deletes the recipe from the database
+     *
      * @param id the database id of the recipe being deleted
      */
     protected void deleteRecipe(long id) {
@@ -192,7 +200,7 @@ public class RecipeFragment extends Fragment {
         private Bitmap image;
 
         /**
-         *
+         * Getter method for Bitmap variable
          * @return the Bitmap image
          */
         public Bitmap getImage() {
@@ -209,6 +217,7 @@ public class RecipeFragment extends Fragment {
         protected String doInBackground(String... args) {
             try {
                 URL url = new URL(args[0]);
+                Log.i("Searching for image:", args[0]);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
                 Log.i("Thumbnail Request", "Connection established");
@@ -234,7 +243,7 @@ public class RecipeFragment extends Fragment {
         @Override
         public void onPostExecute(String strings) {
             if (getImage() != null)
-                thumbnail.setImageBitmap(Bitmap.createScaledBitmap(getImage(), 500, 500, false));
+                thumbnail.setImageBitmap(Bitmap.createScaledBitmap(getImage(), 530 , 400, false));
             else {
                 failed.show();
                 Log.i("Thumbnail", "Failed to load");
