@@ -21,5 +21,7 @@
     <string name="search_info_cv">Entrer un pays en majuscule</string>
     <string name="audioAuthor">Benjamin Dalton</string>
     <string name="audioHelp">Audio DB Help</string>
+    <string name="audioHelpMessage">Pour utiliser cette page, recherchez un artiste avec la barre de recherche.S\'ils ont des espaces dans leur nom, vous devez ajouter un trait de soulignement à la place de l\'espace. Cette base de données ne contient pas tous les artistes.</string>
+    <string name="audioDBResultsCount">"résultats: "</string>
 
 </resources>

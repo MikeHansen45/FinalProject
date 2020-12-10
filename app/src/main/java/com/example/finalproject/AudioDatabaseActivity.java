@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -89,15 +90,18 @@ public class AudioDatabaseActivity extends MainActivity {
         loadDataFromDatabase();
 
         listView.setOnItemClickListener((parent, view, pos, id) ->{
+            String albumID = elements.get(pos).getIdAlbum();
+            String albumArtURL = elements.get(pos).getAlbumThumb();
 
+            Intent i = new Intent(AudioDatabaseActivity.this, AlbumDisplayActivity.class);
+            //i.putExtra("albumID", albumID);
+            i.putExtra("albumObj", elements.get(pos));
+            startActivity(i);
         });
 
         button.setOnClickListener(e-> {
-            //elements = new ArrayList<AudioDBObject>();
-            Toast.makeText(this, "You pressed a button", Toast.LENGTH_LONG).show();
-
+            elements = new ArrayList<AudioDBObject>();
             Snackbar snackbar = Snackbar.make(listView, "searching for: " + editText.getText().toString(), Snackbar.LENGTH_LONG);
-
             snackbar.show();
 
 
@@ -106,14 +110,13 @@ public class AudioDatabaseActivity extends MainActivity {
             audioSearchTask req = new audioSearchTask();
             req.execute("https://www.theaudiodb.com/api/v1/json/1/searchalbum.php?s=" + editText.getText());
             runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
-
                     myAdapter.notifyDataSetChanged();
-
                 }
             });
+
+            Toast.makeText(this, R.string.audioDBResultsCount + elements.size(), Toast.LENGTH_LONG).show();
 
             saveData();
 
@@ -142,7 +145,7 @@ public class AudioDatabaseActivity extends MainActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuItem helpButton = menu.findItem(R.id.menu1);
-        helpButton.setVisible(true);
+        helpButton.setVisible(false);
         return true;
     }
     @Override
@@ -177,10 +180,19 @@ public class AudioDatabaseActivity extends MainActivity {
     public void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         text = sharedPreferences.getString(TEXT, "");
+        audioSearchTask req = new audioSearchTask();
+        req.execute("https://www.theaudiodb.com/api/v1/json/1/searchalbum.php?s=" + text);
+
     }
 
     public void updateViews() {
         editText.setText(text);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                myAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     class AudioDBAdapter extends BaseAdapter {
@@ -277,12 +289,9 @@ public class AudioDatabaseActivity extends MainActivity {
                 }
 
                 runOnUiThread(new Runnable() {
-
                     @Override
                     public void run() {
-
                         myAdapter.notifyDataSetChanged();
-
                     }
                 });
             } catch (Exception e) {
