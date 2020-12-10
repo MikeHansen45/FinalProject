@@ -3,9 +3,11 @@ package com.example.finalproject;
 import org.json.JSONObject;
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
+
 import static java.lang.Integer.parseInt;
 
-public class AudioDBObject {
+public class AudioDBObject implements Serializable {
 
     String idAlbum;
     String idArtist;

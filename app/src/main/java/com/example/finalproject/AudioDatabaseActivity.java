@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -89,23 +90,18 @@ public class AudioDatabaseActivity extends MainActivity {
         loadDataFromDatabase();
 
         listView.setOnItemClickListener((parent, view, pos, id) ->{
-           AlertDialog.Builder  alertDialogBuilder = new AlertDialog.Builder(this);
-           alertDialogBuilder.setTitle("Item");
-           alertDialogBuilder.setMessage("This is an item");
-           alertDialogBuilder.setPositiveButton("yes", (click, arg) -> {
-              //do something
-           });
-           alertDialogBuilder.setNegativeButton("no", (click, arg)-> {
-               // do something else
-           });
+            String albumID = elements.get(pos).getIdAlbum();
+            String albumArtURL = elements.get(pos).getAlbumThumb();
+
+            Intent i = new Intent(AudioDatabaseActivity.this, AlbumDisplayActivity.class);
+            //i.putExtra("albumID", albumID);
+            i.putExtra("albumObj", elements.get(pos));
+            startActivity(i);
         });
 
         button.setOnClickListener(e-> {
-            //elements = new ArrayList<AudioDBObject>();
-            Toast.makeText(this, "You pressed a button", Toast.LENGTH_LONG).show();
-
+            elements = new ArrayList<AudioDBObject>();
             Snackbar snackbar = Snackbar.make(listView, "searching for: " + editText.getText().toString(), Snackbar.LENGTH_LONG);
-
             snackbar.show();
 
 
@@ -114,33 +110,31 @@ public class AudioDatabaseActivity extends MainActivity {
             audioSearchTask req = new audioSearchTask();
             req.execute("https://www.theaudiodb.com/api/v1/json/1/searchalbum.php?s=" + editText.getText());
             runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
-
                     myAdapter.notifyDataSetChanged();
-
                 }
             });
 
-            //Set the toolbar
-            Toolbar myToolbar = findViewById(R.id.toolbar);
-            // CHANGE THESE STRINGS
-            myToolbar.setTitle(R.string.goToRecipe);
-            myToolbar.setSubtitle(R.string.recipeAuthor);
-            setSupportActionBar(myToolbar);
-//For NavigationDrawer
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
-                    drawer, myToolbar, R.string.open, R.string.close);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
-            NavigationView nav = findViewById(R.id.nav_view);
-            nav.setNavigationItemSelectedListener(this);
+            Toast.makeText(this, R.string.audioDBResultsCount + elements.size(), Toast.LENGTH_LONG).show();
 
             saveData();
 
-        });
+            });
+
+        //Set the toolbar
+        Toolbar myToolbar = findViewById(R.id.toolbar);
+        // CHANGE THESE STRINGS
+        myToolbar.setTitle(R.string.toAudioButtonText);
+        myToolbar.setSubtitle(R.string.audioAuthor);
+        setSupportActionBar(myToolbar);
+        //For NavigationDrawer
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, myToolbar, R.string.open, R.string.close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView nav = findViewById(R.id.nav_view);
+        nav.setNavigationItemSelectedListener(this);
 
         loadData();
         updateViews();
@@ -151,16 +145,27 @@ public class AudioDatabaseActivity extends MainActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuItem helpButton = menu.findItem(R.id.menu1);
-        helpButton.setVisible(true);
+        helpButton.setVisible(false);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        item.setOnMenuItemClickListener(v -> {
+            alertDialogBuilder
+                    .setTitle(R.string.audioHelp)
+                    .setMessage(R.string.audioHelpMessage)
+                    .setNeutralButton(R.string.ok, (click, arg) -> {
+                    })
+                    .create().show();
+            return true;
+        });
+
         return true;
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return super.onNavigationItemSelected(item);
-    }
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return super.onOptionsItemSelected(item);
     }
 
     public void saveData() {
@@ -175,10 +180,19 @@ public class AudioDatabaseActivity extends MainActivity {
     public void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         text = sharedPreferences.getString(TEXT, "");
+        audioSearchTask req = new audioSearchTask();
+        req.execute("https://www.theaudiodb.com/api/v1/json/1/searchalbum.php?s=" + text);
+
     }
 
     public void updateViews() {
         editText.setText(text);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                myAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     class AudioDBAdapter extends BaseAdapter {
@@ -274,7 +288,12 @@ public class AudioDatabaseActivity extends MainActivity {
                     elements.add(new AudioDBObject(idAlbum, idArtist, strAlbum, strArtist, intYearReleased, strGenre, strAlbumThumb));
                 }
 
-                myAdapter.notifyDataSetChanged();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        myAdapter.notifyDataSetChanged();
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -294,6 +313,38 @@ public class AudioDatabaseActivity extends MainActivity {
 
     private void loadDataFromDatabase() {
         // finish from android labs
+        AudioDBOpener dbOpener = new AudioDBOpener(this);
+        db = dbOpener.getWritableDatabase();
+
+        String[] columns = {AudioDBOpener.COL_ID, AudioDBOpener.COL_ALBUM_ID, AudioDBOpener.COL_ARTIST_ID,
+                AudioDBOpener.COL_ALBUM_NAME, AudioDBOpener.COL_ARTIST_NAME, AudioDBOpener.COL_RELEASE_YEAR,
+                AudioDBOpener.COL_GENRE, AudioDBOpener.COL_ALBUM_ART};
+        Cursor results = db.query(false, AudioDBOpener.TABLE_NAME, columns, null, null, null, null, null, null);
+
+        int idColIndex = results.getColumnIndex(AudioDBOpener.COL_ID);
+        int albumIDColIndex = results.getColumnIndex(AudioDBOpener.COL_ALBUM_ID);
+        int artistIDColIndex = results.getColumnIndex(AudioDBOpener.COL_ARTIST_ID);
+        int albumNameColIndex = results.getColumnIndex(AudioDBOpener.COL_ALBUM_NAME);
+        int artistNameColIndex = results.getColumnIndex(AudioDBOpener.COL_ARTIST_NAME);
+        int releaseYearColIndex = results.getColumnIndex(AudioDBOpener.COL_RELEASE_YEAR);
+        int genreColIndex = results.getColumnIndex(AudioDBOpener.COL_GENRE);
+        int albumArtColIndex = results.getColumnIndex(AudioDBOpener.COL_ALBUM_ART);
+
+        while (results.moveToNext()) {
+            long id = results.getLong(idColIndex);
+            String albumID = results.getString(albumIDColIndex);
+            String artistID = results.getString(artistIDColIndex);
+            String albumName = results.getString(albumNameColIndex);
+            String artistName = results.getString(artistNameColIndex);
+            String releaseYear = results.getString(releaseYearColIndex);
+            String genre = results.getString(genreColIndex);
+            String albumArt = results.getString(albumArtColIndex);
+
+            AudioDBObject newEntry = new AudioDBObject(albumID, artistID, albumName, artistName, releaseYear, genre, albumArt, id);
+            elements.add(newEntry);
+        }
+
+        printCursor(results, db.getVersion());
     }
 
     protected void deleteObject(AudioDBObject obj) {
@@ -302,7 +353,7 @@ public class AudioDatabaseActivity extends MainActivity {
 
     public void printCursor(Cursor c, int version) {
         c.moveToFirst();
-        Log.e("DATABASE VERSION NO: ", String.valueOf(db.getVersion()));
+        Log.e("DATABASE VERSION NO: ", String.valueOf(version));
         Log.e("NUMBER OF COLUMNS: ", String.valueOf(c.getColumnCount()));
 
         String[] names = c.getColumnNames();
@@ -314,5 +365,33 @@ public class AudioDatabaseActivity extends MainActivity {
         Log.e("NUMBER OF ROWS", String.valueOf(c.getCount()));
 
         // finish adding column indexes using android labs as example
+
+        int idColIndex = c.getColumnIndex(AudioDBOpener.COL_ID);
+        int albumIDColIndex = c.getColumnIndex(AudioDBOpener.COL_ALBUM_ID);
+        int artistIDColIndex = c.getColumnIndex(AudioDBOpener.COL_ARTIST_ID);
+        int albumNameColIndex = c.getColumnIndex(AudioDBOpener.COL_ALBUM_NAME);
+        int artistNameColIndex = c.getColumnIndex(AudioDBOpener.COL_ARTIST_NAME);
+        int releaseYearColIndex = c.getColumnIndex(AudioDBOpener.COL_RELEASE_YEAR);
+        int genreColIndex = c.getColumnIndex(AudioDBOpener.COL_GENRE);
+        int albumArtColIndex = c.getColumnIndex(AudioDBOpener.COL_ALBUM_ART);
+
+        while (c.moveToNext()) {
+            long id = c.getLong(idColIndex);
+            String albumID = c.getString(albumIDColIndex);
+            String artistID = c.getString(artistIDColIndex);
+            String albumName = c.getString(albumNameColIndex);
+            String artistName = c.getString(artistNameColIndex);
+            String releaseYear = c.getString(releaseYearColIndex);
+            String genre = c.getString(genreColIndex);
+            String albumArt = c.getString(albumArtColIndex);
+
+            String s = String.valueOf(id) + " album id: " + albumID + " artist id: " + artistID +
+                    " album name: " + albumName +
+                    " artist name: " + artistName + " release year: " + releaseYear + " genre: " +
+                    genre + " album art url: " + albumArt;
+
+            Log.e("row: ", s);
+        }
+
     }
 }
