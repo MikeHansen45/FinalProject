@@ -29,7 +29,7 @@
         android:id="@+id/Covlist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/Covpgbar"
+        android:layout_above="@id/btnlyt"
         android:layout_below="@id/lineedt"/>
 
     <ImageButton
@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:hint="COUNTRY"
+        android:hint="@string/ccountry_edit"
         android:layout_toLeftOf="@id/Resultbtn"
         android:inputType="textCapCharacters" />
 
@@ -63,7 +63,7 @@
         android:layout_alignParentStart="true"
         android:layout_weight="1"
         android:inputType="date"
-        android:hint="YYYY-MM-DD"/>
+        android:hint="@string/cymd"/>
 
     <EditText
         android:id="@+id/timeedt"
@@ -81,7 +81,7 @@
             android:layout_alignParentStart="true"
             android:layout_weight="1"
             android:inputType="date"
-            android:hint="YYYY-MM-DD"/>
+            android:hint="@string/cymd"/>
 
         <EditText
             android:id="@+id/timeedt2"
@@ -105,20 +105,20 @@
             android:id="@+id/Covbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"/>
+            android:text="@string/csaveButton"/>
 
             <Button
                 android:id="@+id/gotobtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Go to Saved Data"/>
+                android:text="@string/cgoToSaved"/>
 
             <Button
                 android:id="@+id/clearbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clear"
+                android:text="@string/cclearButton"
                 />
 
         </LinearLayout>

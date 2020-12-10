@@ -28,6 +28,9 @@ public class CovidFragment extends ListFragment {
     String date;
     ArrayList<Covid> test = new ArrayList<>();
 
+    /**
+     *Where the fragment is created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i("s", getActivity().toString());
@@ -44,10 +47,18 @@ public class CovidFragment extends ListFragment {
         return res;
     }
 
+    /**
+     * Will return and adaptor for the frafment
+     * @return fadapt
+     */
     public FragmentAdapter getAdaptor(){
         return fadapt;
     }
 
+    /**
+     * Will query for data based on what date you selected
+     * @param date date
+     */
     public void queryDate(String date) {
         CovidOpener cpHelper = new CovidOpener(getActivity());
         cdb = cpHelper.getWritableDatabase();
@@ -84,6 +95,10 @@ public class CovidFragment extends ListFragment {
         printCursor(results);
     }
 
+    /**
+     * Will print out database results, used for log
+     * @param c cursor
+     */
     public void printCursor(Cursor c){
 
         c.moveToFirst();
@@ -110,22 +125,44 @@ public class CovidFragment extends ListFragment {
 
     public class FragmentAdapter extends BaseAdapter{
 
+        /**
+         * Gets the size of the array
+         * @return The number of elements
+         */
         @Override
         public int getCount() {
             return test.size();
         }
         //Returns elements in the list based on the array size
 
+
+        /**
+         * Gets the position of the item in the array
+         * @param position position of the item
+         * @return the item at position in the arrays
+         */
         @Override
         public Covid getItem(int position) {
             return test.get(position);
         }//Item returned in the list
 
+        /**
+         *
+         * @param position position of the item
+         * @return the item position in the database
+         */
         @Override
         public long getItemId(int position) {
             return getItem(position).getId();
         }
 
+        /**
+         *
+         * @param position The item that will be returned
+         * @param convertView The view that will be displayed
+         * @param parent ViewGroup
+         * @return view
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater covinflater = getLayoutInflater();

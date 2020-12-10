@@ -37,11 +37,6 @@
     <string name="artistNameHint">Entrez le nom de l\'artiste</string>
     <string name="searchAudioDBButton">Chercher</string>
 
-    <string name="covid_data_btn">Obtenir Données</string>
-    <string name="covid_country">PAYS</string>
-    <string name="cvalert_t">Données covid</string>
-    <string name="cvalert_mess">Voici les données du covid</string>
-    <string name="cvalert_negative">Annuler</string>
     <string name="search_info_cv">Entrer un pays en majuscule</string>
     <string name="audioAuthor">Benjamin Dalton</string>
     <string name="audioHelp">Audio DB Help</string>
@@ -50,4 +45,36 @@
     <string name="tktMstr_delete_saved">Souhaitez-vous supprimer cet événement?</string>
     <string name="tktMstr_Yes">Out</string>
     <string name="tktMstr_cancel">Annuler</string>
+
+    <string name="ccountry_edit">PAYS</string>
+    <string name="chelpButtonTitle">Bienvenu.</string>
+    <string name="chelpButton1">
+Pour obtenir les résultats de la recherche, commencez par entrer un pays et les dates dans les textes d\'édition,
+        Les résultats auront une date par défaut si seul le pays est saisi,
+        Vous pouvez enregistrer les résultats par date en cliquant sur le bouton Enregistrer ou en enregistrant l\'élément,
+        Le bouton Effacer effacera toutes les informations de la page,
+        Pour accéder à vous pouvez aller voir vos données enregistrées en cliquant sur "aller aux données".</string>
+    <string name="chelpButton2"> Les données ici sont stockées en dates,
+        Cliquez sur une date pour voir les résultats,
+        Vous pouvez supprimer une date en cliquant longuement dessus,
+        Pour revenir à la page précédente, appuyez sur "retour".</string>
+    <string name="csaveButton">SAUVE</string>
+    <string name="cgoToSaved">ALLER AUX DONNÉES</string>
+    <string name="cclearButton">EFFACER</string>
+    <string name="csaveToastAll">Données sauvegardées</string>
+    <string name="csaveToastDate">Date sauvegardée</string>
+    <string name="cinfo1">Il y a </string>
+    <string name="cinfo2"> cas en/au </string>
+    <string name="cinfo3">a partir de </string>
+    <string name="savedDateTitle">Dates Sauvegardées</string>
+    <string name="savedDateInfo">Données sauvegardées par date</string>
+    <string name="cgoBack">RETOUR</string>
+    <string name="ctoast1">Les données sur l\'écran vont etres effacées</string>
+    <string name="ctoast2">Effacer cette date?</string>
+    <string name="ctoastBtn1">ACCEPTE</string>
+    <string name="ctoastBtn2">OUI</string>
+    <string name="calertBtnClose">FERMER</string>
+    <string name="calertBtnSave">SAUVE</string>
+    <string name="cymd">AAAA-MM-JJ</string>
+
 </resources>

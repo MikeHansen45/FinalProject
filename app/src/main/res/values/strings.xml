@@ -34,11 +34,6 @@
     <string name="recipeFavRemoved">Removed from favourites!</string>
     <string name="help">Info</string>
 
-    <string name="covid_data_btn">Get Data</string>
-    <string name="covid_country">COUNTRY</string>
-    <string name="cvalert_t">Covid data</string>
-    <string name="cvalert_mess">Here is the covid data</string>
-    <string name="cvalert_negative">Cancel</string>
     <string name="search_info_cv">Enter a country name, all caps</string>
     <string name="audioAuthor">Benjamin Dalton</string>
     <string name="audioHelp">Audio DB Help</string>
@@ -49,4 +44,36 @@
     <string name="tktMstr_delete_saved">Would you like to delete this event?</string>
     <string name="tktMstr_Yes">Yes</string>
     <string name="tktMstr_cancel">Cancel</string>
+
+    <string name="ccountry_edit">COUNTRY</string>
+    <string name="chelpButtonTitle">Welcome.</string>
+    <string name="chelpButton1">To get search results start by entering a country and the dates into the edit texts,
+        The results will have a default date if only the country is entered,
+        You can save the results by date by clicking on the save button or saving the item,
+        The clear button will clear all the information on the page,
+        you can go see your saved data by clicking on "go to saved data".</string>
+    <string name="chelpButton2"> The data here is stored in dates,
+        Click on a date to view results,
+        You can delete a date by long clicking on it,
+        To go back to the previous page press "go back".</string>
+    <string name="csaveButton">SAVE</string>
+    <string name="cgoToSaved">GO TO SAVED DATA</string>
+    <string name="cclearButton">CLEAR</string>
+    <string name="csaveToastAll">Data saved successfully</string>
+    <string name="csaveToastDate">Single date saved successfully</string>
+    <string name="cinfo1">There are </string>
+    <string name="cinfo2"> cases in </string>
+    <string name="cinfo3"> as of </string>
+    <string name="savedDateTitle">Saved Dates</string>
+    <string name="savedDateInfo">Saved info by Date</string>
+    <string name="cgoBack">GO BACK</string>
+    <string name="ctoast1">The data on screen will be cleared</string>
+    <string name="ctoast2">Delete this date?</string>
+    <string name="ctoastBtn1">ACCEPT</string>
+    <string name="ctoastBtn2">YES</string>
+    <string name="calertBtnClose">CLOSE</string>
+    <string name="calertBtnSave">SAVE</string>
+    <string name="cymd">YYYY-MM-DD</string>
+
+
 </resources>

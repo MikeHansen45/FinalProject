@@ -10,7 +10,7 @@
         android:id="@+id/ftv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Saved info by Date"
+        android:text="@string/savedDateInfo"
         android:textAlignment="center"
         android:textSize="21dp"
         android:layout_alignParentStart="true"/>

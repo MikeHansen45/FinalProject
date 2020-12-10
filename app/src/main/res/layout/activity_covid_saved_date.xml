@@ -36,7 +36,7 @@
           android:layout_height="wrap_content"
           android:textAlignment="center"
           android:textSize="21dp"
-          android:text="Saved Dates"/>
+          android:text="@string/savedDateTitle"/>
 
       <ListView
           android:id="@+id/datelv"
@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="Go back"/>
+            android:text="@string/cgoBack"/>
 
     </RelativeLayout>
 </RelativeLayout>

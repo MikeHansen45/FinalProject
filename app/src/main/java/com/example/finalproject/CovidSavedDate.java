@@ -2,6 +2,7 @@ package com.example.finalproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -30,9 +31,7 @@ import java.util.ArrayList;
 public class CovidSavedDate extends MainActivity  {
 
     DateListAdapter DateAdt = new DateListAdapter();
-    //ArrayList<String> Datess = new ArrayList();
     ArrayList<Covid> Dates = new ArrayList();
-    Covid cov;
     CovidFragment cf;
     SQLiteDatabase cdb;
     String country;
@@ -43,6 +42,10 @@ public class CovidSavedDate extends MainActivity  {
     String date;
     long id;
 
+    /**
+     *Where the activity is initialized, loads the view, data will be saved in this method
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +55,8 @@ public class CovidSavedDate extends MainActivity  {
         Button backbutton = findViewById(R.id.gobackbtn);
 
         loadDataFromCovidDatabase();
-        //loadDatesFromDatabase();
+
         datelist.setAdapter(DateAdt);
-        //loadDataFromCovidDatabase();
-        //queryDate();
 
         //Set the toolbar
         Toolbar myToolbar = findViewById(R.id.toolbar);
@@ -79,7 +80,7 @@ public class CovidSavedDate extends MainActivity  {
         });
 
         datelist.setOnItemClickListener((parent, view, position, id) -> {
-            //queryDate(Datess.get(position));
+
             Bundle dateDataToPass = new Bundle();
             dateDataToPass.putString("passdate", Dates.get(position).getDate());
         cf = new CovidFragment();
@@ -93,13 +94,16 @@ public class CovidSavedDate extends MainActivity  {
     });
 
         datelist.setOnItemLongClickListener((parent, view, position, id) -> {
-            Snackbar snack = Snackbar.make(datelist,"The data on screen will be cleared", Snackbar.LENGTH_LONG)
-                    .setAction("ACCEPT", new View.OnClickListener() {
+            Snackbar snack = Snackbar.make(datelist,getString(R.string.ctoast2), Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.ctoastBtn2), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*deleteDate(cov);
+                    deleteDate(Dates.get(position));
                     Dates.remove(position);
-                    DateAdt.notifyDataSetChanged();*/
+                    DateAdt.notifyDataSetChanged();
+
+                    if(cf!=null){
+                        getSupportFragmentManager().beginTransaction().remove(cf).commit();}
                 }
             });
             snack.show();
@@ -107,10 +111,19 @@ public class CovidSavedDate extends MainActivity  {
         });
     }
 
-    /*public void deleteDate(Covid m){
-        cdb.delete(CovidOpener.TABLE_NAME,CovidOpener.COL_DATE + "= ?", new String[] {String.toString(m.getDate())});
-    }*/
+    /**
+     * This will delete a selected item
+     * @param d Object that will get deleted
+     */
+    public void deleteDate(Covid d){
+        cdb.delete(CovidOpener.TABLE_NAME,CovidOpener.COL_ID + "= ?", new String[] {Long.toString(d.getId())});
+    }
 
+    /**
+     * Creates the toolbar menu
+     * @param menu Object used to create the toolbar
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -119,16 +132,37 @@ public class CovidSavedDate extends MainActivity  {
         return true;
     }
 
+    /**
+     * Listener for items in the nav menu
+     * @param item items in the drawer
+     * @return true
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return super.onNavigationItemSelected(item);
     }
 
+    /**
+     * Listener for items in the toolbar
+     * @param item items on the toolbar menu
+     * @return true
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.menu1) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setTitle(getString(R.string.chelpButtonTitle))
+                    .setMessage(getString(R.string.chelpButton2))
+                    .setNegativeButton((getString(R.string.calertBtnClose)), (click, arg) -> {})
+                    .create().show();
+        }
+        return true;
     }
 
+    /**
+     * Loads the data from the database, group the dates in order and only get unique values
+     */
     public void loadDataFromCovidDatabase() {
         CovidOpener cpHelper = new CovidOpener(this);
         cdb = cpHelper.getWritableDatabase();
@@ -153,43 +187,19 @@ public class CovidSavedDate extends MainActivity  {
             cases = results.getInt(casesColIndex);
             date = results.getString(dateColIndex);
             id = results.getLong(idColIndex);
-            //Log.i("DATESSS", date);
 
-            /*for (int i = 0; Dates.size() > i; i++) {
-                Log.i("Dates?", Dates.get(i).getDate());
-                if (!Dates.get(i).getDate().contains(date)) {*/
                     Dates.add(new Covid(null, null, null, null, 0, date, 0));
                 }
-            //}
-        //}
         printCursor(results);
     }
-
-    /*public void loadDatesFromDatabase() {
-        CovidOpener cpHelper = new CovidOpener(this);
-        cdb = cpHelper.getWritableDatabase();
-
-        String[] datecolumn = {CovidOpener.COL_DATE};
-
-        Cursor dateResults = cdb.query(false, CovidOpener.TABLE_NAME, datecolumn, null, null, null, null, null, null);
-
-        int dateColIndex = dateResults.getColumnIndex(CovidOpener.COL_DATE);
-
-        while (dateResults.moveToNext()) {
-            date = dateResults.getString(dateColIndex);
-            if (Datess.contains(date)) {
-                Datess.add(date);
-            }
-        }
-    }*/
 
     /**
      * This will query the database and filter the dates
      *
-     * @param date Filtered dates to display them in a listview
+     //* @param date Filtered dates to display them in a listview
      */
     //Will filter the results by date still container
-    public void queryDate(String date) {
+    /*public void queryDate(String date) {
         ArrayList<Covid> Dates = new ArrayList<>();
         CovidOpener cpHelper = new CovidOpener(this);
         cdb = cpHelper.getWritableDatabase();
@@ -216,7 +226,7 @@ public class CovidSavedDate extends MainActivity  {
             id = results.getLong(idColIndex);
             Dates.add(new Covid(country, countryCode, province, city, cases, date, id));
         }
-    }
+    }*/
 
     public void printCursor(Cursor c) {
         c.moveToFirst();
@@ -232,6 +242,10 @@ public class CovidSavedDate extends MainActivity  {
         }
     }
 
+    /**
+     * Gets the size of the array
+     * @return The number of elements
+     */
     class DateListAdapter extends BaseAdapter {
         @Override
         public int getCount() {
@@ -239,16 +253,33 @@ public class CovidSavedDate extends MainActivity  {
         }
         //Returns elements in the list based on the array size
 
+        /**
+         * Gets the position of the item in the array
+         * @param position position of the item
+         * @return the item at position in the arrays
+         */
         @Override
         public Covid getItem(int position) {
             return Dates.get(position);
         }//Item returned in the list
 
+        /**
+         *
+         * @param position position of the item
+         * @return the item position in the database
+         */
         @Override
         public long getItemId(int position) {
             return getItem(position).getId();
         }
 
+        /**
+         *
+         * @param position The item that will be returned
+         * @param convertView The view that will be displayed
+         * @param parent ViewGroup
+         * @return view
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater covinflater = getLayoutInflater();
