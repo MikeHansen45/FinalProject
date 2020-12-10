@@ -55,6 +55,8 @@
     <string name="tktMstr_URL">URL</string>
     <string name="tktMstr_Type">Event</string>
     <string name="tktMstr_Cost">Price</string>
+    <string name="tktMstr_by_mh">Ticket Master by M.Hansen</string>
+    <string name="ticket_master_help_title">Help</string>
     <string name="tktMstr_Delete">Supprimer</string>
     <string name="tktMst_help_saved">Long click on a saved event. Select the delete button to delete \n and the cancel button to cancel</string>
     <string name="tktMstr_event_saved">Your event has been saved</string>
