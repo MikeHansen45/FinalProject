@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,7 +64,7 @@ public class CovidData extends MainActivity {
         setContentView(R.layout.activity_covid_data);
 
         Button Covidbtn = findViewById(R.id.Covbtn);
-        Button CovSearchbtn = findViewById(R.id.Resultbtn);
+        ImageButton CovSearchbtn = findViewById(R.id.Resultbtn);
         Button Gotobtn = findViewById(R.id.gotobtn);
         Button clearbtn = findViewById(R.id.clearbtn);
         ListView Covidlist = findViewById(R.id.Covlist);
@@ -79,11 +80,20 @@ public class CovidData extends MainActivity {
 
         cvprefs = getSharedPreferences("Input_Data", Context.MODE_PRIVATE);
         String cvsavedString = cvprefs.getString("COUNTRY", "");
-
-       edt.setText(cvsavedString);
+        String d1savedString = cvprefs.getString("FROMDATE", "");
+        String t1savedString = cvprefs.getString("FROMTIME", "");
+        String d2savedString = cvprefs.getString("TODATE", "");
+        String t2savedString = cvprefs.getString("TOTIME", "");
+        edt.setText(cvsavedString);
+        edtd.setText(d1savedString);
+        edtt.setText(t1savedString);
+        edtd2.setText(d2savedString);
+        edtt2.setText(t2savedString);
 
         //Set the toolbar
         Toolbar myToolbar = findViewById(R.id.toolbar);
+        myToolbar.setTitle("Covid-19 ver.1.0");
+        myToolbar.setSubtitle("Marek La Roche");
         setSupportActionBar(myToolbar);
 
         //For NavigationDrawer
@@ -99,11 +109,16 @@ public class CovidData extends MainActivity {
             //Declare and execute a search query
             CovArray.clear();
             String ec = edt.getText().toString();
+            String ed1 = edtd.getText().toString();
+            String ed2 = edtd2.getText().toString();
+            String et1 = edtt.getText().toString();
+            String et2 = edtt2.getText().toString();
             CovidQuery cq = new CovidQuery();
             if (ec.isEmpty()) {
             cq.execute("https://api.covid19api.com/country/CANADA/status/confirmed/live?from=2020-10-14T00:00:00Z&to=2020-10-15T00:00:00Z");}
-            else{
-            cq.execute("https://api.covid19api.com/country/" + ec +"/status/confirmed/live?from=2020-10-14T00:00:00Z&to=2020-10-15T00:00:00Z");}
+            else if (ed1.isEmpty() && et1.isEmpty() || ed2.isEmpty() && et2.isEmpty()){
+            cq.execute("https://api.covid19api.com/country/"+ec+"/status/confirmed/live?from=2020-10-14T00:00:00Z&to=2020-10-15T00:00:00Z");}
+            else{ cq.execute("https://api.covid19api.com/country/"+ec+"/status/confirmed/live?from="+ed1+"T"+et1+"Z&to="+ed2+"T"+et2+"Z");}
             //cq.execute("https://api.covid19api.com/country/" +edt.getText()+ "/status/confirmed/live?from=" +edtd.getText()+ "T" +edtt.getText()+ "Z&to=" +edtd2.getText()+ "T" +edtt2.getText()+ "Z");
 
             CovAdt.notifyDataSetChanged();
@@ -111,16 +126,25 @@ public class CovidData extends MainActivity {
             //Saves the query from the edit text into the file
             SharedPreferences.Editor editor = cvprefs.edit();
             String stringToSave = edt.getText().toString();
+            String stringToSave1 = edtd.getText().toString();
+            String stringToSave2 = edtt.getText().toString();
+            String stringToSave3 = edtd2.getText().toString();
+            String stringToSave4 = edtt2.getText().toString();
             editor.putString("COUNTRY", stringToSave);
+            editor.putString("FROMDATE", stringToSave1);
+            editor.putString("FROMTIME", stringToSave2);
+            editor.putString("TODATE", stringToSave3);
+            editor.putString("TOTIME", stringToSave4);
             editor.apply();
         });
 
        Covidbtn.setOnClickListener(click -> {
-            Snackbar.make(Covidbtn, "Hello", Snackbar.LENGTH_LONG).show();//Creates snackbar with long lenght
-            Toast.makeText(this, "Hello - Toast", Toast.LENGTH_SHORT).show();//Creates toast with short duration
-
+            //Snackbar.make(Covidbtn, "Hello", Snackbar.LENGTH_LONG).show();//Creates snackbar with long lenght
+            //Toast.makeText(this, "Hello - Toast", Toast.LENGTH_SHORT).show();//Creates toast with short duration
            for (int i=0; CovArray.size() > i; i++){
            insertDatabase(CovArray.get(i).getCountry(),CovArray.get(i).getCountryCode(),CovArray.get(i).getProvince(),CovArray.get(i).getCity(),CovArray.get(i).getCases(),CovArray.get(i).getDate());}
+
+           Toast.makeText(this, "Data saved Successfully", Toast.LENGTH_SHORT).show();
         });
 
 
@@ -135,7 +159,10 @@ public class CovidData extends MainActivity {
                     .setMessage("There are "+cvpos.cases+" cases in "+cvpos.country+", "+cvpos.displayCityProvince()+" as of "+cvpos.convertDate())
                     .setNegativeButton(("Close"), (click, arg) -> {})
                     .setPositiveButton(("Save"), (click, arg) -> {
-                    })
+                        for (int i=0; CovArray.size() > i; i++){
+                        insertDatabase(CovArray.get(i).getCountry(),CovArray.get(i).getCountryCode(), CovArray.get(i).getProvince(), CovArray.get(i).getCity(), CovArray.get(i).getCases(), CovArray.get(position).getDate());
+                            Toast.makeText(this, "Single date saved Successfully", Toast.LENGTH_SHORT).show();
+                    }})
                     .create().show();
         });
 
@@ -152,8 +179,15 @@ public class CovidData extends MainActivity {
         });
 
         clearbtn.setOnClickListener(click ->{
-            CovArray.clear();
-            edt.setText("");edtd.setText("");edtd2.setText("");edtt.setText("");edtt2.setText("");
+            Snackbar snack = Snackbar.make(clearbtn,"The data on screen will be cleared", Snackbar.LENGTH_LONG)
+                    .setAction("ACCEPT", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            CovArray.clear();
+                            edt.setText("");edtd.setText("");edtd2.setText("");edtt.setText("");edtt2.setText("");
+                        }
+                    });
+            snack.show();
         });
     }
 
@@ -177,6 +211,11 @@ public class CovidData extends MainActivity {
 
     public class CovidQuery extends AsyncTask<String, Integer, String>{
 
+        /**
+         *
+         * @param strings
+         * @return
+         */
         public String doInBackground(String... strings) {
             try{
                 URL covurl = new URL(strings[0]);

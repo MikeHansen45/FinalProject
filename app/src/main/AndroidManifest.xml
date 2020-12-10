@@ -17,9 +17,7 @@
         <activity android:name=".CovidData" />
         <activity android:name=".TicketMasterActivity" />
         <activity android:name=".RecipeFavourites" />
-        <activity android:name=".TicketMasterActivity" />
         <activity android:name=".AudioDatabaseActivity" />
-        <activity android:name=".CovidData" />
         <activity android:name=".RecipeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

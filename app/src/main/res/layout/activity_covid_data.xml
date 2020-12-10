@@ -32,12 +32,13 @@
         android:layout_above="@id/Covpgbar"
         android:layout_below="@id/lineedt"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/Resultbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_above="@id/lineedt"/>
+        android:layout_above="@id/lineedt"
+        android:src="@drawable/search"/>
 
 
     <EditText
@@ -46,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:hint="COUNTRY"
+        android:layout_toLeftOf="@id/Resultbtn"
         android:inputType="textCapCharacters" />
 
         <LinearLayout
@@ -103,19 +105,20 @@
             android:id="@+id/Covbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="covid"/>
+            android:text="Save"/>
 
             <Button
                 android:id="@+id/gotobtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="go"/>
+                android:text="Go to Saved Data"/>
 
             <Button
                 android:id="@+id/clearbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Clear"
                 />
 
         </LinearLayout>

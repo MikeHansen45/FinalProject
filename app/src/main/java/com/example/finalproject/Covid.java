@@ -132,7 +132,7 @@ public class Covid {
     public String toString(){
         if (!province.equals("") || !city.equals("")) {
             return countryCode + ", " + province + ", " + city + " " + cases + " cases, " + convertDate();
-        }else if (province.equals("") && city.equals("") && !(cases==0)) {
+        }else if (province.equals("") && city.equals("") && (cases !=0)) {
             return country+ ", " + cases + " cases, " + convertDate();}
         return null;
     }

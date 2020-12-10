@@ -30,10 +30,19 @@
       android:layout_height="325dp"
       android:layout_alignParentTop="true">
 
+      <TextView
+          android:id="@+id/sdtv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textAlignment="center"
+          android:textSize="21dp"
+          android:text="Saved Dates"/>
+
       <ListView
           android:id="@+id/datelv"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
+          android:layout_height="wrap_content"
+          android:layout_below="@id/sdtv"/>
 
   </RelativeLayout>
 
@@ -45,7 +54,15 @@
         <FrameLayout
             android:id="@+id/cfragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_above="@id/gobackbtn"/>
+
+        <Button
+            android:id="@+id/gobackbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Go back"/>
 
     </RelativeLayout>
 </RelativeLayout>
