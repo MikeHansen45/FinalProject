@@ -78,7 +78,7 @@ public class RecipeActivity extends MainActivity {
 
         //Set the toolbar, title, and subtitle
         Toolbar myToolbar = findViewById(R.id.toolbar);
-        myToolbar.setTitle(R.string.recipeSearchTitle);
+        myToolbar.setTitle(R.string.recipeTitle);
         myToolbar.setSubtitle(R.string.recipeAuthor);
         setSupportActionBar(myToolbar);
 

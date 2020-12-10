@@ -49,7 +49,7 @@ public class RecipeFavourites extends MainActivity {
 
         //Set the toolbar
         Toolbar myToolbar = findViewById(R.id.toolbar);
-        myToolbar.setTitle(R.string.recipeSearchTitle);
+        myToolbar.setTitle(R.string.recipeTitle);
         myToolbar.setSubtitle(R.string.recipeAuthor);
         setSupportActionBar(myToolbar);
 

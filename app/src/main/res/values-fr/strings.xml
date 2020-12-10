@@ -10,7 +10,7 @@
     <string name="tktMstr_Alert">Voulez-vous le enregistrés c est evenement?</string>
 
 
-    <string name="toAudioButtonText">audio</string>
+    <string name="toAudioButtonText">Base de données audio</string>
     <string name="goToRecipe">"Recette "</string>
     <string name="toast_message">"C'est mon toast "</string>
     <string name="recipeImageDescription">"Image de recette "</string>
@@ -42,7 +42,7 @@
 
 
     <string name="audioAuthor">Benjamin Dalton</string>
-    <string name="audioHelp">Audio DB Help</string>
+    <string name="audioHelp">Aide de la base de données audio</string>
     <string name="audioHelpMessage">Pour utiliser cette page, recherchez un artiste avec la barre de recherche.S\'ils ont des espaces dans leur nom, vous devez ajouter un trait de soulignement à la place de l\'espace. Cette base de données ne contient pas tous les artistes.</string>
     <string name="audioDBResultsCount">"résultats: "</string>
     <string name="ticket_master_help_title">Aide</string>
