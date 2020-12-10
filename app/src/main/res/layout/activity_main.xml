@@ -51,7 +51,7 @@
                 android:id="@+id/toCovid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/cvalert_t"
+                android:text="@string/toCovid"
                 />
             <Button
                 android:id="@+id/toRecipe"

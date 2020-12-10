@@ -1,7 +1,5 @@
 package com.example.finalproject;
 
-import org.json.JSONObject;
-
 public class Covid {
 
     String country;
@@ -12,12 +10,17 @@ public class Covid {
     String status;
     String date;
     int lat, lon, cases;
+    long id;
 
-    Covid(String countryCode, String province, String city, int cases){
+
+    Covid(String country, String countryCode, String province, String city, int cases, String date, long id){
+        this.country = country;
         this.countryCode = countryCode;
         this.province = province;
         this.city = city;
         this.cases = cases;
+        this.date = date;
+        this.id = id;
     }
 
     Covid(String country, String countryCode, String province, String city, String cityCode, int lat, int lon, int cases,  String status, String date){
@@ -113,9 +116,36 @@ public class Covid {
         this.cases = cases;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String convertDate(){
+       return date.replaceAll("[TZ]", " ");
+    }
+
     @Override
     public String toString(){
-        return countryCode + ", " + province + ", " + city + " " + cases + " cases";
+        if (!province.equals("") || !city.equals("")) {
+            return countryCode + ", " + province + ", " + city + " " + cases + " cases, " + convertDate();
+        }else if (province.equals("") && city.equals("") && (cases !=0)) {
+            return country+ ", " + cases + " cases, " + convertDate();}
+        return null;
+    }
+
+    public String displayCityProvince(){
+        if (city.equals("")) {
+            return province;}
+        else if(!city.equals("") && !province.equals("")){
+            return province +", "+city;
+        }
+        else{
+            return city;
+        }
     }
 
 }
