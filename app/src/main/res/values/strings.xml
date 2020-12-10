@@ -42,12 +42,12 @@
     <string name="cvalert_negative">Cancel</string>
     <string name="search_info_cv">Enter a country name, all caps</string>
     <string name="audioAuthor">Benjamin Dalton</string>
-    <string name="audioHelp">Audio DB Help</string>
+
     <string name="audioHelpMessage">To use this page, search up an artist with the search bar, if they have spaces in their name you need to add an underscore in place of the space. This database does not have every artist.</string>
     <string name="audioDBResultsCount">results:</string>
-    <string name="audioAuthor">Benjamin Dalton</string>
+
     <string name="audioHelp">Audio DB Help</string>
-    <string name="audioHelpMessage">audio Help Message goes here</string>
+
     <string name="tktMstr_help_title">Ticket Master Help</string>
     <string name="tktMstr_empty_search">Please enter a City and Radius to complete your search</string>
     <string name="toTicketSave">Saved Events</string>
