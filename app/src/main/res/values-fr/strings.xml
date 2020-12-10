@@ -23,6 +23,7 @@
     <string name="help">Info</string>
     <string name="open">Ouverte</string>
     <string name="close">Ferme</string>
+    <string name="recipeTitle">Recherche de recettes 1.0</string>
     <string name="recipeAuthor">Auteure: Zavar Siddiqui</string>
     <string name="directLink">"Lien direct "</string>
     <string name="ingredientsTitle">"Liste des ingrédients: "</string>

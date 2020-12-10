@@ -4,7 +4,7 @@
     <string name='author'>Zavar Siddiqui,  Marek La Roche,  Michael Hansen, Benjamin Dalton </string>
     <string name='searchCity_TM'>Enter a city name: </string>
     <string name="searchRadius_TM">Enter a search radius</string>
-    <string name="tktMstr_Alert">Do you want to delete this?</string>
+    <string name="tktMstr_Alert">Do you want to save this?</string>
     <string name="toast_message">No image found</string>
     <string name="toAudioButtonText">Audio Database</string>
     <string name="goToRecipe">Recipe Search</string>
@@ -87,7 +87,7 @@
     <string name="tktMstr_Cost">Price</string>
     <string name="tktMstr_by_mh">Ticket Master by M.Hansen</string>
     <string name="ticket_master_help_title">Help</string>
-    <string name="tktMstr_Delete">Supprimer</string>
+    <string name="tktMstr_Delete">Delete</string>
     <string name="tktMst_help_saved">Long click on a saved event. Select the delete button to delete \n and the cancel button to cancel</string>
     <string name="tktMstr_event_saved">Your event has been saved</string>
     <string name="tktMstr_main_help">Enter a city name, and the radius around the city you would like to search.
