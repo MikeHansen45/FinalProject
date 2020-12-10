@@ -36,40 +36,44 @@ public class RecipeFragment extends Fragment {
     private static final String LINK_SELECTED = "Link";
     private static final String INGREDIENTS_SELECTED = "Ingredients";
     private static final String THUMBNAIL_SELECTED = "Thumbnail";
-    private static final String ITEM_POSITION = "Position";
-    private static final String ITEM_ID = "ID";
     private int snackTime = Snackbar.LENGTH_LONG;
     private int duration = Toast.LENGTH_LONG;
-    public static final String COL_TITLE = "TITLE";
-    public static final String COL_URL = "URL";
-    public static final String COL_INGREDIENTS = "INGREDIENTS";
-    public static final String COL_THUMBNAIL = "THUMBNAIL";
-    public static final String DATABASE_NAME = "RecipeDB";
     public MyRecipeOpener dbOpener = new MyRecipeOpener(RecipeActivity.sContext);
     public SQLiteDatabase db = dbOpener.getWritableDatabase();
     ImageView thumbnail;
     public Toast failed;
 
+    /**
+     * creates the fragment which is inflated into the parent activity
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View recipeDetails = inflater.inflate(R.layout.fragment_recipe, container, false);
-        Log.i("Container is:", container.toString());
-        Log.i("getActivity returns:", getActivity().toString());
+
+        //gets the data passed from the activity
         Bundle data = getArguments();
 
+        //create a toast message that will display if no image was found for each recipe
         failed = Toast.makeText(getActivity(), R.string.toast_message, duration);
 
+        //get the recipe thumbnail URL and use a second async task to load the image from the web
         String thumbnailURL = data.getString(THUMBNAIL_SELECTED);
         MyThumbnailRequest req = new MyThumbnailRequest();
         req.execute(thumbnailURL);
         thumbnail = recipeDetails.findViewById(R.id.thumbnailImage);
 
+        //get the title from bundle
         String title = data.getString(TITLE_SELECTED);
         TextView titleView = recipeDetails.findViewById(R.id.recipeTitle);
         Log.i("adding title", title);
         titleView.setText(title);
 
+        //get the direct link from the bundle and create a listener that opens the browser when clicked
         String url = data.getString(LINK_SELECTED);
         TextView link = recipeDetails.findViewById(R.id.recipeLink);
         link.setText(url);
@@ -77,56 +81,62 @@ public class RecipeFragment extends Fragment {
                 startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(url)))
         );
 
+        //get the list of ingredients from the bundle
         String items = data.getString(INGREDIENTS_SELECTED);
         TextView ingredients = recipeDetails.findViewById(R.id.ingredientsView);
         ingredients.setText(items);
 
+        //setting up the favourites switch
         Switch fav = recipeDetails.findViewById(R.id.favRecipeSwitch);
+
+        //checking to see if the recipe already exists in the database and sets the switch to "ON" if it is
         long checkID = isSaved(title);
         Log.i("Recipe Database ID is:", String.valueOf(checkID));
         boolean check = checkID != 0L;
         Log.i("check", String.valueOf(check));
         fav.setChecked(check);
 
-        if (!fav.isChecked()) {
-            Log.i("The switch is", "off");
-            fav.setOnCheckedChangeListener((a, b) -> {
+        //Switch listener that deletes the recipe or saves it depending on the toggle state
+        //also shows a snackbar to undo the changes
+        fav.setOnCheckedChangeListener((a, b) -> {
+
+            Log.i("The switch is", String.valueOf(b));
+            Snackbar snk = Snackbar.make(fav, (b ? R.string.recipeFavSaved : R.string.recipeFavRemoved), snackTime);
+            snk.setAction(R.string.undo, click -> {
+                fav.setChecked(!b);
+                Log.i("After snk the switch is", String.valueOf(b));
+            })
+                    .show();
+            if (b) {
                 saveFavourite(title, url, items, thumbnailURL);
-                Log.i("Saved:", "added to database");
-                Snackbar snk = Snackbar.make(fav, (b ? R.string.recipeFavSaved : R.string.recipeFavRemoved), snackTime);
-                snk.setAction(R.string.undo, click -> {
-                    fav.setChecked(!b);
-                    if (check) deleteRecipe(checkID);
-                    else deleteRecipe(isSaved(title));
-                })
-                        .show();
-            });
-
-
-        } else {
-            Log.i("The switch is", "on");
-            fav.setOnCheckedChangeListener((a, b) -> {
+                Log.i("Saved:", title + "added to database");
+            } else {
                 if (check) deleteRecipe(checkID);
                 else deleteRecipe(isSaved(title));
                 Log.i("Deleted", "from database");
-                Snackbar snk = Snackbar.make(fav, (b ? R.string.recipeFavSaved : R.string.recipeFavRemoved), snackTime);
-                snk.setAction(R.string.undo, click -> {
-                    fav.setChecked(!b);
-                    saveFavourite(title, url, items, thumbnailURL);
-                })
-                        .show();
-            });
-        }
+            }
 
+        });
+
+        //Setting up button that goes back to search
         Button goBack = recipeDetails.findViewById(R.id.backToRecipe);
         goBack.setOnClickListener(v ->
         {
             getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
             updateFavList();
         });
+
         return recipeDetails;
     }
 
+    /**
+     * Saves the recipe in this fragment to the database.
+     * @param title the recipe title passed from the bundle
+     * @param URL the direct link to the recipe
+     * @param ingredients the list of ingredients
+     * @param thumbnail the thumbnail url from the bundle
+     * @return long database id of the newly saved recipe
+     */
     public long saveFavourite(String title, String URL, String ingredients, String thumbnail) {
         ContentValues newRowValues = new ContentValues();
         newRowValues.put(MyRecipeOpener.COL_TITLE, title);
@@ -136,15 +146,22 @@ public class RecipeFragment extends Fragment {
         return db.insert(MyRecipeOpener.TABLE_NAME, null, newRowValues);
     }
 
+    /**
+     * updates the favourites list on the parent activity from the fragment.
+     * Only if the parent activity is RecipeFavourites.
+     */
     private void updateFavList() {
         boolean favUpdate = getActivity().toString().contains("RecipeFavourites");
-        Log.i("The activity is", getActivity().toString());
-        Log.i("update fave?", String.valueOf(favUpdate));
-        if (getActivity().toString().contains("RecipeFavourites")) {
+        if (favUpdate) {
             ((RecipeFavourites) getActivity()).updateListFromFragment();
         }
     }
 
+    /**
+     * Checks to see if the recipe already exists in the database by name. So no two recipes can exist with the same name.
+     * @param title the recipe title being searching for in the database
+     * @return the database id if found or 0 if not found
+     */
     public long isSaved(String title) {
         Long id = 0L;
         String[] columns = {
@@ -163,6 +180,10 @@ public class RecipeFragment extends Fragment {
         return id;
     }
 
+    /**
+     * Deletes the recipe from the database
+     * @param id the database id of the recipe being deleted
+     */
     protected void deleteRecipe(long id) {
         db.delete(MyRecipeOpener.TABLE_NAME, MyRecipeOpener.COL_ID + "= ?", new String[]{Long.toString(id)});
     }
@@ -170,10 +191,20 @@ public class RecipeFragment extends Fragment {
     private class MyThumbnailRequest extends AsyncTask<String, Integer, String> {
         private Bitmap image;
 
+        /**
+         *
+         * @return the Bitmap image
+         */
         public Bitmap getImage() {
             return image;
         }
 
+        /**
+         * Performs a computation in the background. It is checking for an image from the url provided for each recipe.
+         *
+         * @param args The URLs that will be connected to in the background.
+         * @return null
+         */
         @Override
         protected String doInBackground(String... args) {
             try {
@@ -194,6 +225,12 @@ public class RecipeFragment extends Fragment {
             return null;
         }
 
+        /**
+         * Uses the results of doInBackground to set the image of the recipe. If the image doesn't exist then a toast is displayed
+         * with an error message
+         *
+         * @param strings
+         */
         @Override
         public void onPostExecute(String strings) {
             if (getImage() != null)
