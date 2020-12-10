@@ -145,7 +145,7 @@ public class AudioDatabaseActivity extends MainActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuItem helpButton = menu.findItem(R.id.menu1);
-        helpButton.setVisible(false);
+        helpButton.setVisible(true);
         return true;
     }
     @Override
