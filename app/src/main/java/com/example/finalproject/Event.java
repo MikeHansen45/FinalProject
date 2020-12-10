@@ -51,7 +51,7 @@ public class Event {
         this.id = dbID;
 
     }
-    public void setSaved(String s){
+    public void setDate(String s){
         this.date=s;
     }
 

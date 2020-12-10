@@ -74,10 +74,11 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
     Toolbar lBar;//Toolbar item for nav bar
     SharedPreferences prefs = null;// A shared preferenc item
     Bitmap image =null;
+    public static Context sContext;
 
     // Database variables
 
-    private SQLiteDatabase db;
+    private SQLiteDatabase db;// sqlLite db object
     private DatabaseHelper MyDatabaseHelper; //creates database helper object
     protected Cursor results; // creates a cursor;
 
@@ -114,9 +115,9 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
 
         //////////////////////////////////// Loading Database components /////////////////////////////
 
-        MyDatabaseHelper = new DatabaseHelper(this);
+        MyDatabaseHelper = new DatabaseHelper(this);//database helper object
         db = MyDatabaseHelper.getWritableDatabase();
-        String [] columns = {MyDatabaseHelper.COL_ID, MyDatabaseHelper.COL_NAME,MyDatabaseHelper.COL_TYPE,MyDatabaseHelper.COL_URL, MyDatabaseHelper.COL_MIN,MyDatabaseHelper.COL_MAX};
+        String [] columns = {MyDatabaseHelper.COL_ID, MyDatabaseHelper.COL_DATE, MyDatabaseHelper.COL_NAME,MyDatabaseHelper.COL_TYPE,MyDatabaseHelper.COL_URL, MyDatabaseHelper.COL_MIN,MyDatabaseHelper.COL_MAX};
         results = db.query(false,MyDatabaseHelper.TABLE_NAME, columns, null, null, null, null, null, null);
         int idColIndex = results.getColumnIndex(MyDatabaseHelper.COL_ID);
         int nameColIndex = results.getColumnIndex(MyDatabaseHelper.COL_NAME);
@@ -127,21 +128,11 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
         int dateCol= results.getColumnIndex(MyDatabaseHelper.COL_DATE);
 
 
-//        while (results.moveToNext()){
-//            String dbName = results.getString(nameColIndex);
-//            String dbType = results.getString(typeColIndex);
-//            String dbURL = results.getString(urlColIndex);
-//            int bdMax = results.getInt(maxColIndex);
-//            int bdMin = results.getInt(minColIndex);
-//
-//            eventArray.add(new Event(dbName,dbType,dbURL,bdMin,bdMax,0,"","SAVED"));
-//
-//        }
 
 
         //////////////////////////////////////// TOAST Just because it is required not sure where I want it for real ///////////////////////////////////
         Context context = getApplicationContext();
-        CharSequence text = "Welcome to the ticket master search app";
+        CharSequence text = "Welcome to the ticket master search app";// change to french
         int duration = Toast.LENGTH_SHORT;
 
         Toast toast = Toast.makeText(context, text,duration);
@@ -198,7 +189,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
 
                     /////////////////////////////////// building snackbar, cause its snack time ////////////////////////////////////////////////////////////////////
 //
-                    Snackbar snack =  Snackbar.make(findViewById(R.id.rootView_tktMstr), "p",  Snackbar.LENGTH_LONG);
+                    Snackbar snack =  Snackbar.make(findViewById(R.id.rootView_tktMstr), R.string.tktMstr_empty_search,  Snackbar.LENGTH_LONG);//a snack bar object used when a search is missing a param
                     snack.show();
 
                     ////////////////////////////////// End of Snackbar   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,7 +225,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
             }
 
             catch (Exception e){
-                Log.d("DUCK", String.valueOf(e));
+                Log.d("ERROR", String.valueOf(e));
             }
 //
             //          image.setImageBitmap(temp);
@@ -257,14 +248,14 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
             else {
                 androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.tktMstr_Alert))
-                        .setMessage( eventArray.get(position).getName() + " ?" + "\n \n" +
+                        .setMessage( eventArray.get(position).getName() + " " + "\n \n" +
                                 "Type: " + eventArray.get(position).getType() + "\n \n" +
                                 "URL: "  + eventArray.get(position).getURL() + " \n \n " +
                                 "Date: " + eventArray.get(position).getDate() + "\n \n" +
                                 "Price: " + eventArray.get(position).getPriceMin() + " - " + eventArray.get(position).getPriceMax() + " $")
 
                         .setPositiveButton(R.string.tktMstr_Yes, (click, arg) -> {
-                            eventArray.get(position).setSaved("Saved");
+                            //eventArray.get(position).setSaved(date);
                             // save item to the db
                             ContentValues newRowValues = new ContentValues();
                             newRowValues.put(MyDatabaseHelper.COL_NAME, eventArray.get(position).getName());
@@ -272,7 +263,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
                             newRowValues.put(MyDatabaseHelper.COL_URL, eventArray.get(position).getURL());
                             newRowValues.put(MyDatabaseHelper.COL_MAX, eventArray.get(position).getPriceMax());
                             newRowValues.put(MyDatabaseHelper.COL_MIN, eventArray.get(position).getPriceMin());
-                            //newRowValues.put(MyDatabaseHelper.COL_DATE,eventArray.get(position).getDate());
+                            newRowValues.put(MyDatabaseHelper.COL_DATE,eventArray.get(position).getDate());
                             long newId = db.insert(MyDatabaseHelper.TABLE_NAME, null, newRowValues);
                             //eventArray.get(position).setID(newId);
 
@@ -308,7 +299,7 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
 /////////////////////////////////////////////////////////////// MyListAdapter Code bellow /////////////////////////////////////////////////////////
 
 
-    // this class will be heavily modified so I have not added complete metadata.
+
     private class MyListAdapter extends BaseAdapter {
 
         public int getCount() { return eventArray.size();}
@@ -555,7 +546,11 @@ public class TicketMasterActivity extends AppCompatActivity implements Navigatio
         edit.commit();
     }
 
-
+    /**
+     * Bitmap takes a url to an image and downloads it
+     * @param imgURL the url of the necessary image
+     * @return image an downloaded image, or null
+     */
     private Bitmap getIcon(URL imgURL){
         Log.i("IN GET IMAGE","START");
         HttpURLConnection imgConn = null;

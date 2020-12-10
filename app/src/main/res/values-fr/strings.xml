@@ -7,7 +7,7 @@
     <string name='author'>Zavar Siddiqui,  Marek La Roche,  Michael Hansen, Benjamin Dalton </string>
     <string name='searchCity_TM'>Entrez un nom de ville: </string>
     <string name="searchRadius_TM">Entrez un rayon de recherche</string>
-    <string name="tktMstr_Alert">Voulez-vous le supprimer?</string>
+    <string name="tktMstr_Alert">Voulez-vous le enregistrés c est evenement?</string>
 
     <string name="goToRecipe">"Recette "</string>
     <string name="snack_message">Ceci est mon snackbar</string>
@@ -39,6 +39,7 @@
     <string name="tktMstr_Yes">Oui</string>
     <string name="tktMstr_by_mh">Ticket Master par M.Hansen</string>
     <string name="tktMstr_cancel">Annuler</string>
+    <string name="tktMstr_event_saved">Votre événement a été enregistré </string>
     <string name="tktMst_help_saved">Cliquez longuement sur un événement enregistré. Sélectionnez le bouton de suppression pour supprimer \ n et le bouton d\'annulation pour annuler</string>
     <string name="tktMstr_main_help">Entrez un nom de ville et le rayon autour de la ville que vous souhaitez rechercher.
                                 \n Appuyez sur l\'icône de recherche et une liste d\'événements apparaîtra dans la liste ci-dessous.

@@ -17,8 +17,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:layout_below="@id/tktmst_frag_name"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_below="@id/tktmst_frag_name"/>
+
+        <TextView
+            android:id="@+id/tktmst_frag_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_below="@id/tktmst_frag_type"
+           />
+        <TextView
+            android:id="@+id/tktmst_frag_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_below="@id/tktmst_frag_date"/>
+
+        <TextView
+            android:id="@+id/tktmst_frag_URL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_below="@id/tktmst_frag_price"/>
+
 
         <Button
             android:layout_width="100dp"

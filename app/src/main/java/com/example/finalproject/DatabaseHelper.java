@@ -3,12 +3,18 @@ package com.example.finalproject;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+/**
+ * DatabaseHelper.java creates a sql table with rows and collumns to store
+ * event data, it also contains functions to add data
+ * @author Mike Hansen
+ * @version 1.0
+ * Date: 11/19/2020
+ */
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     protected final static String DATABASE_NAME = "EventDb";
-    protected final static int VERSION_NUM = 1;
+    protected final static int VERSION_NUM = 3;
     public final static String TABLE_NAME = "EVENTS";
     public final static String COL_ID = "_id";
     public final static String COL_NAME = "name";
@@ -25,7 +31,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(ctx, DATABASE_NAME, null, VERSION_NUM);
     }
 
-
+    /**
+     * Creates the database connection
+     * @param db sql db to be populated with the tables
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -53,6 +62,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Adds an event item to the db
+     * @param item an event item defined by class event
+     * @return true;
+     */
     public boolean addData(Event item){
         SQLiteDatabase db = this.getWritableDatabase();
         return true;
