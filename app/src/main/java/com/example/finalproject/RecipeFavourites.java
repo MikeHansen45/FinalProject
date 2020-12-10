@@ -40,7 +40,7 @@ public class RecipeFavourites extends MainActivity {
      * Called when the activity is first created. This is where you should do all of your normal static set up: create views, bind data to lists, etc. This method also provides you with a Bundle containing the activity's previously frozen state, if there was one.
      * Always followed by onStart().
      *
-     * @param savedInstanceState
+     * @param savedInstanceState the previously savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,8 @@ public class RecipeFavourites extends MainActivity {
 
         //Set the toolbar
         Toolbar myToolbar = findViewById(R.id.toolbar);
+        myToolbar.setTitle(R.string.recipeSearchTitle);
+        myToolbar.setSubtitle(R.string.recipeAuthor);
         setSupportActionBar(myToolbar);
 
         //For NavigationDrawer
@@ -103,8 +105,8 @@ public class RecipeFavourites extends MainActivity {
 
     /**
      * This method creates the toolbar menu.
-     * @param menu
-     * @return
+     * @param menu the menu used to when the toolbar is created
+     * @return true
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,8 +115,8 @@ public class RecipeFavourites extends MainActivity {
 
     /**
      * Listener for items on the toolbar
-     * @param item
-     * @return
+     * @param item the items on the toolbar menu
+     * @return true
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -123,8 +125,8 @@ public class RecipeFavourites extends MainActivity {
 
     /**
      * Listener for items in the navigation menu.
-     * @param item
-     * @return
+     * @param item the items in the navigation drawer
+     * @return true
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -190,6 +192,7 @@ public class RecipeFavourites extends MainActivity {
     private class MyRecipeFavAdapter extends BaseAdapter {
 
         /**
+         * The size of the arraylist that will be loaded into the ListView is returned by this method.
          * @return the size of the arrayList
          */
         @Override

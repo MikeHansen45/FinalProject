@@ -19,6 +19,15 @@
         android:padding="10sp"
         android:textSize="25sp" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recipeTitle"
+            android:layout_toLeftOf="@id/favRecipeSwitch"
+            android:clickable="false"
+            android:src="@drawable/icons8_heart_outline_24"
+            />
+
     <Switch
         android:id="@+id/favRecipeSwitch"
         android:layout_width="wrap_content"
@@ -32,7 +41,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/favRecipeSwitch"
+        android:adjustViewBounds="true"
         android:padding="5sp"
+        android:clickable="false"
         android:contentDescription="@string/recipeImageDescription" />
 
         <TextView
@@ -70,6 +81,13 @@
         android:padding="5sp"
         android:textSize="15sp"
         android:layout_height="wrap_content" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/backToRecipe"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/snackbarlocation"/>
 
         <Button
             android:layout_width="match_parent"

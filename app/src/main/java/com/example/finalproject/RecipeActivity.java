@@ -57,7 +57,7 @@ public class RecipeActivity extends MainActivity {
      * Called when the activity is first created. This is where you should do all of your normal static set up: create views, bind data to lists, etc. This method also provides you with a Bundle containing the activity's previously frozen state, if there was one.
      * Always followed by onStart().
      *
-     * @param savedInstanceState
+     * @param savedInstanceState the previously saved instanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class RecipeActivity extends MainActivity {
 
         //Set the toolbar, title, and subtitle
         Toolbar myToolbar = findViewById(R.id.toolbar);
-        myToolbar.setTitle(R.string.goToRecipe);
+        myToolbar.setTitle(R.string.recipeSearchTitle);
         myToolbar.setSubtitle(R.string.recipeAuthor);
         setSupportActionBar(myToolbar);
 
@@ -233,6 +233,7 @@ public class RecipeActivity extends MainActivity {
     private class MyListAdapter extends BaseAdapter {
 
         /**
+         * Returns the size of the arraylist that will be loaded in to the ListView
          * @return the size of the arrayList
          */
         @Override
@@ -259,6 +260,7 @@ public class RecipeActivity extends MainActivity {
         }
 
         /**
+         * This method inflates the ListView with a View
          * @param position    The index of the item that will be returned
          * @param convertView The ListView that will hold the items
          * @param parent the parent ViewGroup
@@ -355,7 +357,8 @@ public class RecipeActivity extends MainActivity {
                     // Pulling items from the array
 
                     thumbnailURL = recipes.getString("thumbnail");
-                    title = recipes.getString("title");
+                    //Log.i("Titles", oldTitle);
+                    title = recipes.getString("title").replace("&quot;", "'''").replace("&amp;", "&");
                     href = recipes.getString("href");
                     ingredients = recipes.getString("ingredients");
 

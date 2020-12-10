@@ -7,13 +7,11 @@
     <string name='author'>Zavar Siddiqui,  Marek La Roche,  Michael Hansen, Benjamin Dalton </string>
     <string name='searchCity_TM'>Entrez un nom de ville: </string>
     <string name="searchRadius_TM">Entrez un rayon de recherche</string>
-    <string name="tktMstr_Alert">Voulez-vous le enregistrés c est evenement?</string>
-
     <string name="tktMstr_Alert">Voulez-vous le supprimer?</string>
-    <string name="toAudioButtonText">audio</string>
-    <string name="goToRecipe">"Recette "</string>
-    <string name="snack_message">Ceci est mon snackbar</string>
-    <string name="toast_message">"C'est mon toast "</string>
+    <string name="toAudioButtonText">Base de données audio</string>
+    <string name="goToRecipe">Recherche de recette</string>
+    <string name="recipeTitle">Recherche de recette 1.0</string>
+    <string name="toast_message">Aucune image trouvée</string>
     <string name="recipeImageDescription">"Image de recette "</string>
     <string name="recipeFavSaved">"Ajouté aux favoris! "</string>
     <string name="undo">"ANNULER "</string>
